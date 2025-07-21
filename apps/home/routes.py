@@ -28,7 +28,8 @@ def index():
 @blueprint.route('/tables')
 def tables():
     context = {
-        'segment': 'tables'
+        'segment': 'tables',
+        'title': 'Tables',
     }
     return render_template('pages/tables.html', **context)
 
