@@ -1,259 +1,347 @@
-{% extends "layouts/base.html" %}
-
-{% block title %} Profile {% endblock %} 
+{% extends "layouts/base.html" %} {% block title %} Profile {% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
 
-{% block content %}
-
-<div class= "container-fluid py-2">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="text-center">User Profile</h1>
-            <p class="text-center">Welcome, {{ current_user.username }}!</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-          <div class="card my-4">
-            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
-                <h6 class="text-white text-capitalize ps-3">Usuários</h6>
-              </div>
-            </div>
-            <div class="card-body px-0 pb-2">
-              <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nome</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Setor</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Diária</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                      <th class="text-secondary opacity-7"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for user in users %}
-                        <tr>
-                        <td>
-                            <div class="d-flex px-2 py-1">
-                            <div>
-                                <img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-                            </div>
-                            <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm">{{ user.username }}</h6>
-                                <p class="text-xs text-secondary mb-0">{{ user.email }}</p>
-                            </div>
-                            </div>
-                        </td>
-                        <td>
-                            {% if user.setor %}
-                                <p class="text-xs font-weight-bold mb-0">{{ user.setor }} </p>
-                            {% else %}
-                                <p class="text-xs font-weight-bold mb-0">N/A</p>
-                            {% endif %}
-                            
-                            {% if user.admin %}
-                            <p class="text-xs text-secondary mb-0">Administrador</p>
-                            {% else %}
-                            <p class="text-xs text-secondary mb-0">Usuário</p>
-                            {% endif %}
-                        </td>
-
-                        <td class="align-middle text-center text-sm">
-                            {% if user.diaria %}
-                                <span class="badge badge-sm bg-gradient-success">Ativo</span>
-                            {% else %}
-                                <span class="badge badge-sm bg-gradient-danger">Inativo</span>
-                            {% endif %}
-                            
-                        </td>
-
-
-                        <td class="align-middle text-center text-sm">
-                            {% if user.active %}
-                                <span class="badge badge-sm bg-gradient-success">Ativo</span>
-                            {% else %}
-                                <span class="badge badge-sm bg-gradient-danger">Inativo</span>
-                            {% endif %}
-                            
-                        </td>
-                        <td class="align-middle">
-                            <!--<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                            Edit
-                            </a>-->
-                            <!--<a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i class="material-symbols-rounded text-sm me-2">delete</i></a>
-                            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i class="material-symbols-rounded  me-2">edit</i></a>-->
-                            <a class="btn btn-link text-dark px-3 mb-0 btn-view-user"
-                                href="javascript:;"
-                                data-id="{{ user.id }}"
-                                data-name="{{ user.username }}"
-                                data-email="{{ user.email }}"
-                                data-setor="{{ user.setor }}"
-                                data-status="{{ 'Ativo' if user.active else 'Inativo' }}"
-                                data-diaria="{{ 'Sim' if user.diaria else 'Não' }}">
-                                <i class="material-symbols-rounded me-2">visibility</i>
-                            </a>
-                        </td>
-
-                        </tr>
-                    {% endfor %}                        
-                  </tbody>
-                </table>
-              </div>
+<div class="container-fluid py-2">
+  <!-- Card Search-->
+  <div class="row">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <div class="row g-2 mb-3">
+          <div class="col-md-3">
+            <label for="filtroNome" class="form-label">Nome do Usuário</label>
+            <input
+              type="text"
+              class="form-control border ps-1"
+              id="filtroNome"
+              placeholder="Digite o nome"
+            />
+          </div>
+          <div class="col-md-2">
+            <label for="filtroCodigo" class="form-label">Código</label>
+            <input
+              type="text"
+              class="form-control border ps-1"
+              id="filtroCodigo"
+              placeholder="Código"
+            />
+          </div>
+          <div class="col-md-3">
+            <label for="filtroEmail" class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control border ps-1"
+              id="filtroEmail"
+              placeholder="Digite o email"
+            />
+          </div>
+          <div class="col-md-2">
+            <label for="filtroTipo" class="form-label">Tipo</label>
+            <select class="form-select" id="filtroTipo">
+              <option value="todos" selected>Todos</option>
+              <option value="administrador">Administrador</option>
+              <option value="usuario">Usuário</option>
+            </select>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="filtroAtivo"
+                checked
+              />
+              <label class="form-check-label" for="filtroAtivo"> Ativo </label>
             </div>
           </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            
-            <div class="modal-header">
-              <h5 class="modal-title" id="userModalLabel">Editar Usuário</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            
-            <div class="modal-body">
-              <form id="userEditForm">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <label for="userNameInput" class="form-label "><strong>Nome:</strong></label>
-                      <input type="text" class="form-control border ps-1" id="userNameInput" name="username">
-                    </div>
-      
-                    <div class="mb-3">
-                      <label for="userEmailInput" class="form-label"><strong>Email:</strong></label>
-                      <input type="email" class="form-control border ps-1" id="userEmailInput" name="email">
-                    </div>
-      
-                    <div class="mb-3">
-                      <label for="userSetorSelect" class="form-label"><strong>Setor:</strong></label>
-                      <select class="form-select" id="userSetorSelect" name="setor">
-                        <option value="Atendimento">Atendimento</option>
-                        <option value="Qualidade">Qualidade</option>
-                        <option value="T.I">T.I</option>
-                        <option value="Infraestrutura">Infraestrutura</option>
-                        <option value="Recepção">Recepção</option>
-                        <option value="Administrativo">Administrativo</option>
-                      </select>
-                    </div>
-                  </div>
-      
-                  <div class="col-md-6">
-                    <div class="form-check mb-3">
-                      <input class="form-check-input" type="checkbox" id="userStatusCheckbox" name="active">
-                      <label class="form-check-label" for="userStatusCheckbox"><strong>Usuário Ativo</strong></label>
-                    </div>
-      
-                    <div class="form-check mb-3">
-                      <input class="form-check-input" type="checkbox" id="userDiariaCheckbox" name="diaria">
-                      <label class="form-check-label" for="userDiariaCheckbox"><strong>Diária Ativa</strong></label>
-                    </div>
-      
-                    <div class="form-check mb-3">
-                      <input class="form-check-input" type="checkbox" id="userAdminCheckbox" name="admin">
-                      <label class="form-check-label" for="userAdminCheckbox"><strong>Administrador</strong></label>
-                    </div>
-                  </div>
-                </div>
-                
-                <input type="hidden" id="userIdInput" name="user_id">
-              </form>
-            </div>
-      
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" form="userEditForm" class="btn btn-primary">Salvar Alterações</button>
-            </div>
-      
+        <div class="row g-2">
+          <div class="col-md-2">
+            <button
+              type="button"
+              class="btn btn-secondary w-100"
+              id="btnLimpar"
+            >
+              <i class="material-symbols-rounded me-2">backspace</i> Limpar
+            </button>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-primary w-100" id="btnFiltrar">
+              <i class="material-symbols-rounded me-2">visibility</i> Filtrar
+            </button>
+          </div>
+          <div class="col-md-2">
+            <button
+              href="javascript:;"
+              type="button"
+              class="btn btn-success w-100 btn-view-user"
+              data-action="create"
+              id="btnAdicionarUsuario"
+              data-bs-toggle="modal"
+              data-bs-target="#userModal"
+            >
+              <i class="material-symbols-rounded me-2">add_circle</i>
+              Adicionar
+            </button>
           </div>
         </div>
       </div>
-                   
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Usuários</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th
+                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  >
+                    Nome
+                  </th>
+                  <th
+                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                  >
+                    Setor
+                  </th>
+                  <th
+                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  >
+                    Diária
+                  </th>
+                  <th
+                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  >
+                    Status
+                  </th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in users %}
+                <tr>
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div>
+                        <img
+                          src="{{ url_for('static', filename='assets/img/team-2.jpg') }}"
+                          class="avatar avatar-sm me-3 border-radius-lg"
+                          alt="user1"
+                        />
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">{{ user.username }}</h6>
+                        <p class="text-xs text-secondary mb-0">
+                          {{ user.email }}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    {% if user.setor %}
+                    <p class="text-xs font-weight-bold mb-0">
+                      {{ user.setor }}
+                    </p>
+                    {% else %}
+                    <p class="text-xs font-weight-bold mb-0">N/A</p>
+                    {% endif %} {% if user.admin %}
+                    <p class="text-xs text-secondary mb-0">Administrador</p>
+                    {% else %}
+                    <p class="text-xs text-secondary mb-0">Usuário</p>
+                    {% endif %}
+                  </td>
 
-    
+                  <td class="align-middle text-center text-sm">
+                    {% if user.diaria %}
+                    <span class="badge badge-sm bg-gradient-success"
+                      >Ativo</span
+                    >
+                    {% else %}
+                    <span class="badge badge-sm bg-gradient-danger"
+                      >Inativo</span
+                    >
+                    {% endif %}
+                  </td>
+
+                  <td class="align-middle text-center text-sm">
+                    {% if user.active %}
+                    <span class="badge badge-sm bg-gradient-success"
+                      >Ativo</span
+                    >
+                    {% else %}
+                    <span class="badge badge-sm bg-gradient-danger"
+                      >Inativo</span
+                    >
+                    {% endif %}
+                  </td>
+                  <td class="align-middle">
+                    <!--<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                            Edit
+                            </a>-->
+                    <!--<a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i class="material-symbols-rounded text-sm me-2">delete</i></a>
+                            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i class="material-symbols-rounded  me-2">edit</i></a>-->
+                    <a
+                      class="btn btn-link text-dark px-3 mb-0 btn-view-user"
+                      href="javascript:;"
+                      data-action="edit"
+                      data-id="{{ user.id }}"
+                      data-name="{{ user.username }}"
+                      data-email="{{ user.email }}"
+                      data-setor="{{ user.setor }}"
+                      data-status="{{ 'Ativo' if user.active else 'Inativo' }}"
+                      data-diaria="{{ 'Sim' if user.diaria else 'Não' }}"
+                      data-admin="{{ 'Sim' if user.admin else 'Não' }}"
+                    >
+                      <i class="material-symbols-rounded me-2">visibility</i>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="userModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="userModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Editar Usuário</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Fechar"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="userEditForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="userNameInput" class="form-label"
+                    ><strong>Nome:</strong></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control border ps-1"
+                    id="userNameInput"
+                    name="username"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="userEmailInput" class="form-label"
+                    ><strong>Email:</strong></label
+                  >
+                  <input
+                    type="email"
+                    class="form-control border ps-1"
+                    id="userEmailInput"
+                    name="email"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="userSetorSelect" class="form-label"
+                    ><strong>Setor:</strong></label
+                  >
+                  <select class="form-select" id="userSetorSelect" name="setor">
+                    <option value="Atendimento">Atendimento</option>
+                    <option value="Qualidade">Qualidade</option>
+                    <option value="T.I">T.I</option>
+                    <option value="Infraestrutura">Infraestrutura</option>
+                    <option value="Recepção">Recepção</option>
+                    <option value="Administrativo">Administrativo</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-check mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="userStatusCheckbox"
+                    name="active"
+                  />
+                  <label class="form-check-label" for="userStatusCheckbox"
+                    ><strong>Usuário Ativo</strong></label
+                  >
+                </div>
+
+                <div class="form-check mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="userDiariaCheckbox"
+                    name="diaria"
+                  />
+                  <label class="form-check-label" for="userDiariaCheckbox"
+                    ><strong>Diária Ativa</strong></label
+                  >
+                </div>
+
+                <div class="form-check mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="userAdminCheckbox"
+                    name="admin"
+                  />
+                  <label class="form-check-label" for="userAdminCheckbox"
+                    ><strong>Administrador</strong></label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <input type="hidden" id="userIdInput" name="user_id" />
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button type="submit" form="userEditForm" class="btn btn-primary">
+            Salvar Alterações
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-
 {% block javascripts %}
-<script>
-    import toast from './application/menssageToast.js';
-    document.addEventListener('DOMContentLoaded', function () {
-      const userModal = new bootstrap.Modal(document.getElementById('userModal'));
-      const viewButtons = document.querySelectorAll('.btn-view-user');
-  
-      viewButtons.forEach(button => {
-        button.addEventListener('click', function () {
-          // Coleta dos dados via atributos data-*
-          const userId = this.getAttribute('data-id');
-          const userName = this.getAttribute('data-name');
-          const userEmail = this.getAttribute('data-email');
-          const userSetor = this.getAttribute('data-setor');
-          const userStatus = this.getAttribute('data-status') === 'Ativo';
-          const userDiaria = this.getAttribute('data-diaria') === 'Sim';
-          const userAdmin = this.getAttribute('data-admin') === 'Sim';
-  
-          // Preenchendo campos do modal
-          document.getElementById('userIdInput').value = userId;
-          document.getElementById('userNameInput').value = userName;
-          document.getElementById('userEmailInput').value = userEmail;
-          document.getElementById('userSetorSelect').value = userSetor;
-  
-          document.getElementById('userStatusCheckbox').checked = userStatus;
-          document.getElementById('userDiariaCheckbox').checked = userDiaria;
-          document.getElementById('userAdminCheckbox').checked = userAdmin;
-  
-          // Exibe o modal
-          userModal.show();
-        });
-      });
-    });
-    document.getElementById('userEditForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Impede o envio do formulário padrão
 
-        // Captura todos os campos do formulário
-        const form = event.target;
-        const formData = new FormData(form);
-        const jsonData = {};
-
-        formData.forEach((value, key) => {
-            // Para checkbox, garantir booleano
-            const field = form.elements[key];
-            if (field && field.type === 'checkbox') {
-            jsonData[key] = field.checked;
-            } else {
-            jsonData[key] = value;
-            }
-        });
-            jsonData['id'] = jsonData['user_id']; // Adiciona o ID do usuário
-        const userId = jsonData['user_id'];
-
-        fetch(`/users`, {
-            method: 'PUT',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(jsonData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-
-                toast('Operação realizada com sucesso', 'danger', 'Sucesso', 'Agora', 'campaign');
-                location.reload(); // Recarrega para refletir a alteração
-            } else {
-                let toast = toast('Operação realizada com sucesso', 'danger', 'Sucesso', 'Agora', 'campaign');
-            }
-        })
-        .catch(error => console.error('Erro:', error));
-    });
-
-</script>
-  
-{% endblock javascripts %}
-{% endblock content %}
+<script
+  type="module"
+  src="{{ url_for('static', filename='/assets/js/application/userModal.js') }}"
+></script>
+{% endblock javascripts %} {% endblock content %}

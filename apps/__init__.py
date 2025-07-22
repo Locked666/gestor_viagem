@@ -4,13 +4,17 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 import os
-from flask import Flask
+from flask import Flask,jsonify
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+
+from apps.exceptions.exception import InvalidUsage
+
+
 
 def register_extensions(app):
     db.init_app(app)
@@ -47,5 +51,10 @@ def create_app(config):
     register_extensions(app)
     register_blueprints(app)
     app.register_blueprint(github_blueprint, url_prefix="/login")    
-    app.register_blueprint(google_blueprint, url_prefix="/login")    
+    app.register_blueprint(google_blueprint, url_prefix="/login") 
+    @app.errorhandler(InvalidUsage)
+    def handle_invalid_usage(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response   
     return app

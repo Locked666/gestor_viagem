@@ -26,6 +26,7 @@ class Users(db.Model, UserMixin):
     admin = db.Column(db.Boolean, default=False)
     diaria = db.Column(db.Boolean, default=True)
     active = db.Column(db.Boolean, default=True)
+    first_acess = db.Column(db.Boolean, default = True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     oauth_github  = db.Column(db.String(100), nullable=True)

@@ -65,6 +65,9 @@ def login():
 
         # Check the password
         if verify_pass(password, user.password):
+            user.first_acess = False 
+            db.session.add(user)
+            db.session.commit()
 
             login_user(user)
             return redirect(url_for('home_blueprint.index'))
