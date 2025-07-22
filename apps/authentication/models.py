@@ -25,6 +25,8 @@ class Users(db.Model, UserMixin):
     setor = db.Column(db.String(100))
     admin = db.Column(db.Boolean, default=False)
     diaria = db.Column(db.Boolean, default=True)
+    active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     oauth_github  = db.Column(db.String(100), nullable=True)
     oauth_google  = db.Column(db.String(100), nullable=True)

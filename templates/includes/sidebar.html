@@ -51,6 +51,17 @@
           <span class="nav-link-text ms-1">Dynamic Tables</span>
         </a>
       </li>
+      {% if current_user.is_authenticated and current_user.admin %}
+        <li class="nav-item">
+          <a
+            class="nav-link {% if 'dynamic_dt' == segment %} active bg-gradient-dark text-white {% else %} text-dark {% endif %}"
+            href="{{ url_for('users_blueprint.index') }}"
+          >
+            <i class="material-symbols-rounded opacity-5">table_view</i>
+            <span class="nav-link-text ms-1">Usuarios</span>
+          </a>
+        </li>
+      {% endif %}
       <li class="nav-item">
         <a
           class="nav-link {% if 'charts' == segment %} active bg-gradient-dark text-white {% else %} text-dark {% endif %}"
