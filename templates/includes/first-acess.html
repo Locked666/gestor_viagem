@@ -1,0 +1,9 @@
+
+{% if current_user.first_acess %}
+    <div class="alert alert-warning alert-dismissible text-white" role="alert">
+        <span class="text-sm">Sua senha é a Padrão, altere para maior segurança <a href="{{ url_for('users_blueprint.reset_password') }}" class="alert-link text-white">Clique para alterar.</a></span>
+        <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}

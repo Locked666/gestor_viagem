@@ -65,11 +65,14 @@ def login():
 
         # Check the password
         if verify_pass(password, user.password):
-            user.first_acess = False 
-            db.session.add(user)
-            db.session.commit()
-
+            
             login_user(user)
+                        
+            # user.first_acess = False 
+            # db.session.add(user)
+            # db.session.commit()
+
+            
             return redirect(url_for('home_blueprint.index'))
 
         # Something (user or pass) is not ok

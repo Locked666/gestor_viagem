@@ -30,7 +30,7 @@
         <h6
           class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5"
         >
-          Apps
+          Principal
         </h6>
       </li>
       <li class="nav-item">
@@ -52,7 +52,16 @@
           <span class="nav-link-text ms-1">Dynamic Tables</span>
         </a>
       </li> -->
+
       {% if current_user.is_authenticated and current_user.admin %}
+      <li class="nav-item mt-3">
+        <h6
+          class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5"
+        >
+          Administrativo
+        </h6>
+
+      </li>
       <li class="nav-item">
         <a
           class="nav-link {% if 'users' == segment %} active bg-gradient-dark text-white {% else %} text-dark {% endif %}"

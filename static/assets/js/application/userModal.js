@@ -2,6 +2,7 @@
 
 import {
   putJSON,
+  deleteJSON,
   funcShowLoader,
   funcHideLoader,
   postJSON,
@@ -58,10 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const field = form.elements[key];
         jsonData[key] =
           field && field.type === "checkbox" ? field.checked : value;
-        console.log(field);
-        console.log(field.key);
-        console.log(field.type);
-        console.log(field.checked);
       });
 
       var result = "";
@@ -87,3 +84,37 @@ document.addEventListener("DOMContentLoaded", () => {
       // Toast já será exibido automaticamente
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("#delete-user").forEach((button) => {
+    button.addEventListener("click", async function () {
+      const userId = this.getAttribute("data-id");
+
+      if (!userId) {
+        console.error("ID do usuário não encontrado.");
+        return;
+      }
+
+      const confirmDelete = confirm("Tem certeza que deseja excluir este usuário?");
+      if (!confirmDelete) return;
+
+      const payload = {
+        user_id: userId,
+      };
+
+      const deleteUserP = await deleteJSON("/users", payload);
+      if (deleteUserP.success){
+        setInterval(() => {
+          location.reload()
+        },1000)
+        
+      } else {
+        return
+      }
+
+    });
+  });
+});
+
+
+

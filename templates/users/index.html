@@ -185,13 +185,10 @@
                     {% endif %}
                   </td>
                   <td class="align-middle">
-                    <!--<a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                            Edit
-                            </a>-->
-                    <!--<a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i class="material-symbols-rounded text-sm me-2">delete</i></a>
-                            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i class="material-symbols-rounded  me-2">edit</i></a>-->
                     <a
-                      class="btn btn-link text-dark px-3 mb-0 btn-view-user"
+                      class="btn btn-link text-dark px-3 mb-0 "                 
+                    >
+                      <i class="material-symbols-rounded me-2 btn-view-user"
                       href="javascript:;"
                       data-action="edit"
                       data-id="{{ user.id }}"
@@ -201,8 +198,8 @@
                       data-status="{{ 'Ativo' if user.active else 'Inativo' }}"
                       data-diaria="{{ 'Sim' if user.diaria else 'Não' }}"
                       data-admin="{{ 'Sim' if user.admin else 'Não' }}"
-                    >
-                      <i class="material-symbols-rounded me-2">visibility</i>
+                      >visibility</i>
+                      <i class="material-symbols-rounded me-2" id="delete-user" data-id="{{ user.id }}" >delete</i>
                     </a>
                   </td>
                 </tr>
