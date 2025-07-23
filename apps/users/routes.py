@@ -79,7 +79,6 @@ def index():
         
         if user_email and user_email.id != user.id:
             raise InvalidUsage('Email já cadastrado.', status_code=422)
-        print(data)
         
         try: 
             user.username = data.get('username', user.username).strip()
@@ -188,6 +187,7 @@ def reset_password():
         
         
         try: 
+            
             user.password = data['new_password'].strip()
             user.first_acess = False
             
