@@ -5,7 +5,8 @@ from apps.authentication.models import Users,db
 from apps.models import RegistroViagens
 from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
-from apps.users.validation import validadion_user
+from apps.users.validation import validadion_user, validadion_password
+from apps.authentication.util import verify_pass
 
 
 
@@ -44,6 +45,7 @@ def index():
             raise InvalidUsage(message = 'Parametro ID é obrigatório', status_code=402)
         
         user = Users.query.filter_by(id=data['user_id']).first()
+        
         user_email = Users.query.filter(
             and_(
                 Users.email == data['email'],
@@ -57,8 +59,7 @@ def index():
                 Users.id != data['user_id']
             )
         ).first()
-        
-        
+
         if user_name: 
             raise InvalidUsage(message = "Nome de Usuário Já cadastrado", status_code = 400)
         
@@ -81,7 +82,6 @@ def index():
         print(data)
         
         try: 
-            
             user.username = data.get('username', user.username).strip()
             user.email = data.get('email', user.email)
             user.setor = data.get('setor', user.setor)
@@ -124,9 +124,16 @@ def index():
             raise InvalidUsage(message= f"Ocorreu um erro ao salvar o usuário:\n{e}", status_code=500)
     
     elif request.method == 'DELETE' :
+        
         data = request.get_json()
+        
         if data.get('user_id', None) == None:
             raise InvalidUsage(message = "É necessário o ID do usuário.", status_code= 500)
+        
+        qt_user = Users.query.all().__len__()
+        
+        if qt_user == 1: 
+            raise InvalidUsage(message= " Não foi possivel Excluir Usuário\n, É necessário ter ao menos um usuário", status_code= 400)
         
         
         user_viagens =  RegistroViagens.query.filter_by(usuario = data['user_id']).first()
@@ -148,11 +155,58 @@ def index():
     else : 
         raise InvalidUsage(message= "Method Invalid", status_code= 400)
  
-@blueprint.route('users/reset_password', methods = ['GET'])
+@blueprint.route('/users/reset_password', methods = ['GET', 'PUT'])
 @login_required
 def reset_password():
-    # if current_user.unauthorized():
-    #     return render_template('error/403.html')
+    
+    
+    if request.method == 'PUT':
+        
+        
+        data = request.get_json()
+        
+        field_required = ['new_password','current_password']
+        
+        for field in field_required:
+            if not data.get(field):
+                raise InvalidUsage(message= f'Campo requerido faltando: {field} ', status_code=404)
+       
+        
+        validadion = validadion_password(data['new_password'])
+        
+        if not validadion['success']:
+            raise InvalidUsage(message= validadion['message'], status_code= 400)
+        
+        user = Users.query.filter_by(id=current_user.id).first()
+        
+        if not user: 
+            raise InvalidUsage(message= "Usuário Não encontrado", status_code= 404)
+        
+        if not verify_pass(data['current_password'], user.password):   
+            raise InvalidUsage(message= "Senha atual Incorreta", status_code= 400)
+        
+        
+        
+        try: 
+            user.password = data['new_password'].strip()
+            user.first_acess = False
+            
+            user.save()
+            
+            
+            
+        except Exception as e: 
+            raise InvalidUsage(message= f"Ocorreu um erro ao atualizar senha: {e}", status_code= 500)    
+           
+        return jsonify({'success': True,'message': 'Deu certo a senha'}), 200   
+            
+
+            
+        
+        
+        
+        
+    
     return render_template('users/reset-password.html')
                 
             

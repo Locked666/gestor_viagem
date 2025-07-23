@@ -58,3 +58,4 @@ export const putJSON = (url, data) => request("PUT", url, data);
 export const deleteJSON = (url, data) => request("DELETE", url, data);
 export const funcShowLoader = showLoader;
 export const funcHideLoader = hideLoader;
+export const execToast = toast;

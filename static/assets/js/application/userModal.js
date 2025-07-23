@@ -95,7 +95,9 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const confirmDelete = confirm("Tem certeza que deseja excluir este usuário?");
+      const confirmDelete = confirm(
+        "Tem certeza que deseja excluir este usuário?"
+      );
       if (!confirmDelete) return;
 
       const payload = {
@@ -103,18 +105,51 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       const deleteUserP = await deleteJSON("/users", payload);
-      if (deleteUserP.success){
+      if (deleteUserP.success) {
         setInterval(() => {
-          location.reload()
-        },1000)
-        
+          location.reload();
+        }, 1000);
       } else {
-        return
+        return;
       }
-
     });
   });
 });
+funcHideLoader();
 
+document.addEventListener("DOMContentLoaded", () => {
+  document
+    .getElementById("passwordChangeForm")
+    .addEventListener("submit", async function (event) {
+      event.preventDefault();
 
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmNewPassword =
+        document.getElementById("confirmNewPassword").value;
 
+      if (newPassword !== confirmNewPassword) {
+        alert("As senhas não coincidem.");
+        return;
+      }
+
+      const payload = {
+        current_password: currentPassword,
+        new_password: newPassword,
+      };
+
+      const resetPasswordRequest = await putJSON(
+        "/users/reset_password",
+        payload
+      );
+
+      const result = await resetPasswordRequest.json();
+
+      if (response.success) {
+        document.getElementById("passwordChangeForm").reset();
+        // setInterval(() => {
+        //   location.reload();
+        // }, 1000);
+      }
+    });
+});
