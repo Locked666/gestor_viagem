@@ -6,7 +6,7 @@ from apps.models import RegistroViagens
 from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
 from apps.users.validation import validadion_user, validadion_password
-from apps.authentication.util import verify_pass
+from apps.authentication.util import verify_pass,hash_pass
 
 
 
@@ -188,17 +188,15 @@ def reset_password():
         
         try: 
             
-            user.password = data['new_password'].strip()
+            user.password = hash_pass(data['new_password'].strip())
             user.first_acess = False
             
-            user.save()
-            
-            
-            
+            db.session.commit()
+
         except Exception as e: 
             raise InvalidUsage(message= f"Ocorreu um erro ao atualizar senha: {e}", status_code= 500)    
            
-        return jsonify({'success': True,'message': 'Deu certo a senha'}), 200   
+        return jsonify({'success': True,'message': 'Senha Alterada com sucesso!'}), 200   
             
 
             

@@ -143,13 +143,12 @@ document.addEventListener("DOMContentLoaded", () => {
         payload
       );
 
-      const result = await resetPasswordRequest.json();
-
-      if (response.success) {
+      
+      if (resetPasswordRequest.success) {
         document.getElementById("passwordChangeForm").reset();
-        // setInterval(() => {
-        //   location.reload();
-        // }, 1000);
+        setInterval(() => {
+          location.reload();
+        }, 1000);
       }
     });
 });

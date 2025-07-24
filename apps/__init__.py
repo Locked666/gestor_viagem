@@ -27,6 +27,7 @@ def register_blueprints(app):
         'dyn_dt',
         'charts',
         'users', 
+        'travel',
         ):
         module = import_module('apps.{}.routes'.format(module_name))
         app.register_blueprint(module.blueprint)
