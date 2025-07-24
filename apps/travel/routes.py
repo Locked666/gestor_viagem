@@ -9,10 +9,25 @@ from apps.authentication.util import verify_pass,hash_pass
 
 
 @blueprint.route('/travel', methods = ['GET'])
+@login_required
 def index():
     context = {
-        'segment': 'travel',
+        'segment': 'travel - ',
         'title': 'Viagens'
     }
     
     return render_template('travel/index.html', **context)
+
+
+
+@blueprint.route('/travel/add', methods = ['GET','POST'])
+@login_required
+def add_travel():
+    context = {
+        'segment': 'travel',
+        'title': 'Viagens'
+    }
+
+    return render_template('travel/add-travel.html', **context)
+
+

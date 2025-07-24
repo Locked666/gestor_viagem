@@ -3,9 +3,238 @@
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %} {% block content %}
 
-<h1>VIagens</h1>
+<div class="container-fluid py-2">
+  <!-- Card Search-->
+  <div class="row">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <div class="row g-2 mb-3">
+          <div class="col-md-3">
+            <label for="filtroNome" class="form-label">Nome do Usuário</label>
+            <input
+              type="text"
+              class="form-control border ps-1"
+              id="filtroNome"
+              placeholder="Digite o nome"
+            />
+          </div>
+          <div class="col-md-2">
+            <label for="filtroCodigo" class="form-label">Código</label>
+            <input
+              type="text"
+              class="form-control border ps-1"
+              id="filtroCodigo"
+              placeholder="Código"
+            />
+          </div>
+          <div class="col-md-3">
+            <label for="filtroEmail" class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control border ps-1"
+              id="filtroEmail"
+              placeholder="Digite o email"
+            />
+          </div>
+          <div class="col-md-2">
+            <label for="filtroTipo" class="form-label">Tipo</label>
+            <select class="form-select" id="filtroTipo">
+              <option value="todos" selected>Todos</option>
+              <option value="administrador">Administrador</option>
+              <option value="usuario">Usuário</option>
+            </select>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="filtroAtivo"
+                checked
+              />
+              <label class="form-check-label" for="filtroAtivo"> Ativo </label>
+            </div>
+          </div>
+        </div>
 
+        <div class="row g-2">
+          <div class="col-md-2">
+            <button
+              type="button"
+              class="btn btn-secondary w-100"
+              id="btnLimpar"
+            >
+              <i class="material-symbols-rounded me-2">backspace</i> Limpar
+            </button>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-primary w-100" id="btnFiltrar">
+              <i class="material-symbols-rounded me-2">visibility</i> Filtrar
+            </button>
+          </div>
+          <div class="col-md-2">
+            <a
+              class="btn btn-success w-100"
+              href="{{ url_for('travel_blueprint.add_travel') }}"
+            >
+              <i class="material-symbols-rounded me-2">add_circle</i>
+              <span class="nav-link-text ms-1">Adicionar</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Viagens</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th
+                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  >
+                    Nome
+                  </th>
+                  <th
+                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                  >
+                    Setor
+                  </th>
+                  <th
+                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  >
+                    Diária
+                  </th>
+                  <th
+                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  >
+                    Status
+                  </th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <!--            <tbody>
+                {% for user in users %}
+                <tr>
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div>
+                        <img
+                          src="{{ url_for('static', filename='assets/img/team-2.jpg') }}"
+                          class="avatar avatar-sm me-3 border-radius-lg"
+                          alt="user1"
+                        />
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">{{ user.username }}</h6>
+                        <p class="text-xs text-secondary mb-0">
+                          {{ user.email }}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    {% if user.setor %}
+                    <p class="text-xs font-weight-bold mb-0">
+                      {{ user.setor }}
+                    </p>
+                    {% else %}
+                    <p class="text-xs font-weight-bold mb-0">N/A</p>
+                    {% endif %} {% if user.admin %}
+                    <p class="text-xs text-secondary mb-0">Administrador</p>
+                    {% else %}
+                    <p class="text-xs text-secondary mb-0">Usuário</p>
+                    {% endif %}
+                  </td>
 
-{% block javascripts %}
+                  <td class="align-middle text-center text-sm">
+                    {% if user.diaria %}
+                    <span class="badge badge-sm bg-gradient-success"
+                      >Ativo</span
+                    >
+                    {% else %}
+                    <span class="badge badge-sm bg-gradient-danger"
+                      >Inativo</span
+                    >
+                    {% endif %}
+                  </td>
 
-{% endblock javascripts %} {% endblock content %}
+                  <td class="align-middle text-center text-sm">
+                    {% if user.active %}
+                    <span class="badge badge-sm bg-gradient-success"
+                      >Ativo</span
+                    >
+                    {% else %}
+                    <span class="badge badge-sm bg-gradient-danger"
+                      >Inativo</span
+                    >
+                    {% endif %}
+                  </td>
+                  <td class="align-middle">
+                    <a class="btn btn-link text-dark px-3 mb-0">
+                      <i
+                        class="material-symbols-rounded me-2 btn-view-user"
+                        href="javascript:;"
+                        data-action="edit"
+                        data-id="{{ user.id }}"
+                        data-name="{{ user.username }}"
+                        data-email="{{ user.email }}"
+                        data-setor="{{ user.setor }}"
+                        data-status="{{ 'Ativo' if user.active else 'Inativo' }}"
+                        data-diaria="{{ 'Sim' if user.diaria else 'Não' }}"
+                        data-admin="{{ 'Sim' if user.admin else 'Não' }}"
+                        >visibility</i
+                      >
+                      <i
+                        class="material-symbols-rounded me-2"
+                        id="delete-user"
+                        data-id="{{ user.id }}"
+                        >delete</i
+                      >
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>-->
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="userModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="userModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Editar Usuário</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Fechar"
+          ></button>
+        </div>
+
+        {% block javascripts %} {% endblock javascripts %} {% endblock content
+        %}
+      </div>
+    </div>
+  </div>
+</div>

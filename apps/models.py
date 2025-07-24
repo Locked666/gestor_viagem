@@ -19,25 +19,6 @@ class CURRENCY_TYPE(Enum):
 
 
 #__MODELS__
-# class Usuarios(db.Model):
-#     __tablename__= 'usuarios'
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     usuario = db.Column(db.String(100), nullable=False)
-#     senha = db.Column(db.String(1000), nullable=True)
-#     acesso = db.Column(db.String(100))
-#     email = db.Column(db.String(100))
-#     foto = db.Column(db.String(1000), comment='Caminho da foto do usuário')
-#     setor = db.Column(db.String(100))
-#     admin = db.Column(db.Boolean, default=False)
-#     diaria = db.Column(db.Boolean, default=True)
-#     ativo = db.Column(db.Boolean, default=True)
-#     data = db.Column(db.DateTime, default=db.func.now())
-
-#     #__Usuario_FIELDS__END
-
-#     def __init__(self, **kwargs):
-#         super(Usuarios, self).__init__(**kwargs)
 
 
 class Entidades(db.Model):

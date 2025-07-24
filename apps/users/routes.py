@@ -17,7 +17,7 @@ from apps.authentication.util import verify_pass,hash_pass
 def index():
     context = {
         'segment': 'users',
-        'title': 'Users'
+        'title': 'Usuários'
     }
     
     if current_user.admin is False:
