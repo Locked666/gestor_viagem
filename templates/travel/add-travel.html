@@ -8,7 +8,7 @@
 
   <!-- Tabs Navigation -->
   <ul class="nav nav-tabs bg-20" id="viagemTabs" role="tablist">
-    <li class="nav-item" role="presentation">
+    <li class="nav-item bg" role="presentation">
       <button
         class="nav-link active"
         id="dados-tab"
@@ -25,15 +25,15 @@
     <li class="nav-item" role="presentation">
       <button
         class="nav-link"
-        id="financeiro-tab"
+        id="tecnicoUser-tab"
         data-bs-toggle="tab"
-        data-bs-target="#financeiro"
+        data-bs-target="#tecnicos"
         type="button"
         role="tab"
-        aria-controls="financeiro"
+        aria-controls="tecnicoUser"
         aria-selected="false"
       >
-        <i class="bi bi-cash-stack"></i> Financeiro
+        <i class="bi bi-cash-stack"></i> Técnicos
       </button>
     </li>
     <li class="nav-item" role="presentation">
@@ -78,7 +78,7 @@
             <label for="entidade" class="form-label">Entidade Destino</label>
             <input
               type="text"
-              class="form-control"
+              class="form-control border ps-6"
               id="entidade"
               name="entidade"
               placeholder="Digite o nome da entidade"
@@ -91,7 +91,7 @@
             <label for="dataSaida" class="form-label">Data de Saída *</label>
             <input
               type="datetime-local"
-              class="form-control"
+              class="form-control border ps-1"
               id="dataSaida"
               name="dataSaida"
               required
@@ -103,7 +103,7 @@
             >
             <input
               type="datetime-local"
-              class="form-control"
+              class="form-control border ps-1"
               id="dataRetorno"
               name="dataRetorno"
               required
@@ -118,7 +118,7 @@
             >
             <input
               type="text"
-              class="form-control"
+              class="form-control border ps-1"
               id="codigoRelatorio"
               name="codigoRelatorio"
               required
@@ -130,7 +130,7 @@
             >
             <input
               type="number"
-              class="form-control"
+              class="form-control border ps-1"
               id="quantidadeDiarias"
               name="quantidadeDiarias"
             />
@@ -143,7 +143,7 @@
               <input
                 type="number"
                 step="0.01"
-                class="form-control"
+                class="form-control border ps-1"
                 id="valorDiaria"
                 name="valorDiaria"
                 readonly
@@ -167,7 +167,7 @@
         <div class="mb-3">
           <label for="descricao" class="form-label">Descrição</label>
           <textarea
-            class="form-control"
+            class="form-control border ps-1"
             id="descricao"
             name="descricao"
             rows="3"
@@ -186,128 +186,39 @@
       </form>
     </div>
 
-    <!-- Aba 2: Financeiro -->
+    <!-- Aba 2: Técnicos -->
     <div
       class="tab-pane fade"
-      id="financeiro"
+      id="tecnicos"
       role="tabpanel"
-      aria-labelledby="financeiro-tab"
+      aria-labelledby="tecnicos-tab"
     >
       <div class="row">
         <div class="col-md-6">
-          <h5>Adicionar Gasto</h5>
-          <form id="formGasto">
-            <input type="hidden" id="gastoId" name="gastoId" />
-            <input type="hidden" id="viagemIdGasto" name="viagemIdGasto" />
+          <h5>Adicionar Técnicos</h5>
+          <form id="tecnicoUserForm">
+            <!--<input type="hidden" id="gastoId" name="gastoId" />-->
+            <!--<input type="hidden" id="viagemIdGasto" name="viagemIdGasto" />-->
 
-            <div class="mb-3">
-              <label for="tipoGasto" class="form-label">Tipo do Gasto *</label>
+            <div class="mb-3 d-flex justify-content-end">
+              <label for="tecnicoUser" class="form-label">Técnico *</label>
               <select
                 class="form-select"
-                id="tipoGasto"
-                name="tipoGasto"
+                id="tecnicoUser"
+                name="tecnicoUser"
                 required
               >
-                <option value="" selected disabled>Selecione um tipo</option>
-                <option value="Alimentação">Alimentação</option>
-                <option value="Combustível">Combustível</option>
-                <option value="Estadia">Estadia</option>
-                <option value="Outras">Outras</option>
+                <option value="" selected disabled>Selecione um Técnico</option>
+                {% for tecnico in tecnicos %}
+                <option value="{{tecnico.id}}">{{ tecnico.username }}</option>
+                {% endfor %}
               </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="numeroDocumento" class="form-label"
-                >Número do Documento</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="numeroDocumento"
-                name="numeroDocumento"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="valorGasto" class="form-label">Valor *</label>
-              <div class="input-group">
-                <span class="input-group-text">R$</span>
-                <input
-                  type="number"
-                  step="0.01"
-                  class="form-control"
-                  id="valorGasto"
-                  name="valorGasto"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label for="descricaoGasto" class="form-label"
-                >Descrição do Gasto</label
-              >
-              <textarea
-                class="form-control"
-                id="descricaoGasto"
-                name="descricaoGasto"
-                rows="2"
-              ></textarea>
-            </div>
-
-            <div class="mb-3">
-              <label for="dataHoraGasto" class="form-label"
-                >Data e Hora do Gasto *</label
-              >
-              <input
-                type="datetime-local"
-                class="form-control"
-                id="dataHoraGasto"
-                name="dataHoraGasto"
-                required
-              />
-            </div>
-
-            <div class="mb-3">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="estorno"
-                  name="estorno"
-                />
-                <label class="form-check-label" for="estorno"
-                  >Realizar estorno?</label
+              <a class="w-1" href="">
+                <i class="material-symbols-rounded me-2 justify-content-center"
+                  >add_circle</i
                 >
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label for="tipoDocumento" class="form-label"
-                >Tipo do Documento</label
-              >
-              <select
-                class="form-select"
-                id="tipoDocumento"
-                name="tipoDocumento"
-              >
-                <option value="1">Nota Fiscal</option>
-                <option value="2">Comprovante de Pagamento</option>
-                <option value="3">Recibo</option>
-                <option value="4">Outros</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="documentoUpload" class="form-label"
-                >Upload do Documento</label
-              >
-              <input
-                class="form-control"
-                type="file"
-                id="documentoUpload"
-                name="documentoUpload"
-                accept=".pdf,.jpg,.jpeg,.png"
-              />
+                <span class="nav-link-text ms-1"></span>
+              </a>
             </div>
 
             <div class="d-flex justify-content-end">
