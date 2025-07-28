@@ -16,7 +16,7 @@ from apps.authentication.models import Users
 from flask_wtf import FlaskForm
 
 @blueprint.route('/')
-@blueprint.route('/index')
+# @blueprint.route('/index')
 def index():
     context = {
         'segment': 'dashboard',

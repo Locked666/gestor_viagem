@@ -5,11 +5,16 @@
 <script src="{{ url_for('static', filename='assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
 
 <!-- Scripts prop-->
+<script
+  type="module"
+  src="{{ url_for('static', filename='assets/js/application/autoComplete.js') }}"
+></script>
 
 <script
   type="module"
   src="{{ url_for('static', filename='assets/js/application/request.js') }}"
 ></script>
+
 
 <script>
   var win = navigator.platform.indexOf("Win") > -1;
