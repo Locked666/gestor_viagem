@@ -114,6 +114,7 @@ def index():
         try:
             data['password'] = data['username'].strip()
             data['username'] = data['username'].strip()
+            data['diaria'] = True if data.get('diaria', False) == True else False
             new_user = Users(**data)
             db.session.add(new_user)
             db.session.commit()
