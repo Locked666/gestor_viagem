@@ -2,7 +2,7 @@ from apps.users import blueprint
 from flask_login import login_required, current_user, login_user
 from flask import render_template, request, redirect, url_for, jsonify
 from apps.authentication.models import Users,db
-from apps.models import RegistroViagens
+from apps.travel.models import RegistroViagens
 from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
 from apps.users.validation import validadion_user, validadion_password

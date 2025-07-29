@@ -1,7 +1,7 @@
 from apps.travel import blueprint
 from flask_login import login_required, current_user, login_user
 from flask import render_template, request, redirect, url_for, jsonify
-from apps.models import RegistroViagens,GastosViagens,db
+from apps.travel.models import RegistroViagens,GastosViagens,db
 from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
 from apps.authentication.models import Users
@@ -36,7 +36,7 @@ def add_travel():
     elif request.method == 'POST':
         data = request.get_json()
         
-        print(f'\n\n\n{data}\n\n\n')
+        
         
         return jsonify({'success': True, 'message': 'Viagem Agendada com sucesso', 'id': 10})
     

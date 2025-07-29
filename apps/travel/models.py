@@ -10,6 +10,7 @@ class RegistroViagens(db.Model):
     data_inicio = db.Column(db.DateTime)
     data_fim = db.Column(db.DateTime)
     tipo_viagem = db.Column(db.String(100))
+    local_viagem = db.Column(db.String(100), comment='Local da viagem')
     n_diaria = db.Column(db.String(100), comment='Número da diária')
     v_diaria = db.Column(db.Float, comment='Valor da diária')
     descricao = db.Column(db.String(100))
@@ -26,6 +27,16 @@ class RegistroViagens(db.Model):
 
     entidade_rel = db.relationship('Entidades', backref='viagens', lazy='joined')
     usuario_rel = db.relationship('Users', backref='viagens', lazy='joined')
+    
+class TecnicosViagens(db.Model):
+    __tablename__ = 'tecnicos_viagens'
+    id = db.Column(db.Integer, primary_key=True)
+    viagem = db.Column(db.Integer, db.ForeignKey('registro_viagens.id'), nullable=False)
+    tecnico = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    data = db.Column(db.DateTime, default=db.func.now())
+    
+    
+    
 
 class GastosViagens(db.Model):
     __tablename__ = 'gastos_viagens'
