@@ -3,6 +3,16 @@
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %} {% block content %}
 
+{% if message %}
+    <div class="alert alert-warning alert-dismissible text-white" role="alert">
+        <span class="text-sm">{{message}}</span>
+        <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}
+
+
 <div class="container-fluid py-2">
   <!-- Card Search-->
   <div class="row">
@@ -102,26 +112,92 @@
                   <th
                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                   >
-                    Nome
+                    Entidade
                   </th>
                   <th
                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                   >
-                    Setor
+                    Data
                   </th>
                   <th
-                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                  >
-                    Diária
-                  </th>
-                  <th
-                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                   >
                     Status
                   </th>
+                  <th
+                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  >
+                    Descrição
+                  </th>
+                  <th
+                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  ></th>
                   <th class="text-secondary opacity-7"></th>
                 </tr>
               </thead>
+              <tbody>
+                {% if travels%} {% for travel in travels%}
+                <tr>
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">{{ travel.entidade_nome }}</h6>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">
+                      {{ travel.data_inicio_convert }}
+                    </p>
+                  </td>
+                  <td>
+                    {% if travel.status == 'Agendada' %}
+                      <span class="badge badge-sm bg-gradient-success">
+                        {{ travel.status }}
+                      </span>
+                    {% elif travel.status == 'Concluida' %}
+                    <span class="badge badge-sm bg-gradient-info">
+                      {{ travel.status }}  
+                  </td>
+                    {% elif travel.status == 'Cancelada' %}
+                    <span class="badge badge-sm bg-gradient-danger">
+                      {{ travel.status }}
+                    </span>
+                    {% elif travel.status == 'Parcial' %}
+                    <span class="badge badge-sm bg-gradient-warning">
+                      {{ travel.status }}
+                    </span>
+                    {% else %}
+                    <span class="badge badge-sm bg-gradient-secondary">
+                      {{ travel.status }}
+                    </span>
+                    {% endif %}
+                  <td class="align-middle text-center text-sm">
+                    <p class="text-xs font-weight-bold mb-0">
+                      {{ travel.descricao }}
+                    </p>
+                  </td>
+                  <td class="align-middle text-center">
+                    <a
+                      href="{{ url_for('travel_blueprint.edit_travel', idTravel=travel.id) }}"
+                      class="btn btn-link text-dark px-3 mb-0"
+                    >
+                      <i class="material-symbols-rounded me-2">edit</i> Editar
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %} {% else %}
+                <tr>
+                  <td colspan="5" class="text-center">
+                    <p class="text-xs font-weight-bold mb-0">
+                      Nenhuma viagem encontrada.
+                    </p>
+                  </td>
+                </tr>
+
+                {% endif %}
+              </tbody>
+
               <!--            <tbody>
                 {% for user in users %}
                 <tr>
