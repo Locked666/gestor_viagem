@@ -31,6 +31,10 @@ def index():
         'title': 'Viagens'
     }
     
+    message_code = request.args.get('message')
+    if message_code == '403':
+        context['message'] = 'Você não tem permissão para editar esta viagem.'
+    
     travels = RegistroViagens.query.filter_by(ativo=True).all()
     if not travels:
         return render_template('travel/index.html', **context, travels=None)
@@ -44,6 +48,7 @@ def index():
 
 
 
+# Adicionar Travel / agenda
 @blueprint.route('/travel/add', methods = ['GET','POST'])
 @login_required
 def add_travel():
@@ -122,8 +127,8 @@ def edit_travel():
     tec_travel = TecnicosViagens.query.filter_by(viagem=id_viagem).all()
     
     if current_user.id != tec_travel[0].tecnico and not current_user.admin:
-        # raise InvalidUsage(message='Você não tem permissão para editar esta viagem', status_code=403)
-        return render_template('travel/index.html', message='Você não tem permissão para editar esta viagem', segment='travel', title='Editar - Viagens')
+        return redirect(url_for('travel_blueprint.index', message='403'))
+
     
     
     if not id_viagem:
