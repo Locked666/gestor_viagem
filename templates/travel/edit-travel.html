@@ -1,17 +1,11 @@
-{% extends "layouts/base.html" %}
-
-{% block title %}Home{% endblock title %}
-
-{% block content %}
+{% extends "layouts/base.html" %} {% block title %}Home{% endblock title %} {%
+block content %}
 <div class="container-fluid py-2">
   {% if current_user.admin %}
   <div class="row">
-        
     <div class="ms-3">
       <h3 class="mb-0 h4 font-weight-bolder">Editar Viagens</h3>
-      <p class="mb-4">
-        Check the sales, value and bounce rate by country.
-      </p>
+      <p class="mb-4">Check the sales, value and bounce rate by country.</p>
     </div>
 
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -22,14 +16,19 @@
               <p class="text-sm mb-0 text-capitalize">Today's Money</p>
               <h4 class="mb-0">$53k</h4>
             </div>
-            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+            <div
+              class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
+            >
               <i class="material-symbols-rounded opacity-10">weekend</i>
             </div>
           </div>
         </div>
-        <hr class="dark horizontal my-0">
+        <hr class="dark horizontal my-0" />
         <div class="card-footer p-2 ps-3">
-          <p class="mb-0 text-sm"><span class="text-success font-weight-bolder">+55% </span>than last week</p>
+          <p class="mb-0 text-sm">
+            <span class="text-success font-weight-bolder">+55% </span>than last
+            week
+          </p>
         </div>
       </div>
     </div>
@@ -41,14 +40,19 @@
               <p class="text-sm mb-0 text-capitalize">Today's Users</p>
               <h4 class="mb-0">2300</h4>
             </div>
-            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+            <div
+              class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
+            >
               <i class="material-symbols-rounded opacity-10">person</i>
             </div>
           </div>
         </div>
-        <hr class="dark horizontal my-0">
+        <hr class="dark horizontal my-0" />
         <div class="card-footer p-2 ps-3">
-          <p class="mb-0 text-sm"><span class="text-success font-weight-bolder">+3% </span>than last month</p>
+          <p class="mb-0 text-sm">
+            <span class="text-success font-weight-bolder">+3% </span>than last
+            month
+          </p>
         </div>
       </div>
     </div>
@@ -60,14 +64,19 @@
               <p class="text-sm mb-0 text-capitalize">Ads Views</p>
               <h4 class="mb-0">3,462</h4>
             </div>
-            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+            <div
+              class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
+            >
               <i class="material-symbols-rounded opacity-10">leaderboard</i>
             </div>
           </div>
         </div>
-        <hr class="dark horizontal my-0">
+        <hr class="dark horizontal my-0" />
         <div class="card-footer p-2 ps-3">
-          <p class="mb-0 text-sm"><span class="text-danger font-weight-bolder">-2% </span>than yesterday</p>
+          <p class="mb-0 text-sm">
+            <span class="text-danger font-weight-bolder">-2% </span>than
+            yesterday
+          </p>
         </div>
       </div>
     </div>
@@ -79,14 +88,19 @@
               <p class="text-sm mb-0 text-capitalize">Sales</p>
               <h4 class="mb-0">$103,430</h4>
             </div>
-            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+            <div
+              class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
+            >
               <i class="material-symbols-rounded opacity-10">weekend</i>
             </div>
           </div>
         </div>
-        <hr class="dark horizontal my-0">
+        <hr class="dark horizontal my-0" />
         <div class="card-footer p-2 ps-3">
-          <p class="mb-0 text-sm"><span class="text-success font-weight-bolder">+5% </span>than yesterday</p>
+          <p class="mb-0 text-sm">
+            <span class="text-success font-weight-bolder">+5% </span>than
+            yesterday
+          </p>
         </div>
       </div>
     </div>
@@ -96,32 +110,57 @@
   <div class="row mt-4">
     <div class="col-lg-12 col-md-12">
       <div class="card">
-        <div class="card-header pb-0">
-          
-        </div>
+        <div class="card-header pb-0"></div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="mb-0">
-            <label><strong>Viagem: {{ travel.id}}</strong> </label>
-            <label class="" for="entidade">Entidade:</label>
-            <input type="text" class="form-control" id="entidade" name="entidade" value="{{ travel.entidade }}" readonly>
-            <label class="" for="data_inicio">Data de Início:</label>
-            <input type="date" class="form-control" id="data_inicio" name="data_inicio" value="{{ travel.data_inicio }}" readonly>
-            <label class="" for="tipo_viagem">Tipo de Viagem:</label>
-            <select class="form-select" id="tipoViagem" name="tipoViagem" readonly>
-              <option value="Técnica">Técnica</option>
-              <option value="Administrativa">Administrativa</option>
-              <option value="Capacitação">Capacitação</option>
-              <option value="Outra">Outra</option>
-            </select>
+            <div class="row">
+              <!--Viagem id -->
+              <div class="col-md-2">
+                <label><strong>Viagem: {{ travel.id}}</strong> </label>
+              </div>
 
+              <div class="col-md-2">
+                <label class="" for="entidade">Entidade:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="entidade"
+                  name="entidade"
+                  value="{{ travel.entidade_nome }}"
+                  readonly
+                />
+              </div>
+              <div class="col-md-2">
+                <label class="" for="data_inicio">Data de Início:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="data_inicio"
+                  name="data_inicio"
+                  value="{{ travel.data_inicio_convert }}"
+                  readonly
+                />
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <label class="" for="tipo_viagem">Tipo de Viagem:</label>
 
-
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="tipo_viagem"
+                    name="tipo_viagem"
+                    value="{{ travel.tipo_viagem }}"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-
         </div>
       </div>
     </div>
+
+    {% endblock content %}
+  </div>
 </div>
-
-
-{% endblock content %}

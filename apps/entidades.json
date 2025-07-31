@@ -1,0 +1,478 @@
+[
+  {
+    "id": 1,
+    "nome": "PM CARACOL",
+    "data": "2025-04-23 14:34:20.103973",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 2,
+    "nome": "PM CORGUINHO",
+    "data": "2025-04-17 12:11:42.781610",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 3,
+    "nome": "PM FIGUEIRÃO",
+    "data": "2024-12-02 08:18:34.959386",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 4,
+    "nome": "PM LADARIO",
+    "data": "2024-11-29 08:21:15.525894",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 5,
+    "nome": "PM RIO NEGRO",
+    "data": "2024-11-05 12:32:50.126034",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 6,
+    "nome": "PM ROCHEDO",
+    "data": "2024-11-05 12:32:50.749742",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 7,
+    "nome": "PM TERENOS",
+    "data": "2024-11-05 12:32:51.198861",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 8,
+    "nome": "PM BANDEIRANTES",
+    "data": "2024-11-05 12:32:51.614114",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 9,
+    "nome": "CM CARACOL",
+    "data": "2024-11-05 12:32:51.970336",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 10,
+    "nome": "CM FIGUEIRÃO",
+    "data": "2024-12-27 16:55:58.554020",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 11,
+    "nome": "CM LADARIO",
+    "data": "2024-11-05 12:32:52.679187",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 12,
+    "nome": "CM CORGUINHO",
+    "data": "2025-04-04 11:41:44.329181",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 13,
+    "nome": "CM SELVIRIA",
+    "data": "2024-11-05 12:32:53.598602",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 14,
+    "nome": "CM PEDRO GOMES",
+    "data": "2024-11-05 12:32:54.262639",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 15,
+    "nome": "CM RIO NEGRO",
+    "data": "2025-04-04 11:41:43.262303",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 16,
+    "nome": "CM TERENOS",
+    "data": "2024-11-28 09:33:25.724362",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 17,
+    "nome": "CM BANDEIRANTES",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 18,
+    "nome": "CM MIRANDA",
+    "data": "2024-11-28 09:33:27.227635",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 19,
+    "nome": "CM CORUMBA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 20,
+    "nome": "QUALITY SISTEMAS",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 21,
+    "nome": "CM ROCHEDO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 22,
+    "nome": "INST. DE APOS. E PENSÕES DOS SERVIDORES MUN. DE TERENOS",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "RPPS",
+    "ativo": true
+  },
+  {
+    "id": 23,
+    "nome": "PM ANTONIO JOÃO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 24,
+    "nome": "CM ANTONIO JOAO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 25,
+    "nome": "CM BODOQUENA",
+    "data": "2024-11-28 09:33:28.612373",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 26,
+    "nome": "ESCOLA MUNICIPAL JOÃO JOSÉ LEITE",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Escola",
+    "ativo": true
+  },
+  {
+    "id": 27,
+    "nome": "CENTRO DE EDUCAÇÃO INFANTIL CRIANÇA FELIZ",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Escola",
+    "ativo": true
+  },
+  {
+    "id": 28,
+    "nome": "CM NIOAQUE",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 29,
+    "nome": "HOSPITAL MUNICIPAL RITA ANTONIA MACIEL GODOY",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 30,
+    "nome": "CM DOIS IRMAOS DO BURITI",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 31,
+    "nome": "SERVIÇO AUTÔNOMO DE ÁGUA E ESGOTO DE CORGUINHO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "SAAE",
+    "ativo": true
+  },
+  {
+    "id": 32,
+    "nome": "CM RIO VERDE DE MATO GROSSO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 33,
+    "nome": "CM APARECIDA DO TABOADO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 34,
+    "nome": "CM GUIA LOPES DA LAGUNA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 35,
+    "nome": "CM CAMAPUA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 36,
+    "nome": "PM NIOAQUE",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 37,
+    "nome": "CM AGUA CLARA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 38,
+    "nome": "PM PARAISO DAS AGUAS",
+    "data": "2025-04-04 11:41:45.473627",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 39,
+    "nome": "INSTITUTO MUNICIPAL DE PREVIDENCIA SOCIAL DE ROCHEDO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "RPPS",
+    "ativo": true
+  },
+  {
+    "id": 40,
+    "nome": "CM INOCENCIA",
+    "data": "2024-12-30 16:56:16.807303",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 41,
+    "nome": "CM PARAISO DAS AGUAS",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 42,
+    "nome": "CM COTRIGUACU",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 43,
+    "nome": "SECRETARIA MUNICIPAL DE SAUDE RIO NEGRO",
+    "data": "2024-11-01 16:53:48.203698",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 44,
+    "nome": "FUNDO MUNICIPAL SAÚDE DE RIO NEGRO",
+    "data": "2024-11-01 16:53:45.584526",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 45,
+    "nome": "INSTITUTO MUNICIPAL DE PREVIDENCIA SOCIAL DE LADARIO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "RPPS",
+    "ativo": true
+  },
+  {
+    "id": 46,
+    "nome": "CM NOVO HORIZONTE DO SUL",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 47,
+    "nome": "CM ARAL MOREIRA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 48,
+    "nome": "CM NOVA ALVORADA DO SUL",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 49,
+    "nome": "CM ANGELICA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 50,
+    "nome": "PM QUALITY SISTEMAS",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 51,
+    "nome": "SERVICO AUTONOMO DE AGUA E ESGOTO DE PARAISO DAS AGUAS-SAAE",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "SAAE",
+    "ativo": true
+  },
+  {
+    "id": 52,
+    "nome": "CM DEODAPOLIS",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 53,
+    "nome": "INST. MUN. DE PREV. SOCIAL DOS SERV. DE ANTONIO JOAO-IMPS",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "RPPS",
+    "ativo": true
+  },
+  {
+    "id": 54,
+    "nome": "PMCAMAPUA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 55,
+    "nome": "CM JARDIM",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 56,
+    "nome": "CM PORTO MURTINHO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 57,
+    "nome": "SERVICO AUTONOMO DE AGUA E ESGOTO DE BANDEIRANTES",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "SAAE",
+    "ativo": true
+  },
+  {
+    "id": 58,
+    "nome": "SECRETARIA MUNICIPAL DE SAUDE DE CARACOL",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 59,
+    "nome": "ESF LIDIANE DE OLIVEIRA GARDIN GALEANO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 60,
+    "nome": "ESF CANDELARIA NUNES",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 61,
+    "nome": "ESF IRIA CONCEICAO ALVARENGA MENDES",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 62,
+    "nome": "PLENUS CONSULTORIA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 63,
+    "nome": "HOSPITAL E MATERNIDADE IDIMAQUE PAES FERREIRA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Outros",
+    "ativo": true
+  },
+  {
+    "id": 64,
+    "nome": "PMNOVA ALVORADA DO SUL",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 65,
+    "nome": "CM BELA VISTA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Câmara Municipal",
+    "ativo": true
+  },
+  {
+    "id": 66,
+    "nome": "PM INOCENCIA",
+    "data": "2024-12-30 16:49:14.781290",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 67,
+    "nome": "PM MUNICIPAL PORTO MURTINHO",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "Prefeitura Municipal",
+    "ativo": true
+  },
+  {
+    "id": 68,
+    "nome": "INST. DE PREV DOS SERV. PUBLICOS DO PMCAMAPUA",
+    "data": "2025-07-28 03:46:56",
+    "tipo": "RPPS",
+    "ativo": true
+  }
+]

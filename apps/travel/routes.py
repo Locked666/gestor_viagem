@@ -35,6 +35,9 @@ def index():
     if message_code == '403':
         context['message'] = 'Você não tem permissão para editar esta viagem.'
     
+    if message_code == '404':
+        context['message'] = 'Viagem não encontrada.'    
+    
     travels = RegistroViagens.query.filter_by(ativo=True).all()
     if not travels:
         return render_template('travel/index.html', **context, travels=None)
@@ -102,6 +105,10 @@ def add_travel():
             
             db.session.commit()
             
+            if data.get('envia_email', False):
+            # Aqui você pode implementar a lógica para enviar o e-mail
+                pass
+            
             return jsonify({'success': True, 'message': 'Viagem Agendada com sucesso', 'id': new_travel.id}), 200
         
         except Exception as e: 
@@ -122,7 +129,7 @@ def edit_travel():
     
     travel = RegistroViagens.query.filter_by(id=id_viagem).first()
     if not travel:
-        raise InvalidUsage(message='Viagem não encontrada', status_code=404)
+        return redirect(url_for('travel_blueprint.index', message='404'))
     
     tec_travel = TecnicosViagens.query.filter_by(viagem=id_viagem).all()
     
@@ -136,7 +143,13 @@ def edit_travel():
     
     
     
-    travel = {'id': id_viagem, 'entidade': 25}
+    travel = RegistroViagens.query.filter_by(id=id_viagem).first()
+    if not travel:
+        return redirect(url_for('travel_blueprint.index', message='404'))
+    
+    travel.data_inicio_convert = travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None
+    travel.entidade_nome = Entidades.query.filter_by(id=travel.entidade_destino).first().nome if travel.entidade_destino else None
+    
     
     context = {
             'segment': 'travel',

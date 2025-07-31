@@ -1,20 +1,4 @@
---
--- Arquivo gerado com SQLiteStudio v3.4.8 em ter jul 29 16:48:57 2025
---
--- Codificação de texto usada: UTF-8
---
-PRAGMA foreign_keys = off;
-BEGIN TRANSACTION;
 
--- Tabela: entidades
-CREATE TABLE entidades (
-	id INTEGER NOT NULL, 
-	nome VARCHAR(100) NOT NULL, 
-	data DATETIME, 
-	tipo VARCHAR(100), 
-	ativo BOOLEAN, 
-	PRIMARY KEY (id)
-);
 INSERT INTO entidades (id, nome, data, tipo, ativo) VALUES (1, 'PM CARACOL', '2025-04-23 14:34:20.103973', 'Prefeitura Municipal', 1);
 INSERT INTO entidades (id, nome, data, tipo, ativo) VALUES (2, 'PM CORGUINHO', '2025-04-17 12:11:42.781610', 'Prefeitura Municipal', 1);
 INSERT INTO entidades (id, nome, data, tipo, ativo) VALUES (3, 'PM FIGUEIRÃO', '2024-12-02 08:18:34.959386', 'Prefeitura Municipal', 1);
@@ -84,5 +68,3 @@ INSERT INTO entidades (id, nome, data, tipo, ativo) VALUES (66, 'PM INOCENCIA', 
 INSERT INTO entidades (id, nome, data, tipo, ativo) VALUES (67, 'PM MUNICIPAL PORTO MURTINHO', '2025-07-28 03:46:56', 'Prefeitura Municipal', 1);
 INSERT INTO entidades (id, nome, data, tipo, ativo) VALUES (68, 'INST. DE PREV DOS SERV. PUBLICOS DO PMCAMAPUA', '2025-07-28 03:46:56', 'RPPS', 1);
 
-COMMIT TRANSACTION;
-PRAGMA foreign_keys = on;

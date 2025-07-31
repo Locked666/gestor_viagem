@@ -154,6 +154,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const tipoViagem = document.getElementById("tipoViagem").value;
     const localViagem = document.getElementById("localViagem").value;
     const descricaoViagem = document.getElementById("descricao").value;
+    const checkEnviaEmail = document.getElementById("checkEnviaEmail").checked;
+    const tabTecnicosSelect = document.getElementById("tecnicoUser-tab");
 
     // Validação da Entidade
     if (!entidadeId) {
@@ -176,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Agora",
         "error"
       );
+      tabTecnicosSelect.click();
       return;
     }
     // Validação da Data de Sáida
@@ -187,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Agora",
         "error"
       );
+      document.getElementById("dataSaida").focus();
       return;
     }
 
@@ -208,8 +212,9 @@ document.addEventListener("DOMContentLoaded", function () {
       tipo_viagem: tipoViagem,
       local_viagem: localViagem,
       descricao: descricaoViagem,
+      envia_email: checkEnviaEmail,
     };
-
+    console.log("Payload enviado:", payloadData);
     const sendDataPost = await postJSON("/travel/add", payloadData);
 
     if (sendDataPost.success) {

@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 import wtforms
 from apps.home import blueprint
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for,jsonify
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask_login import login_required, current_user
@@ -14,6 +14,8 @@ from apps.models import *
 from apps.tasks import *
 from apps.authentication.models import Users
 from flask_wtf import FlaskForm
+import os
+import json
 
 @blueprint.route('/')
 # @blueprint.route('/index')
@@ -200,6 +202,72 @@ def get_segment(request):
 
     except:
         return None
+
+
+
+def update_bd_entidades():
+    json_data = update_entidades()
+    if json_data is None:
+        return jsonify({'success': False, 'message': 'Erro ao atualizar entidades.'}), 500
+    try:
+        for entidade in json_data:
+            existing_entidade = Entidades.query.filter_by(id=entidade['id']).first()
+            if existing_entidade:
+                existing_entidade.nome = entidade['nome']
+                existing_entidade.data = datetime.now()
+                existing_entidade.tipo = entidade['tipo']
+                existing_entidade.ativo = entidade['ativo']
+                db.session.commit()
+            else:
+                new_entidade = Entidades(
+                    id=entidade['id'],
+                    nome=entidade['nome'],
+                    data=datetime.now(),
+                    tipo=entidade['tipo'],
+                    ativo=entidade['ativo']
+                )
+                db.session.add(new_entidade)
+                db.session.commit()
+            db.session.commit()    
+        return jsonify({'success': True, 'message': 'Entidades atualizadas com sucesso!'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+def update_entidades():
+    file_path = 'apps/entidades.json'
+
+    if not os.path.exists(file_path):
+        print("❌ Arquivo não encontrado:", file_path)
+        return None
+
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            entidades = json.load(file)
+            print("\n\n\nEntidades carregadas com sucesso:\n")
+            print(json.dumps(entidades, indent=2, ensure_ascii=False))
+            return entidades
+    except json.JSONDecodeError as e:
+        print("❌ Erro ao decodificar o JSON:", e)
+    except Exception as e:
+        print("❌ Erro inesperado ao ler o arquivo:", e)
+
+    return None
+
+
+
+@blueprint.route('/update/entidades/add', methods=['GET'])
+@login_required
+def update_entidades_add():
+    """
+    Endpoint to add a new entity.
+    """
+    try:
+        update_bd_entidades()
+        # return jsonify({'success': True, 'message': 'Entidades atualizadas com sucesso!'}), 200
+        return update_bd_entidades()
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 
 
