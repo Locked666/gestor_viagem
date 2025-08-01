@@ -2,7 +2,7 @@ from apps.users import blueprint
 from flask_login import login_required, current_user, login_user
 from flask import render_template, request, redirect, url_for, jsonify
 from apps.authentication.models import Users,db
-from apps.travel.models import RegistroViagens
+from apps.travel.models import RegistroViagens,TecnicosViagens
 from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
 from apps.users.validation import validadion_user, validadion_password
@@ -138,9 +138,16 @@ def index():
         
         user_viagens =  RegistroViagens.query.filter_by(usuario = data['user_id']).first()
         
+        user_viagens_tecnicos =  TecnicosViagens.query.filter_by(tecnico = data['user_id']).first()
+        
         if user_viagens:
             raise InvalidUsage(message = "Existe Viagens vinculadas a esse usuário\n Não é possivel excluir", status_code = 400)
+        
+        if user_viagens_tecnicos:
+            raise InvalidUsage(message = "Existe Viagens vinculadas a esse usuário\n Não é possivel excluir", status_code = 400)
+        
         try:
+            
             user_delete =  Users.query.filter_by(id = data['user_id']).first()
             if not user_delete:
                 raise InvalidUsage(message = "Usuário não encontrado", status_code= 404)
@@ -148,6 +155,7 @@ def index():
             db.session.delete(user_delete)
             db.session.commit()
             return jsonify({'success' : True, 'message' : "Usuário Excluido com sucesso !!"}), 200
+        
         except Exception as e: 
             db.session.rollback()
             raise InvalidUsage(message= f"Não foi possivel excluir o usuário\n {e}", status_code= 500)

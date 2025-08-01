@@ -76,10 +76,7 @@ def add_travel():
                 data_fim = data.get('data_fim', None),
                 tipo_viagem = data.get('tipo_viagem', None),
                 local_viagem = data.get('local_viagem', None),
-                n_diaria = data.get('n_diaria', None),
-                v_diaria = data.get('v_diaria', None),
                 descricao = data.get('descricao', ""),
-                n_intranet = data.get('n_intranet', '0'),
                 veiculo = data.get('veiculo', None),
                 placa = data.get('placa', None),
                 km_inicial = data.get('km_inicial', None),
@@ -96,7 +93,7 @@ def add_travel():
                 raise InvalidUsage(message='É necessário informar pelo menos um técnico', status_code=400)
             
             for tecnico_id in tecnicos:
-                tecnico = TecnicosViagens(
+                tecnico = TecnicosViagens( 
                     viagem = new_travel.id,
                     tecnico = tecnico_id
                 )

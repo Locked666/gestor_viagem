@@ -12,10 +12,7 @@ class RegistroViagens(db.Model):
     status = db.Column(db.String(100), default='Agendada', comment='Status da viagem (Agendada, Concluida, Cancelada, Parcial)')
     tipo_viagem = db.Column(db.String(100))
     local_viagem = db.Column(db.String(100), comment='Local da viagem')
-    n_diaria = db.Column(db.String(100), comment='Número da diária')
-    v_diaria = db.Column(db.Float, comment='Valor da diária')
     descricao = db.Column(db.String(100))
-    n_intranet = db.Column(db.String(100), comment='Número da visita na intranet', default='0')
     veiculo = db.Column(db.String(100), comment='veículo')
     placa = db.Column(db.String(100), comment='Placa do veículo')
     km_inicial = db.Column(db.String(100), comment='KM inicial')
@@ -34,6 +31,12 @@ class TecnicosViagens(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     viagem = db.Column(db.Integer, db.ForeignKey('registro_viagens.id'), nullable=False)
     tecnico = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    atribuito = db.Column(db.Boolean, default=False, comment='Se o técnico foi atribuído à viagem')
+    data_inicio = db.Column(db.DateTime)
+    data_fim = db.Column(db.DateTime)
+    n_diaria = db.Column(db.String(100), comment='Número da diária')
+    v_diaria = db.Column(db.Float, comment='Valor da diária')
+    n_intranet = db.Column(db.String(100), comment='Número da visita na intranet', default='0')
     data = db.Column(db.DateTime, default=db.func.now())
     
     
@@ -41,8 +44,10 @@ class TecnicosViagens(db.Model):
 
 class GastosViagens(db.Model):
     __tablename__ = 'gastos_viagens'
+    
     id = db.Column(db.Integer, primary_key=True)
     viagem = db.Column(db.Integer,db.ForeignKey('registro_viagens.id') ,nullable=False)
+    tecnico = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     data_gasto = db.Column(db.DateTime, default=db.func.now(), comment='Data do gasto')
     tipo_gasto = db.Column(db.String(100))
     n_documento = db.Column(db.String(100), comment='Número do documento')
@@ -55,6 +60,7 @@ class GastosViagens(db.Model):
     status = db.Column(db.String(100), default='Pendente', comment='Status do gasto (Pendente, Aprovado, Rejeitado, Parcial)')
     motivo = db.Column(db.String(255), comment='Motivo da rejeição do gasto')
     valor_atual = db.Column(db.Float, default=0.0, comment='Valor atual do gasto após possíveis alterações')
+    
     usuario = db.Column(db.Integer, db.ForeignKey('users.id'), comment='ID do usuário que alterou o gasto')
     
     data = db.Column(db.DateTime, default=db.func.now())   
