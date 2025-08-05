@@ -160,7 +160,419 @@ block content %}
         </div>
       </div>
     </div>
+  </div>
+  <div class="row mt-4">
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs" id="viagemTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link active"
+          id="dados-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#dados"
+          type="button"
+          role="tab"
+          aria-controls="dados"
+          aria-selected="true"
+        >
+          <i class="bi bi-card-checklist"></i> Dados Principais
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="financeiro-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#financeiro"
+          type="button"
+          role="tab"
+          aria-controls="financeiro"
+          aria-selected="false"
+        >
+          <i class="bi bi-cash-stack"></i> Gastos
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="outros-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#gastos"
+          type="button"
+          role="tab"
+          aria-controls="gastos"
+          aria-selected="false"
+        >
+          <i class="bi bi-gear"></i> Outros
+        </button>
+      </li>
+    </ul>
 
-    {% endblock content %}
+    <!-- Tabs Content -->
+    <div
+      class="tab-content bg-white p-3 border border-top-0 rounded-bottom"
+      id="viagemTabsContent"
+    >
+      <!-- Aba 1: Dados Principais -->
+      <div
+        class="tab-pane fade show active"
+        id="dados"
+        role="tabpanel"
+        aria-labelledby="dados-tab"
+      >
+        <form id="formDadosPrincipais" action>
+          <input type="hidden" id="viagemId" name="viagemId" value="" />
+          <input
+            type="hidden"
+            id="usuario"
+            name="usuario"
+            value="{{ session['usuarioConnect'] }}"
+          />
+
+          <div class="row mb-3">
+            <!--Data Saida-->
+            <div class="col-md-3">
+              <label for="dataSaida" class="form-label">Data de Saída *</label>
+              <input
+                type="datetime-local"
+                class="form-control border ps-1"
+                id="dataSaida"
+                name="dataSaida"
+                required
+              />
+            </div>
+            <!--Data Retorno-->
+            <div class="col-md-3">
+              <label for="dataRetorno" class="form-label"
+                >Data de Retorno *</label
+              >
+              <input
+                type="datetime-local"
+                class="form-control border ps-1"
+                id="dataRetorno"
+                name="dataRetorno"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="codigoRelatorio" class="form-label"
+                >Código do Relatório *</label
+              >
+              <input
+                type="text"
+                class="form-control border ps-1"
+                id="codigoRelatorio"
+                name="codigoRelatorio"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="quantidadeDiarias" class="form-label"
+                >Quantidade de Diárias</label
+              >
+              <input
+                type="number"
+                class="form-control border ps-1"
+                id="quantidadeDiarias"
+                name="quantidadeDiarias"
+              />
+              <!--readonly-->
+            </div>
+            <div class="col-md-4">
+              <label for="valorDiaria" class="form-label"
+                >Valor da Diária</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control border ps-1"
+                  id="valorDiaria"
+                  name="valorDiaria"
+                  value="0.00"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+
+          <!--<div class="row mb-3">
+            <div class="col-md-6">
+              <label for="tipoViagem" class="form-label">Tipo da Viagem</label>
+              <select
+                class="form-select border ps-1"
+                id="tipoViagem"
+                name="tipoViagem"
+              >
+                <option value="Técnica">Técnica</option>
+                <option value="Administrativa">Administrativa</option>
+                <option value="Capacitação">Capacitação</option>
+                <option value="Outra">Outra</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição</label>
+            <textarea
+              class="form-control"
+              id="descricao"
+              name="descricao"
+              rows="3"
+            ></textarea>
+          </div>-->
+
+          <div class="d-flex justify-content-end">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              id="bnt-salvar-principal"
+            >
+              Salvar Dados
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Aba 2: Gasto -->
+      <div
+        class="tab-pane fade"
+        id="gastos"
+        role="tabpanel"
+        aria-labelledby="gastos-tab"
+      >
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Adicionar Gasto</h5>
+            <form id="formGasto">
+              <input type="hidden" id="gastoId" name="gastoId" />
+              <input type="hidden" id="viagemIdGasto" name="viagemIdGasto" />
+
+              <div class="mb-3">
+                <label for="tipoGasto" class="form-label"
+                  >Tipo do Gasto *</label
+                >
+                <select
+                  class="form-select"
+                  id="tipoGasto"
+                  name="tipoGasto"
+                  required
+                >
+                  <option value="" selected disabled>Selecione um tipo</option>
+                  <option value="Alimentação">Alimentação</option>
+                  <option value="Combustível">Combustível</option>
+                  <option value="Estadia">Estadia</option>
+                  <option value="Outras">Outras</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="numeroDocumento" class="form-label"
+                  >Número do Documento</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="numeroDocumento"
+                  name="numeroDocumento"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="valorGasto" class="form-label">Valor *</label>
+                <div class="input-group">
+                  <span class="input-group-text">R$</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    class="form-control"
+                    id="valorGasto"
+                    name="valorGasto"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="descricaoGasto" class="form-label"
+                  >Descrição do Gasto</label
+                >
+                <textarea
+                  class="form-control"
+                  id="descricaoGasto"
+                  name="descricaoGasto"
+                  rows="2"
+                ></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="dataHoraGasto" class="form-label"
+                  >Data e Hora do Gasto *</label
+                >
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="dataHoraGasto"
+                  name="dataHoraGasto"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="estorno"
+                    name="estorno"
+                  />
+                  <label class="form-check-label" for="estorno"
+                    >Realizar estorno?</label
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="tipoDocumento" class="form-label"
+                  >Tipo do Documento</label
+                >
+                <select
+                  class="form-select"
+                  id="tipoDocumento"
+                  name="tipoDocumento"
+                >
+                  <option value="1">Nota Fiscal</option>
+                  <option value="2">Comprovante de Pagamento</option>
+                  <option value="3">Recibo</option>
+                  <option value="4">Outros</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="documentoUpload" class="form-label"
+                  >Upload do Documento</label
+                >
+                <input
+                  class="form-control"
+                  type="file"
+                  id="documentoUpload"
+                  name="documentoUpload"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                />
+              </div>
+
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary me-2">
+                  Salvar Gasto
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="limparGasto"
+                >
+                  Limpar
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-md-6">
+            <h5>Gastos Cadastrados</h5>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaGastos">
+                  <!-- Dados serão preenchidos via JavaScript -->
+                  <tr>
+                    <td colspan="5" class="text-center">
+                      Nenhum gasto cadastrado
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="1" class="text-end">
+                      <strong>Total Gasto:</strong>
+                    </td>
+                    <td id="totalGastos" class="text-end">R$ 0,00</td>
+                    <td colspan="2" class="text-end">
+                      <strong>Total Estorno:</strong>
+                    </td>
+                    <td id="totalGastosEstorno" class="text-end">R$ 0,00</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 3: Fincanceiro -->
+      <div
+        class="tab-pane fade"
+        id="outros"
+        role="tabpanel"
+        aria-labelledby="outros-tab"
+      >
+        <form id="formOutros">
+          <input type="hidden" id="viagemIdOutros" name="viagemIdOutros" />
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="veiculo" class="form-label">Veículo Utilizado</label>
+              <input
+                type="text"
+                class="form-control"
+                id="veiculo"
+                name="veiculo"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="placa" class="form-label">Placa</label>
+              <input type="text" class="form-control" id="placa" name="placa" />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="kmInicial" class="form-label">KM Inicial</label>
+              <input
+                type="number"
+                class="form-control"
+                id="kmInicial"
+                name="kmInicial"
+                min="0"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="kmFinal" class="form-label">KM Final</label>
+              <input
+                type="number"
+                class="form-control"
+                id="kmFinal"
+                name="kmFinal"
+                min="0"
+              />
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
+{% endblock content %}
