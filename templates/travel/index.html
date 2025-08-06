@@ -103,6 +103,7 @@
       </div>
     </div>
   </div>
+
   <div class="row">
     <div class="col-12">
       <div class="card my-4">
@@ -114,8 +115,14 @@
         <div class="card-body px-0 pb-2">
           <div class="table-responsive p-0">
             <table class="table align-items-center mb-0">
+              <!--head-->
               <thead>
                 <tr>
+                  <th
+                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  >
+                    #ID
+                  </th>
                   <th
                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                   >
@@ -145,6 +152,15 @@
               <tbody>
                 {% if travels%} {% for travel in travels%}
                 <tr>
+                  <!--ID-->
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">{{ travel.id }}</h6>
+                      </div>
+                    </div>
+                  </td>
+                  <!--Entidade-->  
                   <td>
                     <div class="d-flex px-2 py-1">
                       <div class="d-flex flex-column justify-content-center">
@@ -179,17 +195,23 @@
                       {{ travel.status }}
                     </span>
                     {% endif %}
-                  <td class="align-middle text-center text-sm">
-                    <p class="text-xs font-weight-bold mb-0">
+                  <td class="align-middle text-left text-sm ">
+                    <p class="text-xs font-weight-bold text-break mb-0">
                       {{ travel.descricao }}
                     </p>
                   </td>
-                  <td class="align-middle text-center">
+                  <td class="align-middle text-left text-sm">
                     <a
-                      href="{{ url_for('travel_blueprint.edit_travel', idTravel=travel.id) }}"
+                      
                       class="btn btn-link text-dark px-3 mb-0"
                     >
-                      <i class="material-symbols-rounded me-2">edit</i> Editar
+                      <i class="material-symbols-rounded me-2"
+                      action="{{ url_for('travel_blueprint.edit_travel', idTravel=travel.id) }}"
+                      >edit</i>
+                      <i class="material-symbols-rounded me-2">visibility</i>
+                      {% if current_user.admin and travel.status == "Agendada" %}
+                      <i class="material-symbols-rounded me-2" id="delete-travel" data-id="{{ travel.id }}" >delete</i>
+                      {% endif %}  
                     </a>
                   </td>
                 </tr>
