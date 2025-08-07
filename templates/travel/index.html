@@ -195,11 +195,12 @@
                       {{ travel.status }}
                     </span>
                     {% endif %}
-                  <td class="align-middle text-left text-sm ">
-                    <p class="text-xs font-weight-bold text-break mb-0">
+                  <td class="align-middle text-left text-sm text-break" title="{{ travel.descricao }}">
+                    <p class="text-xs font-weight-bold text-break mb-0" style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                       {{ travel.descricao }}
                     </p>
                   </td>
+
                   <td class="align-middle text-left text-sm">
                     <a
                       
