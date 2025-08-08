@@ -1,4 +1,10 @@
 export function autoComplete(inputSelector, hiddenInputSelector, apiUrl) {
+  console.log(
+    "AutoComplete initialized for:",
+    inputSelector,
+    hiddenInputSelector,
+    apiUrl
+  );
   const input = document.querySelector(inputSelector);
   const hiddenInput = document.querySelector(hiddenInputSelector);
 

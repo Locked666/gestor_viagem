@@ -130,7 +130,14 @@ def edit_travel():
     
     tec_travel = TecnicosViagens.query.filter_by(viagem=id_viagem).all()
     
-    if current_user.id != tec_travel[0].tecnico and not current_user.admin:
+    for tecnico in tec_travel:
+        tecnico.username = Users.query.filter_by(id=tecnico.tecnico).first()
+    
+    
+    tecnicos = [t.tecnico for t in tec_travel if t.tecnico] 
+    
+    
+    if current_user.id not in tecnicos and not current_user.admin:
         return redirect(url_for('travel_blueprint.index', message='403'))
 
     
@@ -154,5 +161,5 @@ def edit_travel():
         }
 
     
-    return render_template('travel/edit-travel.html', **context, travel  = travel)
+    return render_template('travel/edit-travel.html', **context, travel  = travel, tecnicos=tec_travel)
 

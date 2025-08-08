@@ -204,15 +204,28 @@
                   <td class="align-middle text-left text-sm">
                     <a
                       
-                      class="btn btn-link text-dark px-3 mb-0"
+                      class="btn btn-link text-dark px-3 mb-0 bnt-action"
                     >
-                      <i class="material-symbols-rounded me-2"
-                      action="{{ url_for('travel_blueprint.edit_travel', idTravel=travel.id) }}"
+                      <i class="material-symbols-rounded me-2 bnt-action"
+                      href="javascript:;"
+                      data-action="edit"
+                      data-id="{{ travel.id }}"
                       >edit</i>
-                      <i class="material-symbols-rounded me-2">visibility</i>
+
+                      <i class="material-symbols-rounded me-2"
+                      href="javascript:;"
+                      data-action="viewer"
+                      data-id="{{ travel.id }}"
+                      >visibility</i>
+
                       {% if current_user.admin and travel.status == "Agendada" %}
-                      <i class="material-symbols-rounded me-2" id="delete-travel" data-id="{{ travel.id }}" >delete</i>
-                      {% endif %}  
+                      <i class="material-symbols-rounded me-2" id="delete-travel" data-id="{{ travel.id }}"
+                      href="javascript:;"
+                      data-action="viewer"
+                       >delete</i>
+                      {% endif %}
+
+                      <i class="fa fa-ellipsis-v text-xs"></i>  
                     </a>
                   </td>
                 </tr>
@@ -243,30 +256,15 @@
     aria-labelledby="userModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="userModalLabel">Editar Usuário</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Fechar"
-          ></button>
-        </div>
-
-        
-      </div>
-    </div>
   </div>
   {% include "includes/footer.html" %}
 </div>
 
 {% block javascripts %}
-  <script type="module">
-    import { autoComplete } from "/static/assets/js/application/autoComplete.js";
-    autoComplete("#entidade", "#entidade-id", "/api/v1/entidade");
-  </script>
-{% endblock javascripts %}
 
-{% endblock content%}
+  <script
+    type="module"
+    src="{{ url_for('static', filename='/assets/js/application/useIndexTravel.js') }}"
+  ></script>
+
+{% endblock javascripts %} {% endblock content %}

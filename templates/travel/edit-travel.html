@@ -22,13 +22,12 @@ block content %}
 </style>
 
 <div class="container-xxl py-2">
+  <div class="ms-3 mb-3">
+      <h3 class="mb-0 h4 font-weight-bolder">Editar Viagens - <strong>{{travel.id}} </strong></h3>
+      <p class="mb-4">Check the sales, value and bounce rate by country.</p>
+  </div>
   {% if current_user.admin %}
   <div class="row">
-    <div class="ms-3 mb-3">
-      <h3 class="mb-0 h4 font-weight-bolder">Editar Viagens</h3>
-      <p class="mb-4">Check the sales, value and bounce rate by country.</p>
-    </div>
-
     <!-- Cards Estatísticos -->
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
       <div class="card shadow-sm rounded-3">
@@ -140,17 +139,15 @@ block content %}
           <div class="mb-0">
             <div class="row gy-3">
               <!--Viagem id -->
-              <div class="col-md-2">
-                <label><strong>Viagem: {{ travel.id}}</strong> </label>
-              </div>
+               
 
               <div class="col-md-3">
-                <label for="entidade" class="form-label">Entidade:</label>
+                <label for="entidadeReadonly" class="form-label">Entidade:</label>
                 <input
                   type="text"
                   class="form-control border"
-                  id="entidade"
-                  name="entidade"
+                  id="entidadeReadonly"
+                  name="entidadeReadonly"
                   value="{{ travel.entidade_nome }}"
                   readonly
                 />
@@ -206,17 +203,48 @@ block content %}
                 </input>
 
               </div>
-              <div class="col-md-4">
+
+              {% if current_user.admin %}
+              <div class = "col-md-4">
+                <div class="mb-3">
+                  <label for="tecnicoUser" class="form-label">Técnico *</label>
+                  <select
+                    class="form-select"
+                    id="tecnicoUser"
+                    name="tecnicoUser"
+                    required
+                  >
+                    <option value="" selected disabled>Selecione um Técnico</option>
+                    {% for tecnico in tecnicos %}
+                    <option value="{{ tecnico.id }}">{{ tecnico.username }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              {% endif %}
+
+              
+
+            </div>
+            <div class="row gy-3 mt-3">
+              <div class="col-md-12">
+                {% if current_user.admin %}
                 <button
-                  class="btn btn-primary mt-4"
+                  class="btn btn-primary "
                   id="btnEditarViagem"
                   data-bs-toggle="modal"
                   data-bs-target="#editTravelModal" 
                 >
                   <i class="bi bi-pencil-square"></i> Editar Viagem
-              </div>
+                </button>  
+                {% endif %}
+                <!---->
+                <a href="{{ url_for('travel_blueprint.index') }}" class="btn btn-outline-secondary"
+                  ><i class="bi bi-arrow-left-circle me-2"></i>Voltar</a
+                >
 
-            </div>
+              </div>
+            </div>  
           </div>
         </div>
       </div>
@@ -742,39 +770,101 @@ block content %}
         </div>
       </div>
     </div>
+
+    {% if current_user.admin %}
     <!-- Modal Editar Viagem -->
-    <div
-      class="modal fade"
-      id="editTravelModal"
-      tabindex="-1"
-      aria-labelledby="editTravelModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="editTravelModalLabel">Editar Viagem</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+    <div class="modal fade" id="editTravelModal" tabindex="-1" aria-labelledby="editTravelModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg rounded-3">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="editTravelModalLabel">
+              <i class="bi bi-pencil-square me-2"></i>Editar Viagem
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
           </div>
+          
           <div class="modal-body">
-            
+            <div class="row gy-3">
+              <!-- Entidade -->
+              <div class="col-md-6">
+                <label for="entidade" class="form-label fw-bold">Entidade *</label>
+                <input 
+                  type="text" 
+                  class="form-control border ps-2" 
+                  id="entidade" 
+                  name="entidade" 
+                  value="{{ travel.entidade_nome }}"
+                  required
+                />
+                <input type="hidden" id="entidade-id" name="entidade_id" required />
+              </div>
+
+              <!-- Data de início -->
+              <div class="col-md-3">
+                <label for="data_inicio" class="form-label fw-bold">Data de Início:</label>
+                <input 
+                  type="text" 
+                  class="form-control border" 
+                  id="data_inicio" 
+                  name="data_inicio" 
+                  value="{{ travel.data_inicio_convert }}" 
+                  readonly
+                />
+              </div>
+
+              <!-- Tipo de Viagem -->
+              <div class="col-md-3">
+                <label for="tipo-travel" class="form-label fw-bold">Tipo de Viagem:</label>
+                <select class="form-select border" id="tipo-travel" name="tipo-travel">
+                  <option value="Técnica" {% if travel.tipo_viagem == 'Técnica' %}selected{% endif %}>Técnica</option>
+                  <option value="Administrativa" {% if travel.tipo_viagem == 'Administrativa' %}selected{% endif %}>Administrativa</option>
+                  <option value="Capacitação" {% if travel.tipo_viagem == 'Capacitação' %}selected{% endif %}>Capacitação</option>
+                  <option value="Outra" {% if travel.tipo_viagem == 'Outra' %}selected{% endif %}>Outra</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Status e Descrição -->
+            <div class="row gy-3 mt-3">
+              <div class="col-md-4">
+                <label for="status" class="form-label fw-bold">Status:</label>
+                <select class="form-select border" id="status" name="status">
+                  <option value="Agendada" {% if travel.status == 'Agendada' %}selected{% endif %}>Agendada</option>
+                  <option value="Em Andamento" {% if travel.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                  <option value="Concluída" {% if travel.status == 'Concluída' %}selected{% endif %}>Concluída</option>
+                  <option value="Cancelada" {% if travel.status == 'Cancelada' %}selected{% endif %}>Cancelada</option>
+                </select>
+              </div>
+
+            </div>
+            <div class="row gy-3 mt-3">
+              <div class="col-md-8">
+                <label for="descricao" class="form-label fw-bold">Descrição:</label>
+                <textarea 
+                  class="form-control border" 
+                  id="descricao" 
+                  name="descricao" 
+                  rows="3"
+                >{{ travel.descricao }}</textarea>
+              </div>
           </div>
+
+            </div>
+            
+
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Fechar
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle"></i> Fechar
+            </button>
+            <button class="btn btn-primary" id="btnEditarViagemModal">
+              <i class="bi bi-save"></i> Salvar
             </button>
           </div>
         </div>
       </div>
+    </div>
+    {% endif %}
+
 
     {% include "includes/footer.html" %}
   </div>
@@ -782,7 +872,8 @@ block content %}
 
   <script
     type="module"
-    src="{{ url_for('static', filename='/assets/js/application/useTravel.js') }}"
+    src="{{ url_for('static', filename='/assets/js/application/useEditTravel.js') }}"
   ></script>
-  {% endblock javascripts %} {% endblock content %}
+
 </div>
+{% endblock javascripts %} {% endblock content %}
