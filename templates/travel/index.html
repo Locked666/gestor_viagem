@@ -201,33 +201,73 @@
                     </p>
                   </td>
 
-                  <td class="align-middle text-left text-sm">
-                    <a
+                  <td class="align-middle text-left text-sm p-0">
+                    <div class="d-flex align-items-center gap-2">
                       
-                      class="btn btn-link text-dark px-3 mb-0 bnt-action"
-                    >
-                      <i class="material-symbols-rounded me-2 bnt-action"
-                      href="javascript:;"
-                      data-action="edit"
-                      data-id="{{ travel.id }}"
-                      >edit</i>
+                      <!-- Botão Editar -->
+                      <i class="material-symbols-rounded bnt-action"
+                        href="javascript:;"
+                        data-action="edit"
+                        data-id="{{ travel.id }}">
+                        edit
+                      </i>
 
-                      <i class="material-symbols-rounded me-2"
-                      href="javascript:;"
-                      data-action="viewer"
-                      data-id="{{ travel.id }}"
-                      >visibility</i>
+                      <!-- Botão Visualizar -->
+                      <i class="material-symbols-rounded bnt-action"
+                        href="javascript:;"
+                        data-action="viewer"
+                        data-id="{{ travel.id }}">
+                        visibility
+                      </i>
 
+                      <!-- Botão Excluir -->
                       {% if current_user.admin and travel.status == "Agendada" %}
-                      <i class="material-symbols-rounded me-2" id="delete-travel" data-id="{{ travel.id }}"
-                      href="javascript:;"
-                      data-action="viewer"
-                       >delete</i>
+                      <i class="material-symbols-rounded bnt-action"
+                        id="delete-travel"
+                        data-id="{{ travel.id }}"
+                        href="javascript:;"
+                        data-action="delete">
+                        delete
+                      </i>
                       {% endif %}
 
-                      <i class="fa fa-ellipsis-v text-xs"></i>  
-                    </a>
+                      <!-- Dropdown de mais ações -->
+                      <div class="dropdown">
+                        <a href="javascript:;" class="text-dark p-0 m-0" id="dropdownMenuButton{{ travel.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fa fa-ellipsis-v text-xs m-0 p-0"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ travel.id }}">
+                          {% if travel.status == "Agendada" %}
+                          <li>
+                            <a class="dropdown-item bnt-action" href="javascript:;" data-action="finish" data-id="{{ travel.id }}">
+                              Concluir Viagem
+                            </a>
+                          </li>
+                          
+                          {% if current_user.admin%}
+                          <li>
+                            <a class="dropdown-item bnt-action" href="javascript:;" data-action="cancel" data-id="{{ travel.id }}">
+                              Cancelar
+                            </a>
+                          </li>
+                          {% endif %}
+                          {% endif %}
+                          <li>
+                            <a class="dropdown-item bnt-action" href="javascript:;" data-action="assign" data-id="{{ travel.id }}">
+                              Atribuir
+                            </a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item bnt-action" href="javascript:;" data-action="resend" data-id="{{ travel.id }}">
+                              Reenviar E-mail
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
                   </td>
+
                 </tr>
                 {% endfor %} {% else %}
                 <tr>

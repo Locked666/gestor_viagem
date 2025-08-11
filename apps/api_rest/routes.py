@@ -3,8 +3,9 @@ from flask import jsonify,request
 from flask_login import login_required, current_user
 from apps.authentication.models import Users
 from apps.models import Entidades
-from apps.travel.models import RegistroViagens,TecnicosViagens
+from apps.travel.models import RegistroViagens,TecnicosViagens, db
 from apps.exceptions.exception import InvalidUsage
+from apps.api_rest.services import validade_user_travel
 
 
 
@@ -27,15 +28,7 @@ def get_viagens(integer):
     """
     
     try: 
-        travel = RegistroViagens.query.filter_by(id=int(integer)).first()
-        
-        if not travel:
-            return jsonify({"message": "Nenhuma travel encontrada."}), 404
-        
-        tec_travel = TecnicosViagens.query.filter_by(viagem=int(integer)).all()
-    
-        if current_user.id != tec_travel[0].tecnico and not current_user.admin:
-            return jsonify({"message": "Sem permissão para acessar essa viagem"}), 403
+        travel = travel = validade_user_travel(integer)
         
         
         travel_data = {
@@ -52,3 +45,48 @@ def get_viagens(integer):
     
     except Exception as e:
         raise InvalidUsage(f'Erro ao buscar viagens: {str(e)}', status_code=500)
+    
+    
+@blueprint.route('/travel/delete/<integer>', methods = ['DELETE'])
+@login_required
+def delete_travel(integer):
+    """
+    Deleta uma viagem pelo ID.
+    """
+    try: 
+        travel = travel = validade_user_travel(integer)
+        
+        # Deletar os técnicos associados primeiro
+        TecnicosViagens.query.filter_by(viagem=int(integer)).delete()
+        
+        # Depois deletar a viagem
+        db.session.delete(travel)
+        db.session.commit()
+        
+        return jsonify({"success": True,"message": "Viagem deletada com sucesso."}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        raise InvalidUsage(f'Erro ao deletar viagem: {str(e)}', status_code=500)    
+    
+    
+@blueprint.route('/travel/cancel/<integer>', methods = ['PUT'])  
+@login_required
+def cancel_travel(integer):
+    """
+    Cancela uma viagem pelo ID.
+    """
+    try: 
+               
+        travel = validade_user_travel(integer)
+        
+        travel.status = 'Cancelada'
+        db.session.commit()
+        
+        return jsonify({"success": True, "message": "Viagem cancelada com sucesso."}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        raise InvalidUsage(f'Erro ao cancelar viagem: {str(e)}', status_code=500)  
+    
+    

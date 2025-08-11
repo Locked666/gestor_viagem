@@ -9,6 +9,7 @@ from apps.authentication.models import Users
 from apps.models import Entidades
 from apps.users.validation import validadion_user, validadion_password
 from apps.authentication.util import verify_pass,hash_pass
+from apps.api_rest.services import validade_user_travel
 
 
 def convert_to_datetime(dt):
@@ -124,24 +125,13 @@ def edit_travel():
     
     id_viagem =  request.args.get('idTravel')
     
-    travel = RegistroViagens.query.filter_by(id=id_viagem).first()
-    if not travel:
-        return redirect(url_for('travel_blueprint.index', message='404'))
+    travel = validade_user_travel(id_viagem)
     
     tec_travel = TecnicosViagens.query.filter_by(viagem=id_viagem).all()
     
     for tecnico in tec_travel:
         tecnico.username = Users.query.filter_by(id=tecnico.tecnico).first()
-    
-    
-    tecnicos = [t.tecnico for t in tec_travel if t.tecnico] 
-    
-    
-    if current_user.id not in tecnicos and not current_user.admin:
-        return redirect(url_for('travel_blueprint.index', message='403'))
 
-    
-    
     if not id_viagem:
         raise InvalidUsage(message='ID da viagem é obrigatório', status_code=400)
     
