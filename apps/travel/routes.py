@@ -125,7 +125,11 @@ def edit_travel():
     
     id_viagem =  request.args.get('idTravel')
     
-    travel = validade_user_travel(id_viagem)
+    travel = validade_user_travel(id_viagem, False)
+    
+    if not travel or isinstance(travel, dict):
+        if travel.get('success', True) is False:
+            return redirect(url_for('travel_blueprint.index', message=travel.get('status_code', 404)))
     
     tec_travel = TecnicosViagens.query.filter_by(viagem=id_viagem).all()
     

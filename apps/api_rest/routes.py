@@ -54,7 +54,7 @@ def delete_travel(integer):
     Deleta uma viagem pelo ID.
     """
     try: 
-        travel = travel = validade_user_travel(integer)
+        travel = validade_user_travel(integer)
         
         # Deletar os técnicos associados primeiro
         TecnicosViagens.query.filter_by(viagem=int(integer)).delete()
@@ -88,5 +88,22 @@ def cancel_travel(integer):
     except Exception as e:
         db.session.rollback()
         raise InvalidUsage(f'Erro ao cancelar viagem: {str(e)}', status_code=500)  
+
+@blueprint.route('/travel/finish/<integer>', methods = ['PUT'])  
+@login_required    
+
+def finish_travel(integer):
+    """
+    Conclui uma viagem pelo ID.
+    """
+    try: 
+        travel = validade_user_travel(integer)
+        
+        travel.status = 'Concluida'
+        db.session.commit()
+        
+        return jsonify({"success": True, "message": "Viagem concluída com sucesso."}), 200
     
-    
+    except Exception as e:
+        db.session.rollback()
+        raise InvalidUsage(f'Erro ao concluir viagem: {str(e)}', status_code=500)    
