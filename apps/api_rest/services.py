@@ -33,3 +33,4 @@ def validade_user_travel(travel_id, validade = True):
         raise InvalidUsage({"success": False,"message": "Sem permissão para cancelar essa viagem"}, status_code=403)
     
     return travel
+

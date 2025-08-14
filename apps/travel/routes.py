@@ -10,18 +10,9 @@ from apps.models import Entidades
 from apps.users.validation import validadion_user, validadion_password
 from apps.authentication.util import verify_pass,hash_pass
 from apps.api_rest.services import validade_user_travel
+from apps.utils.fuctions_for_date import convert_to_datetime
 
 
-def convert_to_datetime(dt):
-    """
-    Converte uma string ISO datetime para objeto datetime.datetime.
-    """
-    if not dt:
-        return None
-    try:
-        return datetime.fromisoformat(dt)
-    except (ValueError, TypeError) as err:
-        raise InvalidUsage(f'Formato de data inválido: {err}', status_code=400)
 
 
 @blueprint.route('/travel', methods = ['GET'])

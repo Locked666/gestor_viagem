@@ -621,13 +621,15 @@ block content %}
                   >Data de Lançamento *</label
                 >
                 <input
-                  type="date-local"
-                  class="form-control border"
+                  type="datetime-local"
+                  class="form-control border ps-1"
                   id="dataLancamento"
                   name="dataLancamento"
                   required
+                  
                 />
               </div>
+                
 
               <!--Tipo do Lançamento-->
               <div class="col-md-4">
@@ -801,16 +803,21 @@ block content %}
 
               <!-- Data de início -->
               <div class="col-md-3">
-                <label for="data_inicio" class="form-label fw-bold">Data de Início:</label>
-                <input 
-                  type="text" 
-                  class="form-control border" 
-                  id="data_inicio" 
-                  name="data_inicio" 
+                <label for="dataSaida-modal" class="form-label"
+                  >Data de Saída *</label
+                >
+                <input
+                  type="datetime-local"
+                  class="form-control border ps-1"
+                  id="dataSaida-modal"
+                  name="dataSaida"
                   value="{{ travel.data_inicio_convert }}" 
-                  readonly
+                  
                 />
               </div>
+
+
+
 
               <!-- Tipo de Viagem -->
               <div class="col-md-3">
@@ -828,7 +835,7 @@ block content %}
             <div class="row gy-3 mt-3">
               <div class="col-md-4">
                 <label for="status" class="form-label fw-bold">Status:</label>
-                <select class="form-select border" id="status" name="status">
+                <select class="form-select border" id="status-modal" name="status">
                   <option value="Agendada" {% if travel.status == 'Agendada' %}selected{% endif %}>Agendada</option>
                   <option value="Em Andamento" {% if travel.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
                   <option value="Concluída" {% if travel.status == 'Concluída' %}selected{% endif %}>Concluída</option>
@@ -842,7 +849,7 @@ block content %}
                 <label for="descricao" class="form-label fw-bold">Descrição:</label>
                 <textarea 
                   class="form-control border" 
-                  id="descricao" 
+                  id="descricao-modal" 
                   name="descricao" 
                   rows="3"
                 >{{ travel.descricao }}</textarea>
