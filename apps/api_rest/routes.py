@@ -120,8 +120,6 @@ def edit_travel():
     
     data = request.get_json()
     
-    print(f"\n\n\nData received for edit: {data}\n\n\n")
-    
     id_viagem = data.get('id_viagem', None)
     if not id_viagem:
         raise InvalidUsage(message='ID da viagem é obrigatório', status_code=400)

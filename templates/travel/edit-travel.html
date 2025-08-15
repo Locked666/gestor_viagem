@@ -216,7 +216,7 @@ block content %}
                   >
                     <option value="" selected disabled>Selecione um Técnico</option>
                     {% for tecnico in tecnicos %}
-                    <option value="{{ tecnico.id }}">{{ tecnico.username }}</option>
+                    <option value="{{ tecnico.tecnico }}">{{ tecnico.username }}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -325,7 +325,7 @@ block content %}
           role="tabpanel"
           aria-labelledby="dados-tab"
         >
-          <form id="formDadosPrincipais" action>
+          <!--<form id="formDadosPrincipais" action>-->
             <input type="hidden" id="viagemId" name="viagemId" value="" />
             <input
               type="hidden"
@@ -415,7 +415,7 @@ block content %}
                 Salvar Dados
               </button>
             </div>
-          </form>
+          <!--</form>-->
         </div>
 
         <!-- Aba 2: Gastos -->
@@ -764,11 +764,11 @@ block content %}
             </div>
 
             <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-primary">
+              <!--<button type="button" id="btn-send-data" class="btn btn-primary">
                 Salvar Dados
-              </button>
+              </button>-->
             </div>
-          </form>
+          <!--</form>-->
         </div>
       </div>
     </div>

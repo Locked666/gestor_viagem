@@ -43,6 +43,7 @@ async function request(method, url, data = null) {
 
     return result;
   } catch (error) {
+    hideLoader();
     console.error("Erro:", error);
     toast("Erro de conexão com o servidor", "danger", "Erro", "Agora", "error");
     return { success: false, message: "Erro na requisição" };

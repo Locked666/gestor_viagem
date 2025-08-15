@@ -18,6 +18,7 @@ import os
 import json
 
 @blueprint.route('/')
+@login_required
 # @blueprint.route('/index')
 def index():
     context = {
