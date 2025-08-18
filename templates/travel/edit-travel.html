@@ -428,7 +428,7 @@ block content %}
           <div class="row">
             <div class="col-md-6">
               <h5>Adicionar Gasto</h5>
-              <form id="formGasto">
+              <!--<form id="formGasto">-->
                 <input type="hidden" id="gastoId" name="gastoId" />
                 <input type="hidden" id="viagemIdGasto" name="viagemIdGasto" />
 
@@ -526,10 +526,10 @@ block content %}
                     id="tipoDocumento"
                     name="tipoDocumento"
                   >
-                    <option value="1">Nota Fiscal</option>
-                    <option value="2">Comprovante de Pagamento</option>
-                    <option value="3">Recibo</option>
-                    <option value="4">Outros</option>
+                    <option value="Nota Fiscal">Nota Fiscal</option>
+                    <option value="Comprovante de Pagamento">Comprovante de Pagamento</option>
+                    <option value="Recibo">Recibo</option>
+                    <option value="Outros">Outros</option>
                   </select>
                 </div>
 
@@ -547,7 +547,7 @@ block content %}
                 </div>
 
                 <div class="d-flex justify-content-end">
-                  <button type="submit" class="btn btn-primary me-2">
+                  <button type="button" id="bntAddGasto" class="btn btn-primary me-2">
                     Salvar Gasto
                   </button>
                   <button
@@ -558,7 +558,7 @@ block content %}
                     Limpar
                   </button>
                 </div>
-              </form>
+              <!--</form>-->
             </div>
 
             <div class="col-md-6">

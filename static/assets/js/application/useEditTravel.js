@@ -10,10 +10,6 @@ import { autoComplete } from "./autoComplete.js";
 const urlAtual = new URL(window.location.href);
 const viagemId = urlAtual.searchParams.get("idTravel");
 
-// const modalEditTravel = new bootstrap.Modal(
-//   document.getElementById("editTravelModal")
-// );
-
 let modalEditTravel = null;
 const modalEl = document.getElementById("editTravelModal");
 
@@ -103,7 +99,6 @@ async function sendDataTravel() {
   };
 
   try {
-    console.log(payloadtravel);
     const response = await putJSON("/travel/edit", payloadtravel);
     funcShowLoader();
 
@@ -112,6 +107,104 @@ async function sendDataTravel() {
     }
   } catch (error) {
     console.log(error);
+    funcHideLoader();
+  }
+}
+
+async function clearExpenseFields() {
+  // Variáveis "clear"
+  const clearTecnicoUserEl = document.getElementById("tecnicoUser");
+  const clearTipoGasto = document.getElementById("tipoGasto");
+  const clearNumeroDocumento = document.getElementById("numeroDocumento");
+  const clearValorGasto = document.getElementById("valorGasto");
+  const clearDescricaoGasto = document.getElementById("descricaoGasto");
+  const clearDataGasto = document.getElementById("dataHoraGasto");
+  const clearEstornoGasto = document.getElementById("estorno");
+  const clearTipoDocumento = document.getElementById("tipoDocumento");
+  const clearUpDocumentExpense = document.getElementById("documentoUpload");
+
+  clearTecnicoUserEl.value = "";
+  clearTipoGasto.value = "";
+  clearNumeroDocumento.value = "";
+  clearValorGasto.value = "";
+  clearDescricaoGasto.value = "";
+  clearDataGasto.value = "";
+  clearEstornoGasto.checked = false;
+  clearTipoDocumento.value = "";
+  clearUpDocumentExpense.value = "";
+}
+
+async function sendDataExpense() {
+  const tecnicoUserEl = document.getElementById("tecnicoUser");
+  const tipoGasto = document.getElementById("tipoGasto").value.trim();
+  const numeroDocumento = document
+    .getElementById("numeroDocumento")
+    .value.trim();
+  const valorGasto = document.getElementById("valorGasto").value.trim();
+  const descricaoGasto = document.getElementById("descricaoGasto").value.trim();
+  const dataGasto = document.getElementById("dataHoraGasto").value.trim();
+  const estornoGasto = document.getElementById("estorno").checked;
+  const tipoDocumento = document.getElementById("tipoDocumento").value.trim();
+
+  const upDocumentExpense = document.getElementById("documentoUpload");
+
+  if (tipoGasto === "") {
+    execToast(
+      "Tipo do Gasto Não pode estar Vazio",
+      "info",
+      "Aviso",
+      "Agora",
+      "error"
+    );
+    return;
+  }
+  if (valorGasto === "") {
+    execToast(
+      "Valor do Gasto Não pode estar Vazio",
+      "info",
+      "Aviso",
+      "Agora",
+      "error"
+    );
+    return;
+  }
+  if (descricaoGasto === "") {
+    execToast(
+      "Descriçao Não pode estar Vazio",
+      "info",
+      "Aviso",
+      "Agora",
+      "error"
+    );
+    return;
+  }
+  if (dataGasto === "") {
+    execToast("Data Não pode estar Vazio", "info", "Aviso", "Agora", "error");
+    return;
+  }
+
+  const payloadExpense = {
+    id_viagem: viagemId,
+    ...(tecnicoUserEl && tecnicoUserEl.value.trim()
+      ? { tecnico_user: tecnicoUserEl.value.trim() }
+      : {}),
+    tipo: tipoGasto,
+    n_documento: numeroDocumento,
+    tipo_documento: tipoDocumento,
+    descricao: descricaoGasto,
+    valor: valorGasto,
+    status: "Pendente",
+    data_gasto: dataGasto,
+    estorno: estornoGasto,
+  };
+
+  try {
+    const response = postJSON("/expense", payloadExpense);
+    if (response.success) {
+      funcHideLoader();
+      clearExpenseFields();
+    }
+  } catch (error) {
     funcHideLoader();
   }
 }
@@ -133,5 +226,11 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", async (e) => {
       e.preventDefault();
       await sendDataTravel();
+    });
+  document
+    .getElementById("bntAddGasto")
+    .addEventListener("click", async (e) => {
+      e.preventDefault();
+      await sendDataExpense();
     });
 });
