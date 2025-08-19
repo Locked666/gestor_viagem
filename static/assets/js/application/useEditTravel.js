@@ -5,7 +5,10 @@ import {
   funcShowLoader,
   funcHideLoader,
   execToast,
+  deleteJSON,
 } from "./request.js";
+import { formatarData } from "./useUtils.js";
+
 import { autoComplete } from "./autoComplete.js";
 const urlAtual = new URL(window.location.href);
 const viagemId = urlAtual.searchParams.get("idTravel");
@@ -15,6 +18,55 @@ const modalEl = document.getElementById("editTravelModal");
 
 if (modalEl) {
   modalEditTravel = new bootstrap.Modal(modalEl);
+}
+
+async function loadExpenseForTravel() {
+  const payloadLoadExpense = {
+    id_viagem: viagemId,
+    // ...(tecnicoUserEl && tecnicoUserEl.value.trim()
+    //   ? { id_tecnico: tecnicoUserEl.value.trim() }
+    //   : {}),
+  };
+  const responseLoadExpense = getJSON(
+    "/api/v1/expense/get",
+    payloadLoadExpense
+  );
+
+  console.table(responseLoadExpense);
+}
+
+async function deleteLineForTableExpense(idGasto) {
+  const linha = document.querySelector(`tr[data-gasto-id="${idGasto}"]`);
+  if (linha) linha.remove();
+
+  const tbody = document.getElementById("tabelaGastos");
+
+  // Verifica se ainda restam linhas
+  if (tbody.rows.length === 0) {
+    const lineNew = tbody.insertRow();
+    lineNew.innerHTML = `
+      <td colspan="5" class="text-center">
+        Nenhum gasto cadastrado
+      </td>
+    `;
+  }
+}
+
+async function excluirGasto(idGasto) {
+  try {
+    const payloadDeleteExpense = {
+      id_gasto: idGasto,
+    };
+    const responseDeleteExpense = await deleteJSON(
+      "/expense/delete",
+      payloadDeleteExpense
+    );
+
+    if (responseDeleteExpense.success) {
+      // Remove a linha da tabela
+      deleteLineForTableExpense(idGasto);
+    }
+  } catch (error) {}
 }
 
 async function reloadInfoTravel() {
@@ -111,7 +163,7 @@ async function sendDataTravel() {
   }
 }
 
-async function clearExpenseFields() {
+function clearExpenseFields() {
   // Variáveis "clear"
   const clearTecnicoUserEl = document.getElementById("tecnicoUser");
   const clearTipoGasto = document.getElementById("tipoGasto");
@@ -130,7 +182,7 @@ async function clearExpenseFields() {
   clearDescricaoGasto.value = "";
   clearDataGasto.value = "";
   clearEstornoGasto.checked = false;
-  clearTipoDocumento.value = "";
+  clearTipoDocumento.value = "Nota Fiscal";
   clearUpDocumentExpense.value = "";
 }
 
@@ -199,8 +251,9 @@ async function sendDataExpense() {
   };
 
   try {
-    const response = postJSON("/expense", payloadExpense);
+    const response = await postJSON("/expense", payloadExpense);
     if (response.success) {
+      atualizarTabelaGastos(payloadExpense, response.id, upDocumentExpense);
       funcHideLoader();
       clearExpenseFields();
     }
@@ -209,10 +262,74 @@ async function sendDataExpense() {
   }
 }
 
+async function atualizarTabelaGastos(data, idGasto, uploadDocumento) {
+  // Atualiza a tabela de gastos
+  const tabelaGastos = document.getElementById("tabelaGastos");
+  const novaLinha = tabelaGastos.insertRow();
+  novaLinha.setAttribute("data-gasto-id", idGasto);
+  if (tabelaGastos.querySelector('tr td[colspan="5"]')) {
+    tabelaGastos.innerHTML = "";
+  }
+
+  // const vlrGasto = frmdata.get("valorGasto");
+  novaLinha.innerHTML = `
+        <td>${idGasto}</td>
+        <td>${await formatarData(data.data_gasto)}</td>
+        <td>${data.tipo}</td>
+        <td>R$ ${Number(data.valor).toFixed(2)}</td>
+        <td class="d-flex align-items-center gap-2">
+          <div class="align-middle text-left text-sm p-0">
+            <button class="btn btn-sm btn-action visualizar-gasto p-0" title="Visualizar">
+              <span class="material-symbols-rounded">visibility</span>
+            </button>
+
+            <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar">
+              <span class="material-symbols-rounded">edit</span>
+            </button>
+
+            <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir">
+              <span class="material-symbols-rounded">delete</span>
+            </button>
+
+            ${
+              uploadDocumento
+                ? `
+              <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento">
+                <span class="material-symbols-rounded">description</span>
+              </button>
+              `
+                : ""
+            }
+          </div>  
+        </td>
+
+    `;
+  tabelaGastos.appendChild(novaLinha);
+
+  // Adicionar event listeners aos botões
+  novaLinha
+    .querySelector(".visualizar-gasto")
+    .addEventListener("click", () => visualizarGasto(idGasto));
+  novaLinha
+    .querySelector(".editar-gasto")
+    .addEventListener("click", () => editarGasto(idGasto));
+  novaLinha
+    .querySelector(".excluir-gasto")
+    .addEventListener("click", () => excluirGasto(idGasto));
+  if (novaLinha.querySelector(".ver-documento")) {
+    novaLinha
+      .querySelector(".ver-documento")
+      .addEventListener("click", () =>
+        verDocumento(uploadDocumento.documentoId)
+      );
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const cardInfoTravel = document.querySelector(".card-info-travel");
   if (modalEl) {
     autoComplete("#entidade", "#entidade-id", "/api/v1/entidade");
+    loadExpenseForTravel();
     document
       .getElementById("btnEditarViagemModal")
       .addEventListener("click", async (e) => {

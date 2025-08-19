@@ -3,7 +3,7 @@ from flask import jsonify,request
 from flask_login import login_required, current_user
 from apps.authentication.models import Users
 from apps.models import Entidades
-from apps.travel.models import TecnicosViagens, db
+from apps.travel.models import TecnicosViagens, db, GastosViagens
 from apps.exceptions.exception import InvalidUsage
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
@@ -153,5 +153,38 @@ def edit_travel():
         db.session.rollback()
         raise InvalidUsage(f'Erro ao atualizar viagem: {str(e)}', status_code=500)
         
+
+# Expense API 
+
+@blueprint.route('/expense/get', methods = ['GET'])
+@login_required
+def get_expense():
+    data = request.get_json()
     
+    id_expense = data.get('id_gasto', None)
+    id_travel = data.get('id_viagem', None)
+    id_user = data.get('id_tecnico', None)
+    
+    if id_travel is None or id_travel == "": 
+        raise InvalidUsage(message="Obrigatório o id da Viagem", status_code=400)
+    
+    if id_user is None or id_user == "": 
+        id_user = current_user.id
+    
+    
+    try:
+    
+        expense =  GastosViagens.query.filter_by(viagem= id_travel, tecnico = id_user).all()
+    
+        return jsonify({'success': True, 'message': 'Expenses', 'expense': expense})
+    except ValueError as e : 
+        raise InvalidUsage(message=f"Ocorreu um erro ao processsar as informations: {e}", status_code=500)    
+    
+    
+    
+    
+    
+    
+    
+        
           

@@ -8,14 +8,12 @@ from apps.utils.fuctions_for_date import convert_to_datetime
 
 # validar Dados
 def validade_data_expense(data, current_method = 'POST', event = 'include'):
-    
-    print(f"\n\n\n{data}\n\n\n")
-    
+
     # Tipo de status validos para o Gasto
     type_status_expense = ['Pendente', 'Aprovado', 'Rejeitado', 'Parcial']
     
     # Tipo de Gasto Validos]
-    type_expense_valid =  ['Alimentação', 'Combustível', 'Estadia', 'Outros']
+    type_expense_valid =  ['Alimentação', 'Combustível', 'Estadia', 'Outras']
     
     id_travel= data.get('id_viagem', None)
     
@@ -110,7 +108,7 @@ def include_data_expense(data):
         db.session.add(new_expense)
         db.session.commit()
         
-        return jsonify({'success': True, 'message': "Gasto Adicionado com sucesso.", "id": new_expense.id})
+        return jsonify({'success': True, 'message': f"Gasto Adicionado com sucesso:{new_expense.id}-{new_expense.descricao} ", "id": new_expense.id})
         
     except Exception as e: 
         db.session.rollback()
