@@ -20,20 +20,20 @@ if (modalEl) {
   modalEditTravel = new bootstrap.Modal(modalEl);
 }
 
-async function loadExpenseForTravel() {
-  const payloadLoadExpense = {
-    id_viagem: viagemId,
-    // ...(tecnicoUserEl && tecnicoUserEl.value.trim()
-    //   ? { id_tecnico: tecnicoUserEl.value.trim() }
-    //   : {}),
-  };
-  const responseLoadExpense = getJSON(
-    "/api/v1/expense/get",
-    payloadLoadExpense
-  );
+// async function loadExpenseForTravel() {
+//   const payloadLoadExpense = {
+//     id_viagem: viagemId,
+//     // ...(tecnicoUserEl && tecnicoUserEl.value.trim()
+//     //   ? { id_tecnico: tecnicoUserEl.value.trim() }
+//     //   : {}),
+//   };
+//   const responseLoadExpense = getJSON(
+//     "/api/v1/expense/get",
+//     payloadLoadExpense
+//   );
 
-  console.table(responseLoadExpense);
-}
+//   console.table(responseLoadExpense);
+// }
 
 async function deleteLineForTableExpense(idGasto) {
   const linha = document.querySelector(`tr[data-gasto-id="${idGasto}"]`);
@@ -279,22 +279,22 @@ async function atualizarTabelaGastos(data, idGasto, uploadDocumento) {
         <td>R$ ${Number(data.valor).toFixed(2)}</td>
         <td class="d-flex align-items-center gap-2">
           <div class="align-middle text-left text-sm p-0">
-            <button class="btn btn-sm btn-action visualizar-gasto p-0" title="Visualizar">
+            <button class="btn btn-sm btn-action visualizar-gasto p-0" title="Visualizar" data-documento-id="{{ expense.documento_id }}">
               <span class="material-symbols-rounded">visibility</span>
             </button>
 
-            <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar">
+            <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar" data-documento-id="{{ expense.documento_id }}">
               <span class="material-symbols-rounded">edit</span>
             </button>
 
-            <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir">
+            <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir" data-documento-id="{{ expense.documento_id }}">
               <span class="material-symbols-rounded">delete</span>
             </button>
 
             ${
               uploadDocumento
                 ? `
-              <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento">
+              <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento" data-documento-id="{{ expense.documento_id }}">
                 <span class="material-symbols-rounded">description</span>
               </button>
               `
@@ -307,29 +307,28 @@ async function atualizarTabelaGastos(data, idGasto, uploadDocumento) {
   tabelaGastos.appendChild(novaLinha);
 
   // Adicionar event listeners aos botões
-  novaLinha
-    .querySelector(".visualizar-gasto")
-    .addEventListener("click", () => visualizarGasto(idGasto));
-  novaLinha
-    .querySelector(".editar-gasto")
-    .addEventListener("click", () => editarGasto(idGasto));
-  novaLinha
-    .querySelector(".excluir-gasto")
-    .addEventListener("click", () => excluirGasto(idGasto));
-  if (novaLinha.querySelector(".ver-documento")) {
-    novaLinha
-      .querySelector(".ver-documento")
-      .addEventListener("click", () =>
-        verDocumento(uploadDocumento.documentoId)
-      );
-  }
+  // novaLinha
+  //   .querySelector(".visualizar-gasto")
+  //   .addEventListener("click", () => visualizarGasto(idGasto));
+  // novaLinha
+  //   .querySelector(".editar-gasto")
+  //   .addEventListener("click", () => editarGasto(idGasto));
+  // novaLinha
+  //   .querySelector(".excluir-gasto")
+  //   .addEventListener("click", () => excluirGasto(idGasto));
+  // if (novaLinha.querySelector(".ver-documento")) {
+  //   novaLinha
+  //     .querySelector(".ver-documento")
+  //     .addEventListener("click", () =>
+  //       verDocumento(uploadDocumento.documentoId)
+  //     );
+  // }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   const cardInfoTravel = document.querySelector(".card-info-travel");
   if (modalEl) {
     autoComplete("#entidade", "#entidade-id", "/api/v1/entidade");
-    loadExpenseForTravel();
     document
       .getElementById("btnEditarViagemModal")
       .addEventListener("click", async (e) => {
@@ -349,5 +348,28 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", async (e) => {
       e.preventDefault();
       await sendDataExpense();
+    });
+
+  // Delegação de eventos para os botões da tabela
+  document
+    .getElementById("tabelaGastos")
+    .addEventListener("click", function (event) {
+      const target = event.target.closest("button"); // Garante que pegamos o botão e não o <span>
+      if (!target) return;
+
+      const linha = target.closest("tr");
+      const idGasto = linha.getAttribute("data-gasto-id");
+
+      if (target.classList.contains("visualizar-gasto")) {
+        visualizarGasto(idGasto);
+      } else if (target.classList.contains("editar-gasto")) {
+        editarGasto(idGasto);
+      } else if (target.classList.contains("excluir-gasto")) {
+        excluirGasto(idGasto);
+      } else if (target.classList.contains("ver-documento")) {
+        // Se precisar passar o documento, você pode colocar um data-atributo no botão também
+        const documentoId = target.getAttribute("data-documento-id");
+        verDocumento(documentoId);
+      }
     });
 });

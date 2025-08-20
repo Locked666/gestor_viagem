@@ -159,24 +159,28 @@ def edit_travel():
 @blueprint.route('/expense/get', methods = ['GET'])
 @login_required
 def get_expense():
-    data = request.get_json()
-    
-    id_expense = data.get('id_gasto', None)
-    id_travel = data.get('id_viagem', None)
-    id_user = data.get('id_tecnico', None)
-    
-    if id_travel is None or id_travel == "": 
-        raise InvalidUsage(message="Obrigatório o id da Viagem", status_code=400)
-    
-    if id_user is None or id_user == "": 
-        id_user = current_user.id
-    
-    
     try:
+        data = request.get_json()
+        
+        id_expense = data.get('id_gasto', None)
+        id_travel = data.get('id_viagem', None)
+        id_user = data.get('id_tecnico', None)
+        
+        if id_travel is None or id_travel == "": 
+            raise InvalidUsage(message="Obrigatório o id da Viagem", status_code=400)
+        
+        if id_user is None or id_user == "": 
+            id_user = current_user.id
+            
+        expense_data = []    
+
+        expenses =  GastosViagens.query.filter_by(viagem= id_travel, tecnico = id_user).all()
+        
+        
+        
+        
     
-        expense =  GastosViagens.query.filter_by(viagem= id_travel, tecnico = id_user).all()
-    
-        return jsonify({'success': True, 'message': 'Expenses', 'expense': expense})
+        return jsonify({'success': True, 'message': 'Expenses', 'expense': expense_data})
     except ValueError as e : 
         raise InvalidUsage(message=f"Ocorreu um erro ao processsar as informations: {e}", status_code=500)    
     

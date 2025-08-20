@@ -576,11 +576,48 @@ block content %}
                   </thead>
                   <tbody id="tabelaGastos">
                     <!-- Dados serão preenchidos via JavaScript -->
-                    <tr>
-                      <td colspan="5" class="text-center">
-                        Nenhum gasto cadastrado
+                     {% if expenses %}
+                     {% for expense in expenses %}
+                     <tr class="{{ "bg-success text-light" if expense.status == "Aprovado" else ""}}" data-gasto-id="{{ expense.id}}">
+                      <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">{{ expense.id }}</td>
+                      <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">{{ expense.data_convert}}</td>
+                      <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">{{ expense.tipo_gasto}}</td>
+                      <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">R$ {{ expense.valor }}</td>
+                      <td class="d-flex align-items-center gap-2">
+                        <div class="align-middle text-left text-sm p-0">
+                          <button class="btn btn-sm btn-action visualizar-gasto p-0" title="Visualizar" data-documento-id="{{ expense.documento_id }}">
+                            <span class="material-symbols-rounded">visibility</span>
+                          </button>
+
+                          <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar" data-documento-id="{{ expense.documento_id }}">
+                            <span class="material-symbols-rounded">edit</span>
+                          </button>
+
+                          <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir" data-documento-id="{{ expense.documento_id }}">
+                            <span class="material-symbols-rounded">delete</span>
+                          </button>
+
+                    
+                            <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento">
+                              <span class="material-symbols-rounded">description</span>
+                            </button>
+
+                        </div>  
                       </td>
-                    </tr>
+
+                     </tr>
+                     {% endfor %}
+
+                     {% else %}
+                      <tr>
+                        <td colspan="5" class="text-center">
+                          Nenhum gasto cadastrado
+                        </td>
+                      </tr>
+                    
+
+                     {% endif %}
+                    
                   </tbody>
                   <tfoot>
                     <tr>

@@ -2,7 +2,7 @@ from apps.travel import blueprint
 from flask_login import login_required, current_user, login_user
 from flask import render_template, request, redirect, url_for, jsonify
 
-from apps.travel.models import RegistroViagens ,TecnicosViagens ,db
+from apps.travel.models import RegistroViagens ,TecnicosViagens ,db, GastosViagens
 from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
 from apps.authentication.models import Users
@@ -130,6 +130,8 @@ def edit_travel():
         
         id_viagem =  request.args.get('idTravel')
         
+        id_user =  request.args.get('idUser')
+        
         travel = validade_user_travel(id_viagem, False)
         
         if not travel or isinstance(travel, dict):
@@ -154,6 +156,16 @@ def edit_travel():
         travel.data_inicio_convert = travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None
         travel.entidade_nome = Entidades.query.filter_by(id=travel.entidade_destino).first().nome if travel.entidade_destino else None
         
+        expenses_for_travel = GastosViagens.query.filter_by(viagem=id_viagem, tecnico = current_user.id).all()
+        
+        
+        # expenses_for_travel.data_convert = expenses_for_travel.data_gasto.strftime('%d/%m/%Y %H:%M') if expenses_for_travel.data_gasto else None
+        
+        for expense in expenses_for_travel:
+           expense.data_convert =  expense.data_gasto.strftime('%d/%m/%Y %H:%M') if expense.data_gasto else None
+            
+        
+        
         
         context = {
                 'segment': 'travel',
@@ -161,7 +173,7 @@ def edit_travel():
             }
 
         
-        return render_template('travel/edit-travel.html', **context, travel  = travel, tecnicos=tec_travel)
+        return render_template('travel/edit-travel.html', **context, travel  = travel, tecnicos=tec_travel, expenses = expenses_for_travel)
 
     elif request.method == 'PUT':
         
