@@ -113,3 +113,17 @@ def include_data_expense(data):
     except Exception as e: 
         db.session.rollback()
         raise InvalidUsage(message=f"Ocorreu um erro ao adicionar o Gasto:\n{e}", status_code=500)    
+
+
+## Atualizar o gasto da viagem. 
+
+def update_balance_expense(id_travel = None) :
+    
+    if id_travel == None or id_travel == "": 
+        raise print(f"\n\n Não é possivel atualizar Gasto, id do gasto não disponivel.\n\n")
+    
+    
+    
+    
+    
+

@@ -8,6 +8,10 @@ from apps.exceptions.exception import InvalidUsage
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
 
+import locale
+
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Define a localidade para português do Brasil
+
 
 @blueprint.route('/entidade', methods = ['GET'])
 @login_required
@@ -156,33 +160,47 @@ def edit_travel():
 
 # Expense API 
 
-@blueprint.route('/expense/get', methods = ['GET'])
+@blueprint.route('/expense/get/totalizer', methods=['GET'])
 @login_required
 def get_expense():
     try:
-        data = request.get_json()
-        
-        id_expense = data.get('id_gasto', None)
-        id_travel = data.get('id_viagem', None)
-        id_user = data.get('id_tecnico', None)
-        
-        if id_travel is None or id_travel == "": 
-            raise InvalidUsage(message="Obrigatório o id da Viagem", status_code=400)
-        
-        if id_user is None or id_user == "": 
-            id_user = current_user.id
-            
-        expense_data = []    
+        id_expense = request.args.get('id_gasto')
+        id_travel = request.args.get('id_viagem')
+        id_user = request.args.get('id_tecnico')
 
-        expenses =  GastosViagens.query.filter_by(viagem= id_travel, tecnico = id_user).all()
-        
-        
-        
-        
-    
-        return jsonify({'success': True, 'message': 'Expenses', 'expense': expense_data})
-    except ValueError as e : 
-        raise InvalidUsage(message=f"Ocorreu um erro ao processsar as informations: {e}", status_code=500)    
+        if not id_travel:
+            raise InvalidUsage(message="Obrigatório o id da Viagem", status_code=400)
+
+        if not id_user:
+            id_user = current_user.id
+
+        expenses_for_travel = GastosViagens.query.filter_by(
+            viagem=id_travel,
+            tecnico=id_user
+        ).all()
+
+        total = 0.0
+        total_estorno = 0.0
+
+        for expense in expenses_for_travel:
+            if expense.ativo:
+                total += float(expense.valor)
+                if expense.estorno:
+                    total_estorno += float(expense.valor)
+
+        return jsonify({
+            'success': True,
+            'message': 'Total Atualizado',
+            'total': locale.currency(total, grouping=True),
+            'total_estorno': locale.currency(total_estorno, grouping=True)
+        })
+
+    except ValueError as e:
+        raise InvalidUsage(
+            message=f"Ocorreu um erro ao processar as informações: {e}",
+            status_code=500
+        )
+   
     
     
     

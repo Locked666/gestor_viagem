@@ -10,6 +10,8 @@ from apps.models import Entidades
 
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
+import locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Define a localidade para português do Brasil
 
 # from datetime import datetime
 # from apps.users.validation import validadion_user, validadion_password
@@ -163,7 +165,22 @@ def edit_travel():
         
         for expense in expenses_for_travel:
            expense.data_convert =  expense.data_gasto.strftime('%d/%m/%Y %H:%M') if expense.data_gasto else None
-            
+        
+        
+        
+        total = 0.0
+        total_estorno = 0.0
+
+        for expense in expenses_for_travel:
+            if expense.ativo: 
+                 total += float(expense.valor)
+                 
+                 if expense.estorno:
+                     total_estorno += float(expense.valor) 
+        
+        totais =  {'total': locale.currency(total, grouping=True), 'total_estorno': locale.currency(total_estorno, grouping=True)}     
+  
+                        
         
         
         
@@ -173,7 +190,7 @@ def edit_travel():
             }
 
         
-        return render_template('travel/edit-travel.html', **context, travel  = travel, tecnicos=tec_travel, expenses = expenses_for_travel)
+        return render_template('travel/edit-travel.html', **context, travel  = travel, tecnicos=tec_travel, expenses = expenses_for_travel, totalizado = totais )
 
     elif request.method == 'PUT':
         

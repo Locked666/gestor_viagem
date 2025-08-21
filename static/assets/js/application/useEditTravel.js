@@ -52,6 +52,27 @@ async function deleteLineForTableExpense(idGasto) {
   }
 }
 
+async function totalizerExpenseForTravel() {
+  const tecnicoUserEl = document.getElementById("tecnicoUser");
+  const totalGastoTotalizer = document.getElementById("totalGastos");
+  const totalGastoEstornoTotalizer =
+    document.getElementById("totalGastosEstorno");
+  const url = `/api/v1/expense/get/totalizer?id_viagem=${viagemId}${
+    tecnicoUserEl && tecnicoUserEl.value.trim()
+      ? `&id_tecnico=${tecnicoUserEl.value.trim()}`
+      : ""
+  }`;
+
+  try {
+    const getResponseTotalizer = await getJSON(url);
+
+    if (getResponseTotalizer.success) {
+      totalGastoEstornoTotalizer.innerText = getResponseTotalizer.total_estorno;
+      totalGastoTotalizer.innerText = getResponseTotalizer.total;
+    }
+  } catch (error) {}
+}
+
 async function excluirGasto(idGasto) {
   try {
     const payloadDeleteExpense = {
@@ -65,6 +86,7 @@ async function excluirGasto(idGasto) {
     if (responseDeleteExpense.success) {
       // Remove a linha da tabela
       deleteLineForTableExpense(idGasto);
+      totalizerExpenseForTravel();
     }
   } catch (error) {}
 }
@@ -305,24 +327,8 @@ async function atualizarTabelaGastos(data, idGasto, uploadDocumento) {
 
     `;
   tabelaGastos.appendChild(novaLinha);
-
-  // Adicionar event listeners aos botões
-  // novaLinha
-  //   .querySelector(".visualizar-gasto")
-  //   .addEventListener("click", () => visualizarGasto(idGasto));
-  // novaLinha
-  //   .querySelector(".editar-gasto")
-  //   .addEventListener("click", () => editarGasto(idGasto));
-  // novaLinha
-  //   .querySelector(".excluir-gasto")
-  //   .addEventListener("click", () => excluirGasto(idGasto));
-  // if (novaLinha.querySelector(".ver-documento")) {
-  //   novaLinha
-  //     .querySelector(".ver-documento")
-  //     .addEventListener("click", () =>
-  //       verDocumento(uploadDocumento.documentoId)
-  //     );
-  // }
+  totalizerExpenseForTravel();
+  // window.location.reload();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
