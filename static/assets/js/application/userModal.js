@@ -63,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       var result = "";
 
-      console.log(jsonData);
       if (currentAction === "edit") {
         var result = await putJSON("/users", jsonData);
       } else {
@@ -114,6 +113,30 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
+  document.querySelectorAll("#reset-for-password").forEach((button) => {
+    button.addEventListener("click", async function () {
+      const userId = this.getAttribute("data-id");
+
+      if (!userId) {
+        console.error("ID do usuário não encontrado.");
+        return;
+      }
+
+      const confirmDelete = confirm("Deseja Reiniciar a senha desse usuário ?");
+      if (!confirmDelete) return;
+
+      const payload = {
+        user_id: userId,
+      };
+
+      const deleteUserP = await putJSON("/users/reset_password/key", payload);
+      if (deleteUserP.success) {
+      } else {
+        return;
+      }
+    });
+  });
 });
 funcHideLoader();
 
@@ -143,7 +166,6 @@ document.addEventListener("DOMContentLoaded", () => {
         payload
       );
 
-      
       if (resetPasswordRequest.success) {
         document.getElementById("passwordChangeForm").reset();
         setInterval(() => {

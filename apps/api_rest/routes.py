@@ -35,23 +35,55 @@ def get_viagens(integer):
     """
     
     try: 
-        travel = travel = validade_user_travel(integer)
+        # verificar se vem via calendar
         
+        is_calendar = request.args.get('calendar', 'false')
         
+        if is_calendar == 'true':
+            travel = validade_user_travel(integer, validade=False, break_ex = False)
+        else: 
+            travel = validade_user_travel(integer)
+
+        # Monta dados básicos da viagem
         travel_data = {
             "id": travel.id,
             "tipo_viagem": travel.tipo_viagem,
             "status": travel.status,
             "descricao": travel.descricao,
             "data_inicio": travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None,
-            "entidade_destino": Entidades.query.filter_by(id=travel.entidade_destino).first().nome if travel.entidade_destino else None,
+            "entidade_destino": (
+                Entidades.query.with_entities(Entidades.nome)
+                .filter_by(id=travel.entidade_destino)
+                .scalar()
+                if travel.entidade_destino else None
+            ),
             "entidade_id": travel.entidade_destino,
         }
 
-        
+        # Se for consulta via calendário, inclui técnicos relacionados
+        if is_calendar == 'true':
+            # Faz join para evitar N+1 queries
+            tecnicos_viagem = (
+                db.session.query(TecnicosViagens, Users)
+                .join(Users, TecnicosViagens.tecnico == Users.id)
+                .filter(TecnicosViagens.viagem == travel.id)
+                .all()
+            )
+
+            travel_data["tecnicos"] = [
+                {
+                    "id_user": tec.id,
+                    "username": user.username,
+                    "atribuito": tec.atribuito,
+                    "relatorio": tec.n_intranet
+                }
+                for tec, user in tecnicos_viagem
+            ]
+
+            
         return jsonify({'success': True, 'message': 'Viagem encontrada.', 'data': travel_data}), 200
     
-    except Exception as e:
+    except ValueError as e:
         raise InvalidUsage(f'Erro ao buscar viagens: {str(e)}', status_code=500)
     
     
@@ -210,18 +242,34 @@ def get_events_travel():
     date_start = request.args.get('start')
     date_end = request.args.get('end')
     
-    print(f"Data Inicio: {convert_to_datetime(date_start)}")
-    print(f"Data Fim: {convert_to_datetime(date_end)}")
+    # print(f"Data Inicio: {convert_to_datetime(date_start)}")
+    # print(f"Data Fim: {convert_to_datetime(date_end)}")
     
     try:
-        travels =  RegistroViagens.query.filter_by(status = 'Agendada', ativo = True).all()
+        travels =  RegistroViagens.query.filter_by(ativo = True).all()
         
         for travel in travels: 
             n_events = {
+                "id": travel.id,
                 "title": travel.descricao, 
                 "start": travel.data_inicio.strftime('%Y-%m-%d') if travel.data_inicio else None,
                 "end": travel.data_inicio.strftime('%Y-%m-%d') if travel.data_inicio else None,
+                "backgroundColor": ""
             }
+            
+            match travel.status:
+                case "Agendada": 
+                    n_events['backgroundColor'] = 'green'
+                    
+                case "Em Andamento": 
+                    n_events['backgroundColor'] = 'turquoise'
+                    
+                case "Concluída": 
+                    n_events['backgroundColor'] = 'lightseagreen'
+                    
+                case "Cancelada": 
+                    n_events['backgroundColor'] = 'red'
+            
             events.append(n_events)
         
         return jsonify(events)

@@ -190,6 +190,7 @@
                         class="material-symbols-rounded me-2 btn-view-user"
                         href="javascript:;"
                         data-action="edit"
+                        title="Visualizar"
                         data-id="{{ user.id }}"
                         data-name="{{ user.username }}"
                         data-email="{{ user.email }}"
@@ -202,8 +203,16 @@
                       <i
                         class="material-symbols-rounded me-2"
                         id="delete-user"
+                        title="Excluir usuário"
                         data-id="{{ user.id }}"
                         >delete</i
+                      >
+                      <i
+                        class="material-symbols-rounded me-2"
+                        id="reset-for-password"
+                        data-id="{{ user.id }}"
+                        title="Resetar senha"
+                        >lock_reset</i
                       >
                     </a>
                   </td>

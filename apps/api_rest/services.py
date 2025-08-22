@@ -7,7 +7,7 @@ from apps.travel.models import RegistroViagens,TecnicosViagens, db
 from apps.exceptions.exception import InvalidUsage
 
 
-def validade_user_travel(travel_id, validade = True, message = 'O Usuário não tem permissão para executar essa ação'):
+def validade_user_travel(travel_id, validade = True, message = 'O Usuário não tem permissão para executar essa ação', break_ex = True):
     """
     Valida se o usuário atual tem permissão para acessar a viagem.
     """
@@ -29,9 +29,10 @@ def validade_user_travel(travel_id, validade = True, message = 'O Usuário não 
     
     if current_user.id not in tecnicos and not current_user.admin:
         if not validade:
-            return {"success":False,"message": message, "status_code": 403}
-        
-        raise InvalidUsage({"success": False,"message": message }, status_code=403)
+            if break_ex:
+                return {"success":False,"message": message, "status_code": 403}
+        if break_ex:
+            raise InvalidUsage({"success": False,"message": message }, status_code=403)
     
     return travel
 

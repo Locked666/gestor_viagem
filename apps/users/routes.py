@@ -206,17 +206,40 @@ def reset_password():
             raise InvalidUsage(message= f"Ocorreu um erro ao atualizar senha: {e}", status_code= 500)    
            
         return jsonify({'success': True,'message': 'Senha Alterada com sucesso!'}), 200   
-            
 
-            
-        
-        
-        
-        
-    
     return render_template('users/reset-password.html')
                 
-            
+@blueprint.route('/users/reset_password/key', methods = ['PUT'])            
+@login_required
+def key_password(): 
+    
+    try: 
+        
+        if not current_user.admin: 
+            raise InvalidUsage(message='Não tem autorização para realizar esse processo.', status_code=403)
+        data = request.get_json()
+        
+        id_user = data.get('user_id', None)
+        
+        if id_user is None or id_user == "": 
+            raise InvalidUsage('Necessário o envio do ID', status_code=400)        
+        
+        user = Users.query.filter_by(id = int(id_user)).first()
+        
+        if not user: 
+            raise InvalidUsage(message="Usuário Não encontrado", status_code=404)
         
         
-         
+        user.password = hash_pass(user.username)
+        user.first_acess = True
+        
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Senha do usuário resetado com sucesso'})
+        
+        
+    except Exception as e: 
+        
+        db.session.rollback()
+        
+        raise InvalidUsage(message=f"Ocorreu um erro ao realizar procedimento: {e}", status_code=500)
