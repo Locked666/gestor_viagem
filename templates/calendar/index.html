@@ -1,0 +1,26 @@
+{% extends "layouts/base.html" %} {% block title %} Profile {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}<link
+  href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css"
+  rel="stylesheet"
+/>
+
+{% endblock stylesheets %} {% block content %}
+
+<div class="container mt-4 d-flex justify-content-center">
+  <div class="card shadow-lg w-100" style="max-width: 900px">
+    <div class="card-body">
+      <div id="calendar"></div>
+    </div>
+  </div>
+</div>
+
+{% block javascripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+<script
+  type="module"
+  src="{{ url_for('static', filename='/assets/js/application/calendar/useIndex.js') }}"
+></script>
+{% endblock javascripts %} {% endblock content %}

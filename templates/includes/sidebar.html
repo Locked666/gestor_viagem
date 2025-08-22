@@ -60,7 +60,6 @@
         >
           Administrativo
         </h6>
-
       </li>
       <li class="nav-item">
         <a
@@ -80,8 +79,8 @@
         >
           Viagens
         </h6>
-
       </li>
+
       <li class="nav-item">
         <a
           class="nav-link {% if 'travel' == segment %} active bg-gradient-dark text-white {% else %} text-dark {% endif %}"
@@ -89,6 +88,16 @@
         >
           <i class="material-symbols-rounded opacity-5">card_travel</i>
           <span class="nav-link-text ms-1">Gestor</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link {% if 'calendar' == segment %} active bg-gradient-dark text-white {% else %} text-dark {% endif %}"
+          href="{{ url_for('travel_blueprint.calendar_events') }}"
+        >
+          <i class="material-symbols-rounded opacity-5">calendar_month</i>
+          <span class="nav-link-text ms-1">Agenda</span>
         </a>
       </li>
       <!-- Gestão de Viagens end-->

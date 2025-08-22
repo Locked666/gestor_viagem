@@ -3,7 +3,7 @@ from flask import jsonify,request
 from flask_login import login_required, current_user
 from apps.authentication.models import Users
 from apps.models import Entidades
-from apps.travel.models import TecnicosViagens, db, GastosViagens
+from apps.travel.models import TecnicosViagens, db, GastosViagens, RegistroViagens
 from apps.exceptions.exception import InvalidUsage
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
@@ -140,14 +140,12 @@ def edit_travel():
     
     if data_inicio is not None or data_inicio != "":
         data_inicio = convert_to_datetime(data.get('data_inicio'))
-        print(f"\n\n\nData after conversion: {data['data_inicio']}\n\n\n")
     
     
     try: 
         travel.entidade_destino = entidade_destino if entidade_destino is not None and entidade_destino != "" else travel.entidade_destino
         travel.tipo_viagem = tipo_viagem if tipo_viagem is not None else travel.tipo_viagem
         travel.descricao = descricao if descricao is not None and descricao != "" else travel.descricao
-        print(f"\n\n\n{data_inicio}\n\n\n")
         travel.data_inicio = data_inicio if data_inicio is not None else travel.data_inicio
         travel.status = status if status is not None else travel.status
         db.session.commit()
@@ -202,7 +200,35 @@ def get_expense():
         )
    
     
+@blueprint.route('/events/get', methods = ['GET', 'POST'])
+@login_required
+
+def get_events_travel():
     
+    events = []
+    
+    date_start = request.args.get('start')
+    date_end = request.args.get('end')
+    
+    print(f"Data Inicio: {convert_to_datetime(date_start)}")
+    print(f"Data Fim: {convert_to_datetime(date_end)}")
+    
+    try:
+        travels =  RegistroViagens.query.filter_by(status = 'Agendada', ativo = True).all()
+        
+        for travel in travels: 
+            n_events = {
+                "title": travel.descricao, 
+                "start": travel.data_inicio.strftime('%Y-%m-%d') if travel.data_inicio else None,
+                "end": travel.data_inicio.strftime('%Y-%m-%d') if travel.data_inicio else None,
+            }
+            events.append(n_events)
+        
+        return jsonify(events)
+    except Exception as e: 
+        raise InvalidUsage(message=f"Ocorreu um erro ao executar a consulta dos eventos {e}", status_code=500)    
+    
+    pass
     
     
     

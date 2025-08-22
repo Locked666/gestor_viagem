@@ -11,6 +11,7 @@ from apps.models import Entidades
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
 import locale
+from datetime import datetime
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Define a localidade para português do Brasil
 
 # from datetime import datetime
@@ -54,12 +55,27 @@ def index():
 def add_travel():
     if request.method == 'GET':
         tecnicos = Users.query.filter_by(diaria= True, active = True).all()
+        
+        date_start = request.args.get('date_start', None)
+        
+        print(f'\n\n{date_start}\n\n')
+        
+        if date_start is not None and date_start != "":
+            # Converte 'YY-mm-dd' para 'yyyy-MM-ddThh:mm' com hora padrão 07:30
+            try:
+                date_obj = datetime.strptime(date_start, "%Y-%m-%d")
+                date_start_convert = date_obj.strftime("%Y-%m-%dT07:30")
+            except Exception:
+                date_start_convert = None
+        else:
+            date_start_convert = None
+        
         context = {
             'segment': 'travel',
-            'title': 'Adicionar -Viagens'
+            'title': 'Adicionar - Viagens'
         }
 
-        return render_template('travel/add-travel.html', **context, tecnicos = tecnicos)
+        return render_template('travel/add-travel.html', **context, tecnicos = tecnicos, date_start = date_start_convert)
     
     elif request.method == 'POST':
         data = request.get_json()
@@ -204,9 +220,7 @@ def edit_travel():
         travel = validade_user_travel(id_viagem)
 
         try:
-            
-            print(f"\n\n\njson recive:\n{data}\n\n\n")
-            
+
             tecnico_of_travel = data['tecnico_user']  if data.get('tecnico_user', None) is not None and data.get('tecnico_user', None) != '' else current_user.id
             
             print(f"\n\n\ntecnico of travel\n{tecnico_of_travel}\n\n\n")
@@ -232,3 +246,12 @@ def edit_travel():
             raise InvalidUsage(f'Erro ao editar viagem: {str(e)}', status_code=500)
         
         
+@blueprint.route('/travel/events', methods = ['GET'])
+@login_required
+def calendar_events():
+    context = {
+        'segment': 'calendar',
+        'title': 'Viagens'
+    }
+    
+    return render_template('calendar/index.html', **context)
