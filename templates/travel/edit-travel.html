@@ -585,22 +585,29 @@ block content %}
                       <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">R$ {{ expense.valor }}</td>
                       <td class="d-flex align-items-center gap-2">
                         <div class="align-middle text-left text-sm p-0">
-                          <button class="btn btn-sm btn-action visualizar-gasto p-0" title="Visualizar" data-documento-id="{{ expense.documento_id }}">
+                          <button class="btn btn-sm btn-action visualizar-gasto p-0" title="Visualizar">
                             <span class="material-symbols-rounded">visibility</span>
                           </button>
 
-                          <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar" data-documento-id="{{ expense.documento_id }}">
+                          <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar">
                             <span class="material-symbols-rounded">edit</span>
                           </button>
 
-                          <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir" data-documento-id="{{ expense.documento_id }}">
+                          <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir" >
                             <span class="material-symbols-rounded">delete</span>
                           </button>
 
-                    
-                            <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento">
+                          {% if expense.arquivo %}
+                            <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento" data-documento-id="{{ expense.arquivo }}">
                               <span class="material-symbols-rounded">description</span>
                             </button>
+                          {% else %}
+                            <button class="btn btn-sm btn-action add-documento p-0" title="Adicione o Documento">
+                              <span class="material-symbols-rounded">upload_file</span>
+                            </button>
+
+
+                          {% endif %}  
 
                         </div>  
                       </td>

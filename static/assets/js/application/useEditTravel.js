@@ -8,10 +8,13 @@ import {
   deleteJSON,
 } from "./request.js";
 import { formatarData } from "./useUtils.js";
-
 import { autoComplete } from "./autoComplete.js";
+import { useUploadFiles } from "./utils/useUploadFiles.js";
+
 const urlAtual = new URL(window.location.href);
 const viagemId = urlAtual.searchParams.get("idTravel");
+
+const debugStatus = true;
 
 let modalEditTravel = null;
 const modalEl = document.getElementById("editTravelModal");
@@ -19,21 +22,6 @@ const modalEl = document.getElementById("editTravelModal");
 if (modalEl) {
   modalEditTravel = new bootstrap.Modal(modalEl);
 }
-
-// async function loadExpenseForTravel() {
-//   const payloadLoadExpense = {
-//     id_viagem: viagemId,
-//     // ...(tecnicoUserEl && tecnicoUserEl.value.trim()
-//     //   ? { id_tecnico: tecnicoUserEl.value.trim() }
-//     //   : {}),
-//   };
-//   const responseLoadExpense = getJSON(
-//     "/api/v1/expense/get",
-//     payloadLoadExpense
-//   );
-
-//   console.table(responseLoadExpense);
-// }
 
 async function deleteLineForTableExpense(idGasto) {
   const linha = document.querySelector(`tr[data-gasto-id="${idGasto}"]`);
@@ -205,7 +193,24 @@ function clearExpenseFields() {
   clearDataGasto.value = "";
   clearEstornoGasto.checked = false;
   clearTipoDocumento.value = "Nota Fiscal";
-  clearUpDocumentExpense.value = "";
+  // clearUpDocumentExpense.value = "";
+}
+async function saveExpenseForFile() {
+  try {
+    const fileInput = document.getElementById("documentoUpload");
+    // 1. Faz upload do documento e obtém o ID
+    const documentoResponse = await useUploadFiles(viagemId, fileInput);
+
+    if (!documentoResponse) {
+      throw new Error("Erro ao fazer upload do documento");
+    }
+    console.log("ID do documento salvo:", documentoResponse);
+    fileInput.value = ""; // Limpa o input após o upload
+    return documentoResponse;
+  } catch (error) {
+    console.error("Erro completo:", error);
+    execToast("Erro na conexão com o servidor." + error, "error");
+  }
 }
 
 async function sendDataExpense() {
@@ -219,8 +224,6 @@ async function sendDataExpense() {
   const dataGasto = document.getElementById("dataHoraGasto").value.trim();
   const estornoGasto = document.getElementById("estorno").checked;
   const tipoDocumento = document.getElementById("tipoDocumento").value.trim();
-
-  const upDocumentExpense = document.getElementById("documentoUpload");
 
   if (tipoGasto === "") {
     execToast(
@@ -256,6 +259,13 @@ async function sendDataExpense() {
     execToast("Data Não pode estar Vazio", "info", "Aviso", "Agora", "error");
     return;
   }
+  const upDocumentExpense = document.getElementById("documentoUpload")
+    ? await saveExpenseForFile()
+    : null; // ID do documento, se houver
+  const documentoUploadId = upDocumentExpense
+    ? upDocumentExpense.documentoId
+    : null;
+  console.log(documentoUploadId);
 
   const payloadExpense = {
     id_viagem: viagemId,
@@ -270,6 +280,7 @@ async function sendDataExpense() {
     status: "Pendente",
     data_gasto: dataGasto,
     estorno: estornoGasto,
+    id_documento: documentoUploadId,
   };
 
   try {

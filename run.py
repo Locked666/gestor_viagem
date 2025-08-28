@@ -7,7 +7,7 @@ import os
 from   flask_migrate import Migrate
 from   flask_minify  import Minify
 from   sys import exit
-
+from flask_socketio import SocketIO
 from apps.config import config_dict
 from apps import create_app, db
 
@@ -54,5 +54,7 @@ if DEBUG:
     app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
 
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+    

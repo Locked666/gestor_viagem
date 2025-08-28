@@ -63,7 +63,8 @@ def delete_expense():
             db.session.rollback()
             raise InvalidUsage(message=f"Ocorreu um erro ao realizar a exclusão: {e}", status_code=500)    
         
-        
+
+     
         
         
         

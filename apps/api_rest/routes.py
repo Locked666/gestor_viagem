@@ -1,17 +1,24 @@
 from apps.api_rest import blueprint
 from flask import jsonify,request
 from flask_login import login_required, current_user
+# from flask_socketio import emit
 from apps.authentication.models import Users
 from apps.models import Entidades
-from apps.travel.models import TecnicosViagens, db, GastosViagens, RegistroViagens
+from apps.travel.models import TecnicosViagens, db, GastosViagens, RegistroViagens,DocumentosViagens
 from apps.exceptions.exception import InvalidUsage
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
+from werkzeug.utils import secure_filename
+
+from werkzeug.exceptions import BadRequest
+from datetime import datetime
+import os 
 
 import locale
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Define a localidade para português do Brasil
-
+UPLOAD_FOLDER = 'uploads/documentos'
+ALLOWED_EXTENSIONS = {'pdf', 'jpg', 'jpeg', 'png'}
 
 @blueprint.route('/entidade', methods = ['GET'])
 @login_required
@@ -278,8 +285,73 @@ def get_events_travel():
     
     pass
     
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS    
+
+@blueprint.route('/upload', methods=['POST', 'PUT', 'GET'])
+# @login_required
+def upload_file():
+    try:
+        
+        if request.method == 'GET':
+   
+            absolute_path = os.path.abspath(UPLOAD_FOLDER)
+
+            return jsonify({'success': True, 'message': 'route validade', 'path': absolute_path})
+
+        
+        if 'arquivo' not in request.files:
+            return jsonify({'status': 'error', 'message': 'Nenhum arquivo enviado'}), 400
+        
+        arquivo = request.files['arquivo']
+        viagem_id = request.form.get('viagemId')
+        tipo_documento = request.form.get('tipoDocumento')
+
+        
+        #Validações
+        if arquivo.filename == '':
+            return jsonify({'status': 'error', 'message': 'Nome de arquivo vazio'}), 400
+            
+        if not allowed_file(arquivo.filename):
+            return jsonify({'status': 'error', 'message': 'Tipo de arquivo não permitido'}), 400
+        
+        # Cria diretório se não existir
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        
+        # Gera nome seguro para o arquivo
+        filename = secure_filename(f"{viagem_id}_{tipo_documento}_{arquivo.filename}")
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        
+        # Salva o arquivo
+        arquivo.save(filepath)
+        
+        # Grava no banco de dados
+        novo_documento = DocumentosViagens(
+            arquivo=filepath,
+            tipo=tipo_documento,
+            data=datetime.now()
+        )
+        
+        db.session.add(novo_documento)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'documentoId': novo_documento.id,
+            'caminho': filepath
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'message': f'Erro no processamento do arquivo: {str(e)}'
+        }), 500
     
     
+
     
     
         
