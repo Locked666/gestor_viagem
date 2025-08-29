@@ -1,5 +1,5 @@
 from apps.api_rest import blueprint
-from flask import jsonify,request
+from flask import jsonify,request,send_from_directory
 from flask_login import login_required, current_user
 # from flask_socketio import emit
 from apps.authentication.models import Users
@@ -291,7 +291,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS    
 
 @blueprint.route('/upload', methods=['POST', 'PUT', 'GET'])
-# @login_required
+@login_required
 def upload_file():
     try:
         
@@ -319,17 +319,10 @@ def upload_file():
         
         # Cria diretório se não existir
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-        
-        # Gera nome seguro para o arquivo
-        filename = secure_filename(f"{viagem_id}_{tipo_documento}_{arquivo.filename}")
-        filepath = os.path.join(UPLOAD_FOLDER, filename)
-        
-        # Salva o arquivo
-        arquivo.save(filepath)
+
         
         # Grava no banco de dados
         novo_documento = DocumentosViagens(
-            arquivo=filepath,
             tipo=tipo_documento,
             data=datetime.now()
         )
@@ -337,11 +330,21 @@ def upload_file():
         db.session.add(novo_documento)
         db.session.commit()
         
+        # Gera nome seguro para o arquivo
+        filename = secure_filename(f"{viagem_id}_{novo_documento.id}_{tipo_documento}_{arquivo.filename}")
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        
+        # Salva o arquivo
+        arquivo.save(filepath)
+        
+        novo_documento.arquivo = filepath
+        db.session.commit()
+        
         return jsonify({
             'success': True,
             'documentoId': novo_documento.id,
             'caminho': filepath
-        })
+        }),200
         
     except Exception as e:
         db.session.rollback()
@@ -351,8 +354,29 @@ def upload_file():
         }), 500
     
     
+@blueprint.route('/file/get/<int:documento_id>', methods=['GET'])
+@login_required
+def get_documento_file(documento_id):
+    """Retorna o arquivo bruto para download/visualização"""
+    documento = DocumentosViagens.query.get_or_404(documento_id)
+    directory = os.path.dirname(documento.arquivo)
+    filename = os.path.basename(documento.arquivo)
+    absolute_path = os.path.abspath(UPLOAD_FOLDER)
+    # print(f"\n\nDirectory: {absolute_path},\n Filename: {filename}\n\n")
+    return send_from_directory(absolute_path, filename, as_attachment=False)
 
-    
-    
-        
+
+@blueprint.route('/file/get/info/<int:documento_id>', methods=['GET'])
+@login_required
+def get_documento_info(documento_id):
+    """Retorna apenas os metadados do documento"""
+    documento = DocumentosViagens.query.get_or_404(documento_id)
+    extensao = os.path.splitext(documento.arquivo)[1].lower().strip(".")
+
+    return jsonify({
+        'id': documento.id,
+        'arquivo': documento.arquivo,
+        'tipo': documento.tipo,
+        'extensao': extensao
+    })
           

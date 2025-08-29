@@ -36,7 +36,10 @@ def index():
     if message_code == '404':
         context['message'] = 'Viagem não encontrada.'    
     
+    
     travels = RegistroViagens.query.filter_by(ativo=True).all()
+    
+    
     if not travels:
         return render_template('travel/index.html', **context, travels=None)
     
@@ -148,6 +151,10 @@ def edit_travel():
         
         id_viagem =  request.args.get('idTravel')
         
+        if not id_viagem:
+            # raise InvalidUsage(message='ID da viagem é obrigatório', status_code=400)
+            return redirect(url_for('travel_blueprint.index', message='404'))
+        
         id_user =  request.args.get('idUser')
         
         travel = validade_user_travel(id_viagem, False)
@@ -161,8 +168,7 @@ def edit_travel():
         for tecnico in tec_travel:
             tecnico.username = Users.query.filter_by(id=tecnico.tecnico).first()
 
-        if not id_viagem:
-            raise InvalidUsage(message='ID da viagem é obrigatório', status_code=400)
+        
         
         
         

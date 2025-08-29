@@ -212,11 +212,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth", // mês por padrão
     themeSystem: "bootstrap5", // usa Bootstrap
+    locale: "pt-br", // localização em português
+
     headerToolbar: {
       left: "prev,next today",
       center: "title",
       right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
     },
+
     events: "/api/v1/events/get", // rota Flask que retorna os eventos em JSON
     selectable: true,
     select: function (info) {

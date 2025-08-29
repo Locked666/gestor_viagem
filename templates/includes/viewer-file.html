@@ -1,0 +1,46 @@
+<!-- Modal para visualização de documentos -->
+<div class="modal fade" id="documentoModal" tabindex="-1" aria-hidden="true">
+  <!--<div class="modal-dialog modal-xl">-->
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="documentoModalLabel">
+          Visualizar Documento
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <!-- Loader -->
+        <div id="documentoLoader" class="d-none">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p>Carregando documento...</p>
+        </div>
+
+        <!-- Visualizadores -->
+        <iframe
+          id="documentoViewer"
+          class="w-100 d-none"
+          style="height: 600px; border: none"
+        ></iframe>
+        <img id="imagemViewer" class="img-fluid d-none" />
+        <div id="documentoFallback" class="alert alert-warning d-none">
+          Pré-visualização não suportada. Use o botão de download abaixo.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <a id="downloadDocumento" href="#" class="btn btn-primary" download>
+          <i class="bi bi-download"></i> Baixar
+        </a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

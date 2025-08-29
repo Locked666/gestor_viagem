@@ -32,6 +32,7 @@ export async function useUploadFiles(viagemId, fileInput) {
       body: formData, // ⚡ multipart/form-data
     });
 
+    console.log("Response do upload:", response);
     const data = await response.json();
 
     if (!response.ok || !data.success) {

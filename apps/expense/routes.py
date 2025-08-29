@@ -2,11 +2,12 @@ from apps.expense import blueprint
 from flask_login import login_required, current_user, login_user
 from flask import render_template, request, redirect, url_for, jsonify
 
-from apps.travel.models import RegistroViagens ,TecnicosViagens, GastosViagens ,db
+from apps.travel.models import GastosViagens ,db, DocumentosViagens
 from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
 from apps.authentication.models import Users
 from apps.models import Entidades
+import os 
 
 # from apps.api_rest.services import validade_user_travel
 
@@ -54,6 +55,21 @@ def delete_expense():
             
             if expense.status != 'Pendente':
                 raise InvalidUsage(message='Não foi possivel realizar a exclusão do Gasto, está diferente de pendente', status_code=400)
+            
+            if expense.arquivo is not None and expense.arquivo != '':
+                # Remover o arquivo do sistema de arquivos
+                try:
+                    file = DocumentosViagens.query.filter_by(id=expense.arquivo).first() 
+                    if os.path.exists(file.arquivo):
+                        os.remove(file.arquivo)
+                       
+                    if file:
+                        db.session.delete(file)
+                        db.session.commit()
+                        
+                except Exception as e:
+                    raise InvalidUsage(message=f"Erro ao remover o arquivo associado: {e}", status_code=500)
+            
 
             db.session.delete(expense)
             db.session.commit()

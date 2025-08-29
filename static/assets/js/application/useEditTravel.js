@@ -10,6 +10,7 @@ import {
 import { formatarData } from "./useUtils.js";
 import { autoComplete } from "./autoComplete.js";
 import { useUploadFiles } from "./utils/useUploadFiles.js";
+import { verDocumento } from "./utils/useViewerFiles.js";
 
 const urlAtual = new URL(window.location.href);
 const viagemId = urlAtual.searchParams.get("idTravel");
@@ -259,13 +260,14 @@ async function sendDataExpense() {
     execToast("Data Não pode estar Vazio", "info", "Aviso", "Agora", "error");
     return;
   }
-  const upDocumentExpense = document.getElementById("documentoUpload")
-    ? await saveExpenseForFile()
-    : null; // ID do documento, se houver
-  const documentoUploadId = upDocumentExpense
-    ? upDocumentExpense.documentoId
+
+  const upDocumentExpense =
+    document.getElementById("documentoUpload").files.length > 0
+      ? await saveExpenseForFile()
+      : null; // ID do documento, se houver
+  const documentoUploadId = (await upDocumentExpense)
+    ? upDocumentExpense
     : null;
-  console.log(documentoUploadId);
 
   const payloadExpense = {
     id_viagem: viagemId,
@@ -280,13 +282,13 @@ async function sendDataExpense() {
     status: "Pendente",
     data_gasto: dataGasto,
     estorno: estornoGasto,
-    id_documento: documentoUploadId,
+    arquivo: await documentoUploadId,
   };
 
   try {
     const response = await postJSON("/expense", payloadExpense);
     if (response.success) {
-      atualizarTabelaGastos(payloadExpense, response.id, upDocumentExpense);
+      atualizarTabelaGastos(payloadExpense, response.id, documentoUploadId);
       funcHideLoader();
       clearExpenseFields();
     }
@@ -316,22 +318,25 @@ async function atualizarTabelaGastos(data, idGasto, uploadDocumento) {
               <span class="material-symbols-rounded">visibility</span>
             </button>
 
-            <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar" data-documento-id="{{ expense.documento_id }}">
+            <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar">
               <span class="material-symbols-rounded">edit</span>
             </button>
 
-            <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir" data-documento-id="{{ expense.documento_id }}">
+            <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir">
               <span class="material-symbols-rounded">delete</span>
             </button>
 
             ${
               uploadDocumento
                 ? `
-              <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento" data-documento-id="{{ expense.documento_id }}">
+              <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento" data-documento-id="${uploadDocumento}">
                 <span class="material-symbols-rounded">description</span>
               </button>
               `
-                : ""
+                : `<button class="btn btn-sm btn-action add-documento p-0" title="Adicione o Documento">
+                    <span class="material-symbols-rounded">upload_file</span>
+                  </button>
+                `
             }
           </div>  
         </td>
