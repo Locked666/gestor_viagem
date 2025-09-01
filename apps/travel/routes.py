@@ -37,9 +37,8 @@ def index():
         context['message'] = 'Viagem não encontrada.'    
     
     
-    travels = RegistroViagens.query.filter_by(ativo=True).all()
-    
-    
+    travels = RegistroViagens.query.filter(RegistroViagens.ativo == True).order_by(RegistroViagens.id.desc()).all()
+
     if not travels:
         return render_template('travel/index.html', **context, travels=None)
     

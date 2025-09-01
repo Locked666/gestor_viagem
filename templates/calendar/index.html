@@ -1,23 +1,84 @@
 {% extends "layouts/base.html" %} {% block title %} Profile {% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}<link
+{% block stylesheets %}
+<link
   href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css"
   rel="stylesheet"
 />
 
 {% endblock stylesheets %} {% block content %}
+<!--Div Principal que encapsula todos os elementos da página-->
+<div class="calendar-wrapper d-flex mt-4 p-1">
+  <!-- Painel lateral esquerdo -->
+  <div id="panel-left-calendar me-3">
+    <div class="card shadow-lg p-3 mb-5 bg-body rounded p-5">
+      <!-- Cabeçalho -->
+      <div id="panel-left-calendar-header">
+        <h4 class="text-center mb-4">Agenda</h4>
+      </div>
 
-<div class="container mt-4 d-flex justify-content-center">
-  <div class="card shadow-lg w-100" style="max-width: 900px">
-    <div class="card-body">
-      <div id="calendar"></div>
+      <!-- Corpo do painel -->
+      <div id="panel-left-calendar-body">
+        <!-- Filtros dos status -->
+        <div id="panel-left-calendar-filters" class="mb-4">
+          <h6 class="fw-bold">Filtros</h6>
+          <div>
+            <input
+              class="bg-color green"
+              type="checkbox"
+              id="filtro-agendada"
+              checked
+            />
+            <label for="filtro-agendada">Agendada</label>
+          </div>
+          <div>
+            <input type="checkbox" id="filtro-andamento" checked />
+            <label for="filtro-andamento">Em Andamento</label>
+          </div>
+          <div>
+            <input type="checkbox" id="filtro-concluida" />
+            <label for="filtro-concluida">Concluída</label>
+          </div>
+          <div>
+            <input type="checkbox" id="filtro-cancelada" />
+            <label for="filtro-cancelada">Cancelada</label>
+          </div>
+        </div>
+
+        <!-- Legenda das cores -->
+        <!--<div id="panel-left-calendar-legend">
+          <h6 class="fw-bold">Legenda</h6>
+          <ul id="legend-list">
+            <li class="legend-item">
+              <span class="legend-circle legend-agendada"></span> Agendada
+            </li>
+            <li class="legend-item">
+              <span class="legend-circle legend-andamento"></span> Em Andamento
+            </li>
+            <li class="legend-item">
+              <span class="legend-circle legend-concluida"></span> Concluída
+            </li>
+            <li class="legend-item">
+              <span class="legend-circle legend-cancelada"></span> Cancelada
+            </li>
+          </ul>
+        </div>-->
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendário ao lado direito -->
+  <div class="container d-flex justify-content-center">
+    <div class="card shadow-lg w-100" style="max-width: 900px">
+      <div class="card-body">
+        <div id="calendar"></div>
+      </div>
     </div>
   </div>
 </div>
 
-{% block javascripts %}
-
+{% include "includes/footer.html" %} {% block javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script
   type="module"
