@@ -1,12 +1,3 @@
-// import {
-//   getJSON,
-//   putJSON,
-//   postJSON,
-//   funcHideLoader,
-//   funcShowLoader,
-// } from "../request";
-// import { autoComplete } from "../autoComplete";
-
 function formatDateBR(dateStr) {
   const date = new Date(dateStr);
   const day = String(date.getDate()).padStart(2, "0");
@@ -206,8 +197,37 @@ function openConfirmModal(start, end) {
   });
 }
 
+function getFilterParams(){
+  const  filterScheduled = document.getElementById('filtro-agendada').checked;
+  const  filterInProgress = document.getElementById('filtro-andamento').checked;
+  const  filterCompleted = document.getElementById('filtro-concluida').checked;
+  const  filterCancelled = document.getElementById('filtro-cancelada').checked;
+
+  return {
+    filter: true,
+    scheduled: filterScheduled,
+    in_progress: filterInProgress,
+    completed: filterCompleted,
+    cancelled: filterCancelled
+  };
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const calendarEl = document.getElementById("calendar");
+  const filterCheckboxes = document.querySelectorAll('#panel-left-calendar-filters input[type="checkbox"]');
+
+  filterCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const filters = getFilterParams();
+      console.log('Filtros aplicados:', filters);
+      calendar.setOption('events', {
+        url: '/api/v1/events/get',
+        method: 'GET',
+        extraParams: filters
+      });
+      calendar.refetchEvents();
+    });
+  });
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth", // mês por padrão

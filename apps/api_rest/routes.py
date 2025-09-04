@@ -145,7 +145,7 @@ def finish_travel(integer):
     try: 
         travel = validade_user_travel(integer)
         
-        travel.status = 'Concluida'
+        travel.status = 'Concluída'
         db.session.commit()
         
         return jsonify({"success": True, "message": "Viagem concluída com sucesso."}), 200
@@ -253,8 +253,33 @@ def get_events_travel():
     # print(f"Data Fim: {convert_to_datetime(date_end)}")
     
     try:
-        travels =  RegistroViagens.query.filter_by(ativo = True).all()
-        
+
+        if request.args.get('filter') == 'true':
+            travels =  RegistroViagens.query.filter_by(ativo = True).all()
+            filter_scheduled = request.args.get('scheduled') == 'true'
+            filter_in_progress = request.args.get('in_progress') == 'true'
+            filter_completed = request.args.get('completed') == 'true'
+            filter_cancelled = request.args.get('cancelled') == 'true'
+            
+            filtered_travels = []
+            
+            for travel in travels:
+                if (filter_scheduled and travel.status == 'Agendada') or \
+                   (filter_in_progress and travel.status == 'Em Andamento') or \
+                   (filter_completed and travel.status == 'Concluída') or \
+                   (filter_cancelled and travel.status == 'Cancelada'):
+                    filtered_travels.append(travel)
+                    
+            travels = filtered_travels
+        else:
+            travels = (
+                RegistroViagens.query
+                .filter(
+                    RegistroViagens.ativo == True,
+                    ~RegistroViagens.status.in_(["Concluída", "Cancelada"])
+                )
+                .all()
+            )
         for travel in travels: 
             n_events = {
                 "id": travel.id,
@@ -283,7 +308,7 @@ def get_events_travel():
     except Exception as e: 
         raise InvalidUsage(message=f"Ocorreu um erro ao executar a consulta dos eventos {e}", status_code=500)    
     
-    pass
+    
     
 
 def allowed_file(filename):
