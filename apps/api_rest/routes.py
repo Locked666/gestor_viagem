@@ -52,6 +52,11 @@ def get_viagens(integer):
             travel = validade_user_travel(integer)
 
         # Monta dados básicos da viagem
+
+        if isinstance(travel, dict):
+            if travel.get('success', False) == False:
+                raise InvalidUsage(travel.get('message'), status_code=travel.get('status_code'))
+        
         travel_data = {
             "id": travel.id,
             "tipo_viagem": travel.tipo_viagem,
@@ -256,6 +261,8 @@ def get_events_travel():
 
         if request.args.get('filter') == 'true':
             travels =  RegistroViagens.query.filter_by(ativo = True).all()
+            
+                
             filter_scheduled = request.args.get('scheduled') == 'true'
             filter_in_progress = request.args.get('in_progress') == 'true'
             filter_completed = request.args.get('completed') == 'true'

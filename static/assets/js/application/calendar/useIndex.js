@@ -18,6 +18,16 @@ async function openTravelViewModal(travelId) {
     const response = await fetch(
       `/api/v1/travel/get/${travelId}?calendar=${true}`
     );
+
+    if (!response.ok || response.status === 404) {
+      alert("Viagem não encontrada, possivelmente foi removida.");
+
+      setInterval(() => {
+        location.reload();
+      }, 1000);
+      return;
+    }
+
     if (!response.ok) throw new Error("Erro ao buscar viagem.");
 
     const result = await response.json();
@@ -146,7 +156,7 @@ async function openTravelViewModal(travelId) {
     modal.show();
   } catch (error) {
     console.error("Erro:", error);
-    alert("Não foi possível carregar os detalhes da viagem.");
+    alert("Não foi possível carregar os detalhes da viagem." + error.message);
   }
 }
 
@@ -197,33 +207,35 @@ function openConfirmModal(start, end) {
   });
 }
 
-function getFilterParams(){
-  const  filterScheduled = document.getElementById('filtro-agendada').checked;
-  const  filterInProgress = document.getElementById('filtro-andamento').checked;
-  const  filterCompleted = document.getElementById('filtro-concluida').checked;
-  const  filterCancelled = document.getElementById('filtro-cancelada').checked;
+function getFilterParams() {
+  const filterScheduled = document.getElementById("filtro-agendada").checked;
+  const filterInProgress = document.getElementById("filtro-andamento").checked;
+  const filterCompleted = document.getElementById("filtro-concluida").checked;
+  const filterCancelled = document.getElementById("filtro-cancelada").checked;
 
   return {
     filter: true,
     scheduled: filterScheduled,
     in_progress: filterInProgress,
     completed: filterCompleted,
-    cancelled: filterCancelled
+    cancelled: filterCancelled,
   };
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   const calendarEl = document.getElementById("calendar");
-  const filterCheckboxes = document.querySelectorAll('#panel-left-calendar-filters input[type="checkbox"]');
+  const filterCheckboxes = document.querySelectorAll(
+    '#panel-left-calendar-filters input[type="checkbox"]'
+  );
 
-  filterCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
+  filterCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
       const filters = getFilterParams();
-      console.log('Filtros aplicados:', filters);
-      calendar.setOption('events', {
-        url: '/api/v1/events/get',
-        method: 'GET',
-        extraParams: filters
+      console.log("Filtros aplicados:", filters);
+      calendar.setOption("events", {
+        url: "/api/v1/events/get",
+        method: "GET",
+        extraParams: filters,
       });
       calendar.refetchEvents();
     });

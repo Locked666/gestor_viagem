@@ -14,6 +14,7 @@ import { verDocumento } from "./utils/useViewerFiles.js";
 
 const urlAtual = new URL(window.location.href);
 const viagemId = urlAtual.searchParams.get("idTravel");
+const VALOR_DIARIA = 35.0; // Valor fixo da diária
 
 const debugStatus = true;
 
@@ -347,8 +348,78 @@ async function atualizarTabelaGastos(data, idGasto, uploadDocumento) {
   // window.location.reload();
 }
 
+function calcularDiasEDiaria() {
+  const quantidadeDiarias = document.getElementById("quantidadeDiarias");
+  const valorDiaria = document.getElementById("valorDiaria");
+
+  if (quantidadeDiarias.value) {
+    const diarias = parseInt(quantidadeDiarias.value);
+    valorDiaria.value = (diarias * VALOR_DIARIA).toFixed(2);
+  }
+}
+
+async function sendDatafinace() {
+  const tecnicoUserEl = document.getElementById("tecnicoUser");
+  const dataLancamento = document.getElementById("dataLancamento");
+  const tipoLançamento =
+    document.getElementById("tipoLancamento").value.trim() === "Débito"
+      ? "D"
+      : "C";
+  const valorLancamento = document.getElementById("valorLancamento");
+  const descricaoLancamento = document.getElementById("descricaoLancamento");
+
+  if (dataLancamento.value.trim() === "") {
+    execToast(
+      "Data do Lançamento Não pode estar Vazio",
+      "info",
+      "Aviso",
+      "Agora",
+      "error"
+    );
+    return;
+  }
+
+  if (descricaoLancamento.value.trim() === "") {
+    execToast(
+      "Descricao do Lançamento Não pode estar Vazio",
+      "info",
+      "Aviso",
+      "Agora",
+      "error"
+    );
+    return;
+  }
+
+  if (valorLancamento.value.trim() === "") {
+    execToast(
+      "Valor do Lançamento Não pode estar Vazio ou ser zero",
+      "info",
+      "Aviso",
+      "Agora",
+      "error"
+    );
+    return;
+  }
+
+  const payLoadFinance = {
+    id_viagem: viagemId,
+    ...(tecnicoUserEl && tecnicoUserEl.value.trim()
+      ? { tecnico_user: tecnicoUserEl.value.trim() }
+      : {}),
+    data_lancamento: dataLancamento.value.trim(),
+    tipo: tipoLançamento,
+    descricao: descricaoLancamento.value.trim(),
+    valor: valorLancamento.value.trim(),
+  };
+
+  console.log(payLoadFinance);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const cardInfoTravel = document.querySelector(".card-info-travel");
+  document
+    .getElementById("quantidadeDiarias")
+    .addEventListener("change", calcularDiasEDiaria);
   if (modalEl) {
     autoComplete("#entidade", "#entidade-id", "/api/v1/entidade");
     document
@@ -359,12 +430,23 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // event lancar aba principal
   document
     .getElementById("bnt-salvar-principal")
     .addEventListener("click", async (e) => {
       e.preventDefault();
       await sendDataTravel();
     });
+
+  // event listener para o botao lancar financeiro
+  document
+    .getElementById("bnt-lancar-financeiro")
+    .addEventListener("click", async (e) => {
+      e.preventDefault();
+      await sendDatafinace();
+    });
+
+  //event button adicionar gasto
   document
     .getElementById("bntAddGasto")
     .addEventListener("click", async (e) => {

@@ -651,82 +651,82 @@ block content %}
           role="tabpanel"
           aria-labelledby="financeiro-tab"
         >
-          <form id="formFinanceiro">
-            <input
-              type="hidden"
-              id="viagemIdFinanceiro"
-              name="viagemIdFinanceiro"
-            />
+          <!--<form id="formFinanceiro">-->
+          <input
+            type="hidden"
+            id="viagemIdFinanceiro"
+            name="viagemIdFinanceiro"
+          />
 
-            <div class="row mb-3">
-              <!--Data de Lançamento-->
-              <div class="col-md-4">
-                <label for="dataLancamento" class="form-label"
-                  >Data de Lançamento *</label
-                >
-                <input
-                  type="datetime-local"
-                  class="form-control border ps-1"
-                  id="dataLancamento"
-                  name="dataLancamento"
-                  required
-                  
-                />
-              </div>
+          <div class="row mb-3">
+            <!--Data de Lançamento-->
+            <div class="col-md-4">
+              <label for="dataLancamento" class="form-label"
+                >Data de Lançamento *</label
+              >
+              <input
+                type="datetime-local"
+                class="form-control border ps-1"
+                id="dataLancamento"
+                name="dataLancamento"
+                required
                 
-
-              <!--Tipo do Lançamento-->
-              <div class="col-md-4">
-                <label for="tipoLancamento" class="form-label"
-                  >Tipo de Lançamento *</label
-                >
-                <select
-                  class="form-select border"
-                  id="tipoLancamento"
-                  name="tipoLancamento"
-                  required
-                >
-                  <option value="" disabled selected>Selecione</option>
-                  <option value="Crédito">Crédito</option>
-                  <option value="Débito">Débito</option>
-                </select>
-              </div>
-
-              <!--Valor do Lançamento-->
-              <div class="col-md-2">
-                <label for="valorlancamento" class="form-label">Valor</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  class="form-control border"
-                  id="valorlancamento"
-                  name="valorlancamento"
-                />
-              </div>
+              />
             </div>
-            <div class="row mb-3">
-              <div class="col-fluid">
-                <label for="descricaoLancamento" class="form-label"
-                  >Descrição</label
-                >
-                <input
-                  type="text"
-                  class="form-control border"
-                  id="descricaoLancamento"
-                  name="descricaoLancamento"
-                />
-              </div>
+              
+
+            <!--Tipo do Lançamento-->
+            <div class="col-md-4">
+              <label for="tipoLancamento" class="form-label"
+                >Tipo de Lançamento *</label
+              >
+              <select
+                class="form-select border"
+                id="tipoLancamento"
+                name="tipoLancamento"
+                required
+              >
+                <option value="" disabled selected>Selecione</option>
+                <option value="Crédito">Crédito</option>
+                <option value="Débito">Débito</option>
+              </select>
             </div>
 
-            <div class="d-flex justify-content-end mb-4">
-              <button type="submit" class="btn btn-success me-2">
-                Salvar Lançamento
-              </button>
-              <button type="reset" class="btn btn-outline-secondary">
-                Limpar
-              </button>
+            <!--Valor do Lançamento-->
+            <div class="col-md-2">
+              <label for="valorlancamento" class="form-label">Valor</label>
+              <input
+                type="number"
+                step="0.01"
+                class="form-control border"
+                id="valorlancamento"
+                name="valorlancamento"
+              />
             </div>
-          </form>
+          </div>
+          <div class="row mb-3">
+            <div class="col-fluid">
+              <label for="descricaoLancamento" class="form-label"
+                >Descrição</label
+              >
+              <input
+                type="text"
+                class="form-control border"
+                id="descricaoLancamento"
+                name="descricaoLancamento"
+              />
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mb-4">
+            <button type="button" class="btn btn-success me-2" id="bnt-lancar-financeiro">
+              Salvar Lançamento
+            </button>
+            <button type="reset" class="btn btn-outline-secondary">
+              Limpar
+            </button>
+          </div>
+          <!--</form>-->
 
           <h5 class="mt-4">Movimentações Financeiras</h5>
           <div class="table-responsive">

@@ -15,6 +15,8 @@ class MovFinanceira(db.Model):
     valor = db.Column(db.Float(),  nullable=True , default=0.0)
 
     data = db.Column(db.DateTime, nullable=True, default= db.func.current_timestamp())
+    
+    
 
     def __init__(self, **kwargs):
         super(MovFinanceira, self).__init__(**kwargs)

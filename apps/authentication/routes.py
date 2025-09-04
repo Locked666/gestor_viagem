@@ -60,7 +60,7 @@ def login():
 
             if not user:
                 return render_template( 'authentication/login.html',
-                                        msg='Unknown User or Email',
+                                        msg='Usuário ou Senha inválidos',
                                         form=login_form)
 
         # Check the password

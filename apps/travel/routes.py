@@ -238,7 +238,7 @@ def edit_travel():
             
             tecnico_travel.data_inicio = case_json(data, 'data_saida', tecnico_travel.data_inicio, date_iso=True)
             tecnico_travel.data_fim = case_json(data, 'data_retorno', tecnico_travel.data_fim, date_iso=True)
-            tecnico_travel.n_diaria = case_json(data, 'quantidade_diaria', tecnico_travel.n_diaria)
+            tecnico_travel.n_diaria = case_json(data, 'quantidade_diarias', tecnico_travel.n_diaria)
             tecnico_travel.v_diaria = case_json(data, 'valor_total', tecnico_travel.v_diaria)
             tecnico_travel.n_intranet = case_json(data, 'codigo_relatorio', tecnico_travel.n_intranet)
 
