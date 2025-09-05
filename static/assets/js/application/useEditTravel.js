@@ -361,11 +361,23 @@ function calcularDiasEDiaria() {
 async function sendDatafinace() {
   const tecnicoUserEl = document.getElementById("tecnicoUser");
   const dataLancamento = document.getElementById("dataLancamento");
+
+  if (document.getElementById("tipoLancamento").value.trim() === "") {
+    execToast(
+      "Selecione o tipo do Lançamento",
+      "info",
+      "Aviso",
+      "Agora",
+      "error"
+    );
+    return;
+  }
+
   const tipoLançamento =
     document.getElementById("tipoLancamento").value.trim() === "Débito"
       ? "D"
       : "C";
-  const valorLancamento = document.getElementById("valorLancamento");
+  const valorLancamento = document.getElementById("valorlancamento");
   const descricaoLancamento = document.getElementById("descricaoLancamento");
 
   if (dataLancamento.value.trim() === "") {
@@ -412,7 +424,80 @@ async function sendDatafinace() {
     valor: valorLancamento.value.trim(),
   };
 
-  console.log(payLoadFinance);
+  try {
+    const response = await postJSON("/finance/travel/", payLoadFinance);
+
+    if (response.success) {
+      // limpar campos
+      dataLancamento.value = "";
+      descricaoLancamento.value = "";
+      valorLancamento.value = "";
+      console.log(response.data);
+      creatLineForTableFinance(response.data);
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+    execToast("Erro na conexão com o servidor.", "error");
+  }
+}
+
+function creatLineForTableFinance(data) {
+  const tabelaFinanceiro = document.getElementById("tabelaFinanceiro");
+  const novaLinha = tabelaFinanceiro.insertRow();
+  novaLinha.setAttribute("data-movimento-id", data.id);
+  if (tabelaFinanceiro.querySelector('tr td[colspan="4"]')) {
+    tabelaFinanceiro.innerHTML = "";
+  }
+  novaLinha.innerHTML = `
+        <td>${data.data_lancamento}</td>
+        <td>${data.tipo}</td>
+        <td>${data.descricao}</td>
+        <td>${data.valor}</td>
+        <td class="d-flex align-items-center gap-2">
+          <div class="align-middle text-left text-sm p-0">
+            <button class="btn btn-sm btn-action editar-movimento p-0" title="Editar">
+              <span class="material-symbols-rounded">edit</span>
+            </button>
+            <button class="btn btn-sm btn-action excluir-movimento p-0" title="Excluir">
+              <span class="material-symbols-rounded">delete</span>
+            </button>
+          </div>
+        </td>
+    `;
+  tabelaFinanceiro.appendChild(novaLinha);
+  // adicionar evento aos botoes
+}
+
+async function editarMovimentoFinance(idMovimento) {
+  const linha = document.querySelector(
+    `tr[data-movimento-id="${idMovimento}"]`
+  );
+  if (!linha) return;
+  alert("Funcionalidade em desenvolvimento");
+}
+async function excluirMovimentoFinance(idMovimento) {
+  try {
+    const responseDeleteFinance = await deleteJSON(
+      `/finance/travel/delete/${idMovimento}`
+    );
+    if (responseDeleteFinance.success) {
+      const linha = document.querySelector(
+        `tr[data-movimento-id="${idMovimento}"]`
+      );
+      if (linha) linha.remove();
+      const tbody = document.getElementById("tabelaFinanceiro");
+      // Verifica se ainda restam linhas
+      if (tbody.rows.length === 0) {
+        const lineNew = tbody.insertRow();
+        lineNew.innerHTML = `
+          <td colspan="5" class="text-center">
+            Nenhum lançamento financeiro cadastrado
+          </td>
+        `;
+      }
+    }
+  } catch (error) {}
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -474,6 +559,21 @@ document.addEventListener("DOMContentLoaded", function () {
         // Se precisar passar o documento, você pode colocar um data-atributo no botão também
         const documentoId = target.getAttribute("data-documento-id");
         verDocumento(documentoId);
+      }
+    });
+
+  // adicionar evento aos botoes da tabela financeiro
+  document
+    .getElementById("tabelaFinanceiro")
+    .addEventListener("click", function (event) {
+      const target = event.target.closest("button"); // Garante que pegamos o botão e não o <span>
+      if (!target) return;
+      const linha = target.closest("tr");
+      const idMovimento = linha.getAttribute("data-movimento-id");
+      if (target.classList.contains("editar-movimento")) {
+        editarMovimentoFinance(idMovimento);
+      } else if (target.classList.contains("excluir-movimento")) {
+        excluirMovimentoFinance(idMovimento);
       }
     });
 });

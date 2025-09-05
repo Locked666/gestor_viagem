@@ -1,0 +1,14 @@
+{% extends "layouts/base.html" %} {% block title %} Profile {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %} {% block
+javascripts %}
+
+<div>{% include "includes/footer.html" %}</div>
+
+<script
+  type="module"
+  src="{{ url_for('static', filename='/assets/js/application/useIndexTravel.js') }}"
+></script>
+
+{% endblock javascripts %} {% endblock content %}

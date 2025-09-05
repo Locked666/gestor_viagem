@@ -1,5 +1,5 @@
 from apps.travel import blueprint
-from flask_login import login_required, current_user, login_user
+from flask_login import login_required, current_user
 from flask import render_template, request, redirect, url_for, jsonify
 
 from apps.travel.models import RegistroViagens ,TecnicosViagens ,db, GastosViagens
@@ -7,6 +7,7 @@ from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
 from apps.authentication.models import Users
 from apps.models import Entidades
+from apps.finance.models import MovFinanceira
 
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
@@ -167,10 +168,6 @@ def edit_travel():
         for tecnico in tec_travel:
             tecnico.username = Users.query.filter_by(id=tecnico.tecnico).first()
 
-        
-        
-        
-        
         travel = RegistroViagens.query.filter_by(id=id_viagem).first()
         
         if not travel:
@@ -181,14 +178,9 @@ def edit_travel():
         
         expenses_for_travel = GastosViagens.query.filter_by(viagem=id_viagem, tecnico = current_user.id).all()
         
-        
-        # expenses_for_travel.data_convert = expenses_for_travel.data_gasto.strftime('%d/%m/%Y %H:%M') if expenses_for_travel.data_gasto else None
-        
         for expense in expenses_for_travel:
            expense.data_convert =  expense.data_gasto.strftime('%d/%m/%Y %H:%M') if expense.data_gasto else None
-        
-        
-        
+
         total = 0.0
         total_estorno = 0.0
 
@@ -200,7 +192,14 @@ def edit_travel():
                      total_estorno += float(expense.valor) 
         
         totais =  {'total': locale.currency(total, grouping=True), 'total_estorno': locale.currency(total_estorno, grouping=True)}     
-  
+
+        finance_for_travel = MovFinanceira.query.filter(and_(MovFinanceira.viagem==id_viagem, MovFinanceira.tecnico==current_user.id)).all()
+        
+        for finance in finance_for_travel:
+            finance.data_lanc_convert = finance.data_lanc.strftime('%d/%m/%Y %H:%M') if finance.data_lanc else None
+            finance.valor_convert = locale.currency(finance.valor, grouping=True) if finance.valor else locale.currency(0, grouping=True)
+            finance.tipo_full = 'Crédito' if finance.tipo == 'C' else 'Débito' if finance.tipo == 'D' else 'N/A'
+            
                         
         
         
@@ -211,7 +210,13 @@ def edit_travel():
             }
 
         
-        return render_template('travel/edit-travel.html', **context, travel  = travel, tecnicos=tec_travel, expenses = expenses_for_travel, totalizado = totais )
+        return render_template('travel/edit-travel.html', **context,
+                               travel  = travel,
+                               tecnicos=tec_travel,
+                               expenses = expenses_for_travel, 
+                               totalizado = totais, 
+                               finance = finance_for_travel
+                               )
 
     elif request.method == 'PUT':
         
@@ -231,7 +236,9 @@ def edit_travel():
             print(f"\n\n\ntecnico of travel\n{tecnico_of_travel}\n\n\n")
             
             tecnico_travel = TecnicosViagens.query.filter_by(viagem=id_viagem, tecnico=tecnico_of_travel).first()
-            if not tecnico_travel:
+            
+            print(f"\n\n\ntecnico_travel\n{tecnico_travel}\n\n\n")
+            if tecnico_travel == None:
                 raise InvalidUsage(message='Técnico não encontrado para esta viagem', status_code=404)
             
             tecnico_travel.atribuito =  True 

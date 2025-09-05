@@ -741,11 +741,33 @@ block content %}
                 </tr>
               </thead>
               <tbody id="tabelaFinanceiro">
+                {% if finance %}
+                {% for movement in finance %}
+                <tr data-movimento-id="{{ movement.id }}">
+                  <td>{{ movement.data_lanc_convert }}</td>
+                  <td>{{ movement.tipo_full }}</td>
+                  <td>{{ movement.descricao }}</td>
+                  <td>{{ movement.valor_convert }}</td>
+                  <td class="d-flex align-items-center gap-2">
+                    <div class="align-middle text-left text-sm p-0">
+                      <button class="btn btn-sm btn-action editar-movimento p-0" title="Editar">
+                        <span class="material-symbols-rounded">edit</span>
+                      </button>
+
+                      <button class="btn btn-sm btn-action excluir-movimento p-0" title="Excluir" >
+                        <span class="material-symbols-rounded">delete</span>
+                      </button>
+                    </div>  
+                  </td>
+                
+                {% endfor %}
+                {% else %}
                 <tr>
                   <td colspan="5" class="text-center">
                     Nenhuma movimentação registrada
                   </td>
                 </tr>
+                {% endif %}
               </tbody>
             </table>
           </div>

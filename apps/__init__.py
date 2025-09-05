@@ -29,7 +29,8 @@ def register_blueprints(app):
         'users', 
         'travel',
         'api_rest',
-        'expense'
+        'expense',
+        'finance',
         ):
         module = import_module('apps.{}.routes'.format(module_name))
         app.register_blueprint(module.blueprint)
