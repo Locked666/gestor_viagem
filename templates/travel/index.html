@@ -1,23 +1,27 @@
 {% extends "layouts/base.html" %} {% block title %} Profile {% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %} {% block content %}
-
-{% if message %}
-    <div class="alert alert-warning alert-dismissible text-white" role="alert">
-        <span class="text-sm">{{message}}</span>
-        <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+{% block stylesheets %}{% endblock stylesheets %} {% block content %} {% if
+message %}
+<div class="alert alert-warning alert-dismissible text-white" role="alert">
+  <span class="text-sm">{{message}}</span>
+  <button
+    type="button"
+    class="btn-close text-lg py-3 opacity-10"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
 {% endif %}
-
 
 <div class="container-fluid py-2">
   <!-- Card Search-->
   <div class="row">
     <div class="card shadow-sm mb-4">
       <div class="card-body">
+        <!--first row-->
         <div class="row g-2 mb-3">
           <!--Filtro Data-->
           <div class="col-md-3">
@@ -39,15 +43,18 @@
           <!--Filtro Status-->
           <div class="col-md-2">
             <label for="filtroStatus" class="form-label">Status</label>
-            <select class="form-select border ps-1"id="filtroStatus">
+            <select class="form-select border ps-1" id="filtroStatus">
               <option value="todos" selected>Todos</option>
               <option value="Agendada">Agendada</option>
               <option value="Concluida">Concluída</option>
               <option value="Cancelada">Cancelada</option>
               <option value="Parcial">Parcial</option>
-              
-            </select>  
+            </select>
           </div>
+        </div>
+
+        <!--second row-->
+        <div class="row mb-2">
           <!--Filtro entidade-->
           <div class="col-md-6">
             <label for="entidade" class="form-label">Entidade</label>
@@ -56,25 +63,58 @@
               class="form-control border ps-1"
               id="entidade"
               name="entidade"
-              
             />
             <input type="hidden" id="entidade-id" name="entidade_id" />
           </div>
 
-          <div class="col-md-2 d-flex align-items-end">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="filtroAtivo"
-                checked
-              />
-              <label class="form-check-label" for="filtroAtivo"> Ativo </label>
+          <!--Checkboxes-->
+          <div class="col-md-2 mt-4 row g-2">
+            <!--Checkbox Filtro Conlcuida-->
+            <div class="col-md-2 align-items-start">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="filtroConcluida"
+                />
+                <label class="form-check-label" for="filtroConcluida">
+                  Concluídos
+                </label>
+              </div>
+            </div>
+
+            <!--Checkbox Filtro Cancelada-->
+            <div class="col-md-2 mx-auto align-items-end">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="filtroCancelada"
+                />
+                <label class="form-check-label" for="filtroCancelada">
+                  Cancelados
+                </label>
+              </div>
             </div>
           </div>
         </div>
 
+        <!--third row-->
+        <div class="row mb-2">
+          <!--Filtro Descrição-->
+          <div class="col-md-6">
+            <label for="filtroDescricao" class="form-label">Descrição</label>
+            <input
+              type="text"
+              class="form-control border ps-1"
+              id="filtroDescricao"
+            />
+          </div>
+        </div>
+
+        <!--For rows buttons-->
         <div class="row g-2">
           <div class="col-md-2">
             <button
@@ -90,13 +130,14 @@
               <i class="material-symbols-rounded me-2">visibility</i> Filtrar
             </button>
           </div>
-          <div class="col-md-2">
+
+          <div class="col-md-3">
             <a
               class="btn btn-success w-100"
               href="{{ url_for('travel_blueprint.add_travel') }}"
             >
-              <i class="material-symbols-rounded me-2">add_circle</i>
-              <span class="nav-link-text ms-1">Adicionar</span>
+              <i class="material-symbols-rounded me-2">add_circle</i>Adicionar
+              <!--<span class="nav-link-text ms-1 ">Adicionar</span>-->
             </a>
           </div>
         </div>
@@ -149,8 +190,8 @@
                   <th class="text-secondary opacity-7"></th>
                 </tr>
               </thead>
-              <tbody>
-                {% if travels%} {% for travel in travels%}
+              <tbody id="tabela-lista-viagens">
+                {% if travels %} {% for travel in travels %}
                 <tr>
                   <!--ID-->
                   <td>
@@ -160,7 +201,8 @@
                       </div>
                     </div>
                   </td>
-                  <!--Entidade-->  
+
+                  <!--Entidade-->
                   <td>
                     <div class="d-flex px-2 py-1">
                       <div class="d-flex flex-column justify-content-center">
@@ -168,119 +210,166 @@
                       </div>
                     </div>
                   </td>
+
+                  <!--Data-->
                   <td>
                     <p class="text-xs font-weight-bold mb-0">
                       {{ travel.data_inicio_convert }}
                     </p>
                   </td>
+
+                  <!--Status-->
                   <td>
                     {% if travel.status == 'Agendada' %}
-                      <span class="badge badge-sm bg-gradient-success">
-                        {{ travel.status }}
-                      </span>
+                    <span class="badge badge-sm bg-gradient-success"
+                      >{{ travel.status }}</span
+                    >
                     {% elif travel.status == 'Concluída' %}
-                    <span class="badge badge-sm bg-gradient-info">
-                      {{ travel.status }}  
-                  </td>
+                    <span class="badge badge-sm bg-gradient-info"
+                      >{{ travel.status }}</span
+                    >
                     {% elif travel.status == 'Cancelada' %}
-                    <span class="badge badge-sm bg-gradient-danger">
-                      {{ travel.status }}
-                    </span>
+                    <span class="badge badge-sm bg-gradient-danger"
+                      >{{ travel.status }}</span
+                    >
                     {% elif travel.status == 'Em Andamento' %}
-                    <span class="badge badge-sm bg-gradient-warning">
-                      {{ travel.status }}
-                    </span>
+                    <span class="badge badge-sm bg-gradient-warning"
+                      >{{ travel.status }}</span
+                    >
                     {% else %}
-                    <span class="badge badge-sm bg-gradient-secondary">
-                      {{ travel.status }}
-                    </span>
+                    <span class="badge badge-sm bg-gradient-secondary"
+                      >{{ travel.status }}</span
+                    >
                     {% endif %}
-                  <td class="align-middle text-left text-sm text-break" title="{{ travel.descricao }}">
-                    <p class="text-xs font-weight-bold text-break mb-0" style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  </td>
+
+                  <!--Descrição-->
+                  <td
+                    class="align-middle text-left text-sm text-break"
+                    title="{{ travel.descricao }}"
+                  >
+                    <p
+                      class="text-xs font-weight-bold text-break mb-0"
+                      style="
+                        max-width: 300px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      "
+                    >
                       {{ travel.descricao }}
                     </p>
                   </td>
 
+                  <!--Ações-->
                   <td class="align-middle text-left text-sm p-0">
                     <div class="d-flex align-items-center gap-2">
-                      
                       <!-- Botão Editar -->
-                      <i class="material-symbols-rounded bnt-action"
+                      <i
+                        class="material-symbols-rounded bnt-action"
                         href="javascript:;"
                         data-action="edit"
-                        data-id="{{ travel.id }}">
+                        data-id="{{ travel.id }}"
+                      >
                         edit
                       </i>
 
                       <!-- Botão Visualizar -->
-                      <i class="material-symbols-rounded bnt-action"
+                      <i
+                        class="material-symbols-rounded bnt-action"
                         href="javascript:;"
                         data-action="viewer"
-                        data-id="{{ travel.id }}">
+                        data-id="{{ travel.id }}"
+                      >
                         visibility
                       </i>
 
                       <!-- Botão Excluir -->
-                      {% if current_user.admin and travel.status == "Agendada" %}
-                      <i class="material-symbols-rounded bnt-action"
+                      {% if current_user.admin and travel.status == "Agendada"
+                      %}
+                      <i
+                        class="material-symbols-rounded bnt-action"
                         id="delete-travel"
                         data-id="{{ travel.id }}"
                         href="javascript:;"
-                        data-action="delete">
+                        data-action="delete"
+                      >
                         delete
                       </i>
                       {% endif %}
 
-                      <!-- Dropdown de mais ações -->
-                      <div class="dropdown">
-                        <a href="javascript:;" class="text-dark p-0 m-0" id="dropdownMenuButton{{ travel.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                      <!-- Dropdown -->
+                      <div class="dropdown" data-bs-display="static">
+                        <button
+                          class="btn btn-link text-dark p-0 m-0"
+                          id="dropdownMenuButton{{ travel.id }}"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                        >
                           <i class="fa fa-ellipsis-v text-xs m-0 p-0"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ travel.id }}">
+                        </button>
+                        <ul
+                          class="dropdown-menu dropdown-menu-end"
+                          aria-labelledby="dropdownMenuButton{{ travel.id }}"
+                        >
                           {% if travel.status == "Agendada" %}
                           <li>
-                            <a class="dropdown-item bnt-action" href="javascript:;" data-action="finish" data-id="{{ travel.id }}">
+                            <a
+                              class="dropdown-item bnt-action"
+                              href="javascript:;"
+                              data-action="finish"
+                              data-id="{{ travel.id }}"
+                            >
                               Concluir Viagem
                             </a>
                           </li>
-                          
-                          {% if current_user.admin%}
+                          {% if current_user.admin %}
                           <li>
-                            <a class="dropdown-item bnt-action" href="javascript:;" data-action="cancel" data-id="{{ travel.id }}">
+                            <a
+                              class="dropdown-item bnt-action"
+                              href="javascript:;"
+                              data-action="cancel"
+                              data-id="{{ travel.id }}"
+                            >
                               Cancelar
                             </a>
                           </li>
-                          {% endif %}
-                          {% endif %}
+                          {% endif %} {% endif %}
                           <li>
-                            <a class="dropdown-item bnt-action" href="javascript:;" data-action="assign" data-id="{{ travel.id }}">
+                            <a
+                              class="dropdown-item bnt-action"
+                              href="javascript:;"
+                              data-action="assign"
+                              data-id="{{ travel.id }}"
+                            >
                               Atribuir
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item bnt-action" href="javascript:;" data-action="resend" data-id="{{ travel.id }}">
+                            <a
+                              class="dropdown-item bnt-action"
+                              href="javascript:;"
+                              data-action="resend"
+                              data-id="{{ travel.id }}"
+                            >
                               Reenviar E-mail
                             </a>
                           </li>
                         </ul>
                       </div>
-
                     </div>
                   </td>
-
                 </tr>
                 {% endfor %} {% else %}
                 <tr>
-                  <td colspan="5" class="text-center">
+                  <td colspan="6" class="text-center">
                     <p class="text-xs font-weight-bold mb-0">
                       Nenhuma viagem encontrada.
                     </p>
                   </td>
                 </tr>
-
                 {% endif %}
               </tbody>
-
             </table>
           </div>
         </div>
@@ -295,16 +384,15 @@
     role="dialog"
     aria-labelledby="userModalLabel"
     aria-hidden="true"
-  >
-  </div>
+  ></div>
   {% include "includes/footer.html" %}
 </div>
 
 {% block javascripts %}
 
-  <script
-    type="module"
-    src="{{ url_for('static', filename='/assets/js/application/useIndexTravel.js') }}"
-  ></script>
+<script
+  type="module"
+  src="{{ url_for('static', filename='/assets/js/application/useIndexTravel.js') }}"
+></script>
 
 {% endblock javascripts %} {% endblock content %}

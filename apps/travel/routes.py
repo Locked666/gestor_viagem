@@ -22,33 +22,80 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Define a localidade para portu
 
 
 
-@blueprint.route('/travel', methods = ['GET'])
+@blueprint.route('/travel', methods = ['GET', 'POST'])
 @login_required
 def index():
-    context = {
-        'segment': 'travel',
-        'title': 'Viagens'
-    }
-    
-    message_code = request.args.get('message')
-    if message_code == '403':
-        context['message'] = 'Você não tem permissão para editar esta viagem.'
-    
-    if message_code == '404':
-        context['message'] = 'Viagem não encontrada.'    
-    
-    
-    travels = RegistroViagens.query.filter(RegistroViagens.ativo == True).order_by(RegistroViagens.id.desc()).all()
+    if request.method == 'GET':
+        context = {
+            'segment': 'travel',
+            'title': 'Viagens'
+        }
+        
+        message_code = request.args.get('message')
+        if message_code == '403':
+            context['message'] = 'Você não tem permissão para editar esta viagem.'
+        
+        if message_code == '404':
+            context['message'] = 'Viagem não encontrada.'    
+        
+        
+        travels = RegistroViagens.query.filter(
+            RegistroViagens.ativo == True,
+            ~RegistroViagens.status.in_(["Concluída", "Cancelada"])
+        ).order_by(RegistroViagens.id.desc()).all()
 
-    if not travels:
-        return render_template('travel/index.html', **context, travels=None)
+        if not travels:
+            return render_template('travel/index.html', **context, travels=None)
+        
+        for travel in travels:
+            travel.data_inicio_convert = travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None
+            travel.entidade_nome = Entidades.query.filter_by(id=travel.entidade_destino).first().nome if travel.entidade_destino else None
+        
+        
+        return render_template('travel/index.html', **context, travels=travels)
     
-    for travel in travels:
-        travel.data_inicio_convert = travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None
-        travel.entidade_nome = Entidades.query.filter_by(id=travel.entidade_destino).first().nome if travel.entidade_destino else None
-    
-    
-    return render_template('travel/index.html', **context, travels=travels)
+    if request.method == 'POST':
+        
+        data =  request.get_json()
+        
+        if not data:
+            raise InvalidUsage(message='Nenhum dado foi enviado', status_code=400)
+        
+        filter_date_start = data.get('filterDateStart', None)
+        filter_date_end = data.get('filterDateEnd', None)
+        filter_status_travel = data.get('filterStatusTravel', None)
+        filter_entity_id = data.get('filterEntityId', None)
+        filter_completed = data.get('filterCompleted', False)
+        filter_canceled = data.get('filterCanceled', False)
+        filter_description = data.get('filterDescription', None)
+        
+        query = RegistroViagens.query.filter(
+            RegistroViagens.ativo == True,
+            ~RegistroViagens.status.in_(["Concluída", "Cancelada"])
+        ).order_by(RegistroViagens.id.desc()).all()
+        
+        data = []
+        
+        for travel in query: 
+            travel.data_inicio_convert = travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None
+            travel.entidade_nome = Entidades.query.filter_by(id=travel.entidade_destino).first().nome if travel.entidade_destino else None
+            
+            data.append({
+                'id': travel.id,
+                'entidade_nome': travel.entidade_nome,
+                'data_inicio_convert': travel.data_inicio_convert,
+                'tipo_viagem': travel.tipo_viagem,
+                'descricao': travel.descricao,
+                'status': travel.status,
+                'isAdmin': current_user.admin
+            })
+        
+        try: 
+            return jsonify({'success': True, 'message': "Filtro aplicado" ,'data': data}), 200
+        
+        except Exception as e:
+            print(f"Error filtering travels: {str(e)}")
+            raise InvalidUsage(message=str(e), status_code=500)
 
 
 
