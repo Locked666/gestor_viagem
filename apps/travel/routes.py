@@ -56,6 +56,11 @@ def index():
     
     if request.method == 'POST':
         
+        # query = RegistroViagens.query.filter(
+        #     RegistroViagens.ativo == True,
+        #     ~RegistroViagens.status.in_(["Concluída", "Cancelada"])
+        # ).order_by(RegistroViagens.id.desc()).all()
+        
         data =  request.get_json()
         
         if not data:
@@ -69,14 +74,46 @@ def index():
         filter_canceled = data.get('filterCanceled', False)
         filter_description = data.get('filterDescription', None)
         
-        query = RegistroViagens.query.filter(
-            RegistroViagens.ativo == True,
-            ~RegistroViagens.status.in_(["Concluída", "Cancelada"])
-        ).order_by(RegistroViagens.id.desc()).all()
+        
+        # Comece com o filtro base
+        query = RegistroViagens.query.filter(RegistroViagens.ativo == True)
+
+        # Adiciona filtros conforme necessário
+        if filter_date_start:
+            query = query.filter(RegistroViagens.data >= filter_date_start)
+        if filter_date_end:
+            query = query.filter(RegistroViagens.data <= filter_date_end)
+       
+        if filter_entity_id:
+            query = query.filter(RegistroViagens.entidade_destino == filter_entity_id)
+            
+        if filter_description:
+            query = query.filter(RegistroViagens.descricao.ilike(f'%{filter_description}%'))
+        
+        status = []
+        
+        if filter_status_travel == 'todos':
+            status.append('Agendada')
+            status.append('Em Andamento')
+            
+            if filter_completed:
+                status.append("Concluída")
+            if filter_canceled:
+                status.append("Cancelada") 
+        else:
+            status.append(filter_status_travel)            
+                
+        query = query.filter(RegistroViagens.status.in_(status))        
+        query = query.order_by(RegistroViagens.id.desc())        
+        
+            
+        travels = query.all()
+        
+        
         
         data = []
         
-        for travel in query: 
+        for travel in travels: 
             travel.data_inicio_convert = travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None
             travel.entidade_nome = Entidades.query.filter_by(id=travel.entidade_destino).first().nome if travel.entidade_destino else None
             
@@ -91,6 +128,10 @@ def index():
             })
         
         try: 
+            
+            if len(data) == 0:
+                return jsonify({'success': False, 'message': "Nenhum registro encontrado verifique o filtro utilizado", 'titleToast':'Notificação', 'iconToast':'notifications', 'typeToast': 'info'}), 404
+            
             return jsonify({'success': True, 'message': "Filtro aplicado" ,'data': data}), 200
         
         except Exception as e:

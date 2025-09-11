@@ -34,10 +34,10 @@ async function request(method, url, data = null) {
     } else {
       toast(
         result.message || "Erro ao processar a operação",
-        "danger",
-        "Erro",
+        result?.typeToast || "danger",
+        result?.titleToast || "Erro",
         "Agora",
-        "error"
+        result?.iconToast || "error"
       );
     }
 
