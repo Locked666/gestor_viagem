@@ -25,7 +25,12 @@ def index():
         'segment': 'dashboard',
         'parent': 'dashboard',
         'title':'HOME'
-    }    
+    }
+    
+    if not current_user.admin:
+        # Lógica para usuários não administradores
+        return render_template('dashboard/dashboard-user.html', **context)
+        
     return render_template('pages/index.html', segment='dashboard', parent='dashboard')
 
 @blueprint.route('/tables')
