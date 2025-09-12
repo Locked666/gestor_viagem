@@ -205,7 +205,7 @@ async function getFilteredTravels() {
     ...(filterDescription ? { filterDescription: filterDescription } : {}),
   };
 
-  console.log(payloadFiltered);
+  //  console.log(payloadFiltered);
   const responseFiltered = await postJSON("/travel", payloadFiltered);
 
   if (responseFiltered.success) {
@@ -256,7 +256,7 @@ function setActionForButton() {
                   window.location.href = "/travel";
                 }, 2000);
               } else {
-                alert(response.message || "Erro ao concluir a viagem.");
+                // alert(response.message || "Erro ao concluir a viagem.");
               }
             })
             .catch(() => alert("Erro na conexão com o servidor."));

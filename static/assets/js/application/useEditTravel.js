@@ -144,6 +144,11 @@ async function editTravel() {
 async function sendDataTravel() {
   const tecnicoUserEl = document.getElementById("tecnicoUser");
 
+  if (document.getElementById("quantidadeDiarias").value.trim() === "") {
+    execToast("Informe  a quantidade de diárias", "info");
+    return;
+  }
+
   const payloadtravel = {
     id_viagem: viagemId,
     data_saida: document.getElementById("dataSaida").value.trim(),

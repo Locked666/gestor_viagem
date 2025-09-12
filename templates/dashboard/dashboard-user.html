@@ -7,7 +7,7 @@ block content %}
   <div class="row">
     <div class="ms-3">
       <h3 class="mb-0 h4 font-weight-bolder">Dashboard</h3>
-      <p class="mb-4">Controle de Viagens - {{ competence }}</p>
+      <p class="mb-4">Controle de Viagens - {{ current_month }}</p>
     </div>
     <!--Card 1 Total de diárias do mês-->
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -29,10 +29,7 @@ block content %}
         </div>
         <hr class="dark horizontal my-0" />
         <div class="card-footer p-2 ps-3">
-          <p class="mb-0 text-sm">
-            <span class="text-success font-weight-bolder">+55% </span>
-            Comparação Mês Anterior
-          </p>
+          <p class="mb-0 text-sm" id="equivalencia-mes-diaria"></p>
         </div>
       </div>
     </div>
@@ -45,7 +42,7 @@ block content %}
               <p class="text-sm mb-0 text-capitalize">
                 Total de Viagens do Mês
               </p>
-              <h4 class="mb-0">2300</h4>
+              <h4 class="mb-0" id="valor-total-travel">0</h4>
             </div>
             <div
               class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
@@ -56,10 +53,7 @@ block content %}
         </div>
         <hr class="dark horizontal my-0" />
         <div class="card-footer p-2 ps-3">
-          <p class="mb-0 text-sm">
-            <span class="text-success font-weight-bolder">+3% </span>than last
-            month
-          </p>
+          <p class="mb-0 text-sm" id="equivalencia-mes-travel"></p>
         </div>
       </div>
     </div>
@@ -70,11 +64,8 @@ block content %}
     <div class="col-lg-4 col-md-6 mt-4 mb-4">
       <div class="card">
         <div class="card-body">
-          <h6 class="mb-0">Diárias Mensais</h6>
-          <!--<p class="text-sm">
-            (<span class="font-weight-bolder" id="">+15%</span>) increase in today
-            sales.
-          </p>-->
+          <h6 class="mb-0">Valor Diárias Mensais</h6>
+          <p class="text-sm">Diárias recebidas dos ultimos 12 meses.</p>
           <div class="pe-2">
             <div class="chart">
               <canvas
@@ -89,20 +80,25 @@ block content %}
             <i class="material-symbols-rounded text-sm my-auto me-1"
               >schedule</i
             >
-            <p class="mb-0 text-sm">updated 4 min ago</p>
+            <p class="mb-0 text-sm">
+              atualizado em:
+              <span class="font-weight-bolder">{{ datenow }}</span>
+            </p>
           </div>
         </div>
       </div>
     </div>
+    ,
+    <!--Graphic quantidade  de viagens-->
     <div class="col-lg-4 mt-4 mb-3">
       <div class="card">
         <div class="card-body">
-          <h6 class="mb-0">Completed Tasks</h6>
-          <p class="text-sm">Last Campaign Performance</p>
+          <h6 class="mb-0">Viagens</h6>
+          <p class="text-sm">Realizado dos ultimos 12 meses</p>
           <div class="pe-2">
             <div class="chart">
               <canvas
-                id="chart-line-tasks"
+                id="chart-line-travels"
                 class="chart-canvas"
                 height="170"
               ></canvas>
@@ -113,7 +109,10 @@ block content %}
             <i class="material-symbols-rounded text-sm my-auto me-1"
               >schedule</i
             >
-            <p class="mb-0 text-sm">just updated</p>
+            <p class="mb-0 text-sm">
+              atualizado em:
+              <span class="font-weight-bolder">{{ datenow }}</span>
+            </p>
           </div>
         </div>
       </div>
@@ -127,102 +126,235 @@ block content %}
 <script src="{{ url_for('static', filename='assets/js/plugins/chartjs.min.js') }}"></script>
 
 <script>
-  var ctx2 = document.getElementById("chart-line").getContext("2d");
+  async function getValueGraphic() {
+    var ctx2 = document.getElementById("chart-line").getContext("2d");
+    var ctx3 = document.getElementById("chart-line-travels").getContext("2d");
 
-  new Chart(ctx2, {
-    type: "line",
-    data: {
-      labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
-      datasets: [
-        {
-          label: "Diarias",
-          tension: 0,
-          borderWidth: 2,
-          pointRadius: 3,
-          pointBackgroundColor: "#43A047",
-          pointBorderColor: "transparent",
-          borderColor: "#43A047",
-          backgroundColor: "transparent",
-          fill: true,
-          data: [120, 230, 130, 440, 250, 360, 270, 180, 90, 300, 310, 220],
-          maxBarThickness: 6,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          callbacks: {
-            title: function (context) {
-              const fullMonths = [
-                "Janeiro",
-                "Fevereiro",
-                "Março",
-                "Abril",
-                "Maio",
-                "Junho",
-                "Julho",
-                "Agosto",
-                "Setemnbro",
-                "Outubro",
-                "Novembro",
-                "Dezembro",
-              ];
-              return fullMonths[context[0].dataIndex];
+    fetch("/dashboard/get/user/graphics")
+      .then((res) => res.json())
+      .then((result) => {
+        // graphic daily value
+        new Chart(ctx2, {
+          type: "line",
+          data: {
+            labels: result.graphic_daily.labels,
+            datasets: [
+              {
+                label: "Diarias",
+                tension: 0,
+                borderWidth: 2,
+                pointRadius: 3,
+                pointBackgroundColor: "#43A047",
+                pointBorderColor: "transparent",
+                borderColor: "#43A047",
+                backgroundColor: "transparent",
+                fill: true,
+                data: result.graphic_daily.data,
+                maxBarThickness: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  title: function (context) {
+                    const fullMonths = result.graphic_daily.tooltips;
+                    return fullMonths[context[0].dataIndex];
+                  },
+                },
+              },
+            },
+            interaction: {
+              intersect: false,
+              mode: "index",
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: true,
+                  drawOnChartArea: true,
+                  drawTicks: false,
+                  borderDash: [4, 4],
+                  color: "#e5e5e5",
+                },
+                ticks: {
+                  display: true,
+                  color: "#737373",
+                  padding: 10,
+                  font: {
+                    size: 12,
+                    lineHeight: 2,
+                  },
+                },
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                  borderDash: [5, 5],
+                },
+                ticks: {
+                  display: true,
+                  color: "#737373",
+                  padding: 10,
+                  font: {
+                    size: 12,
+                    lineHeight: 2,
+                  },
+                },
+              },
             },
           },
-        },
-      },
-      interaction: {
-        intersect: false,
-        mode: "index",
-      },
-      scales: {
-        y: {
-          grid: {
-            drawBorder: false,
-            display: true,
-            drawOnChartArea: true,
-            drawTicks: false,
-            borderDash: [4, 4],
-            color: "#e5e5e5",
+        });
+
+        new Chart(ctx3, {
+          type: "line",
+          data: {
+            labels: result.graphic_travels.labels,
+            datasets: [
+              {
+                label: "Vigens",
+                tension: 0,
+                borderWidth: 2,
+                pointRadius: 3,
+                pointBackgroundColor: "#43A047",
+                pointBorderColor: "transparent",
+                borderColor: "#43A047",
+                backgroundColor: "transparent",
+                fill: true,
+                data: result.graphic_travels.data,
+                maxBarThickness: 6,
+              },
+            ],
           },
-          ticks: {
-            display: true,
-            color: "#737373",
-            padding: 10,
-            font: {
-              size: 12,
-              lineHeight: 2,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+
+              tooltip: {
+                callbacks: {
+                  title: function (context) {
+                    const fullMonths = result.graphic_travels.tooltips;
+                    return fullMonths[context[0].dataIndex];
+                  },
+                },
+              },
+            },
+            interaction: {
+              intersect: false,
+              mode: "index",
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: true,
+                  drawOnChartArea: true,
+                  drawTicks: false,
+                  borderDash: [4, 4],
+                  color: "#e5e5e5",
+                },
+                ticks: {
+                  display: true,
+                  padding: 10,
+                  color: "#737373",
+                  font: {
+                    size: 12,
+                    lineHeight: 2,
+                  },
+                },
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                  borderDash: [5, 5],
+                },
+                ticks: {
+                  display: true,
+                  color: "#737373",
+                  padding: 10,
+                  font: {
+                    size: 12,
+                    lineHeight: 2,
+                  },
+                },
+              },
             },
           },
-        },
-        x: {
-          grid: {
-            drawBorder: false,
-            display: false,
-            drawOnChartArea: false,
-            drawTicks: false,
-            borderDash: [5, 5],
-          },
-          ticks: {
-            display: true,
-            color: "#737373",
-            padding: 10,
-            font: {
-              size: 12,
-              lineHeight: 2,
-            },
-          },
-        },
-      },
-    },
-  });
+        });
+      });
+  }
+
+  async function getValueCards() {
+    var cardDailyCurrentMonth = document.getElementById("value-daily");
+    var cardTotalTravel = document.getElementById("valor-total-travel");
+    var cardEquivalenceDaily = document.getElementById(
+      "equivalencia-mes-diaria"
+    );
+
+    var cardEquivalenceTotalTravel = document.getElementById(
+      "equivalencia-mes-travel"
+    );
+
+    fetch("/dashboard/get/user/cards")
+      .then((res) => res.json())
+      .then((result) => {
+        cardDailyCurrentMonth.innerText = `${result.total_daily_month}`;
+
+        if (Number(result.daily_equivalent_previous_month > 0)) {
+          cardEquivalenceDaily.innerHTML = `
+            <span class="text-success font-weight-bolder">+${Number(
+              result.daily_equivalent_previous_month
+            ).toFixed(2)}% </span>
+                Comparação Mês Anterior
+            `;
+        } else {
+          cardEquivalenceDaily.innerHTML = `
+            <span class="text-danger font-weight-bolder">${Number(
+              result.daily_equivalent_previous_month
+            ).toFixed(2)}% </span>
+                Comparação Mês Anterior
+            `;
+        }
+
+        cardTotalTravel.innerText = `${result.total_travels_current_month}`;
+
+        if (Number(result.daily_equivalent_travel_previous_month > 0)) {
+          cardEquivalenceTotalTravel.innerHTML = `
+            <span class="text-success font-weight-bolder">+${Number(
+              result.daily_equivalent_travel_previous_month
+            ).toFixed(2)}% </span>
+                Comparação Mês Anterior
+            `;
+        } else {
+          cardEquivalenceTotalTravel.innerHTML = `
+            <span class="text-danger font-weight-bolder">${Number(
+              result.daily_equivalent_travel_previous_month
+            ).toFixed(2)}% </span>
+                Comparação Mês Anterior
+            `;
+        }
+        s;
+      });
+  }
+  getValueCards();
+  getValueGraphic();
 </script>
 
 {% endblock extra_js %}

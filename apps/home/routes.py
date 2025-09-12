@@ -16,6 +16,12 @@ from apps.authentication.models import Users
 from flask_wtf import FlaskForm
 import os
 import json
+from datetime import datetime 
+
+MESES = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+]
 
 @blueprint.route('/')
 @login_required
@@ -27,9 +33,19 @@ def index():
         'title':'HOME'
     }
     
+    # Data atual
+    hoje = datetime.today()
+    numero_mes = hoje.month
+    nome_mes = MESES[numero_mes - 1]
+
+    # Formatação do resultado
+    mes_formatado = f"{numero_mes:02d}/{nome_mes}"
+    
+    datenow = datetime.now().strftime('%d/%m/%Y %H:%M')
+    
     if not current_user.admin:
         # Lógica para usuários não administradores
-        return render_template('dashboard/dashboard-user.html', **context)
+        return render_template('dashboard/dashboard-user.html', **context, datenow = datenow, current_month = mes_formatado)
         
     return render_template('pages/index.html', segment='dashboard', parent='dashboard')
 

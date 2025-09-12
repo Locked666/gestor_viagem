@@ -15,9 +15,9 @@ def validade_user_travel(travel_id, validade = True, message = 'O Usuário não 
         
     if not travel:
         if not validade:
-            return {"success":False,"message": "Nenhuma viagem encontrada.", "status_code": 404}
+            return {"success":False,"message": "Nenhuma viagem encontrada.", "status_code": 404 }
         
-        raise InvalidUsage({"message": "Nenhuma viagem encontrada."}, status_code=404)
+        raise InvalidUsage({"success":False,"message": "Nenhuma viagem encontrada."}, status_code=404)
     
     tec_travel = TecnicosViagens.query.filter_by(viagem=travel_id).all()
 
@@ -30,7 +30,7 @@ def validade_user_travel(travel_id, validade = True, message = 'O Usuário não 
     if current_user.id not in tecnicos and not current_user.admin:
         if not validade:
             if break_ex:
-                return {"success":False,"message": message, "status_code": 403}
+                return {"success":False,"message": message, "status_code": 403,"typeToast":"info", "titleToast": "Permissão Negada", "iconToast": "notifications"}
         if break_ex:
             raise InvalidUsage({"success": False,"message": message }, status_code=403)
     

@@ -882,6 +882,7 @@ block content %}
   });
 
   var ctx2 = document.getElementById("chart-line").getContext("2d");
+  var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
 
   new Chart(ctx2, {
     type: "line",
@@ -977,8 +978,6 @@ block content %}
       },
     },
   });
-
-  var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
 
   new Chart(ctx3, {
     type: "line",

@@ -36,4 +36,15 @@ class Entidades(db.Model):
         super(Entidades, self).__init__(**kwargs)
 
 
+class Parametros(db.Model):
+    __tablename__ = 'parametros'
+    
+    id = db.Column(db.Integer, primary_key = True)
+    
+    valor_diaria = db.Column(db.Float, comment = "Valor padrão da diária")
+    supervisor =  db.Column(db.String(100), comment= "supervisor")
+    
+    
+    
+
 #__MODELS__END

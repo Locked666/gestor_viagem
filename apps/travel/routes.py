@@ -6,7 +6,7 @@ from apps.travel.models import RegistroViagens ,TecnicosViagens ,db, GastosViage
 from sqlalchemy import and_
 from apps.exceptions.exception import InvalidUsage
 from apps.authentication.models import Users
-from apps.models import Entidades
+from apps.models import Entidades, Parametros
 from apps.finance.models import MovFinanceira
 
 from apps.api_rest.services import validade_user_travel
@@ -14,12 +14,6 @@ from apps.utils.fuctions_for_date import convert_to_datetime
 import locale
 from datetime import datetime
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Define a localidade para português do Brasil
-
-# from datetime import datetime
-# from apps.users.validation import validadion_user, validadion_password
-# from apps.authentication.util import verify_pass,hash_pass
-
-
 
 
 @blueprint.route('/travel', methods = ['GET', 'POST'])
@@ -288,10 +282,7 @@ def edit_travel():
             finance.valor_convert = locale.currency(finance.valor, grouping=True) if finance.valor else locale.currency(0, grouping=True)
             finance.tipo_full = 'Crédito' if finance.tipo == 'C' else 'Débito' if finance.tipo == 'D' else 'N/A'
             
-                        
-        
-        
-        
+
         context = {
                 'segment': 'travel',
                 'title': 'Editar - Viagens'
@@ -320,23 +311,38 @@ def edit_travel():
         try:
 
             tecnico_of_travel = data['tecnico_user']  if data.get('tecnico_user', None) is not None and data.get('tecnico_user', None) != '' else current_user.id
-            
-            print(f"\n\n\ntecnico of travel\n{tecnico_of_travel}\n\n\n")
-            
+
             tecnico_travel = TecnicosViagens.query.filter_by(viagem=id_viagem, tecnico=tecnico_of_travel).first()
-            
-            print(f"\n\n\ntecnico_travel\n{tecnico_travel}\n\n\n")
+
             if tecnico_travel == None:
                 raise InvalidUsage(message='Técnico não encontrado para esta viagem', status_code=404)
             
+            
+
+            
+            if data.get('valor_total', 0.0) is not None and data.get('valor_total', 0.6) != "":
+
+                try:
+                    valor_atual_diaria = db.session.query(Parametros.valor_diaria).first()[0]
+                    valor_diaria_informado = data.get('valor_total', 0.0)
+                    valor_quantidade_informado = case_json(data, 'quantidade_diarias', 0.0)
+                    
+                    calc_valor_diaria = (float(valor_atual_diaria) * float(valor_quantidade_informado))
+                    if (float(calc_valor_diaria)) != (float(valor_diaria_informado)): 
+                        return jsonify({'success': False, 'message': f'Valor total das diárias informado: {valor_diaria_informado}, difere do valor calculado: {calc_valor_diaria}'})                         
+                    
+                except ValueError as e: 
+                    return jsonify({'success': False, 'message': f"Ocorreu um erro ao realizar calculo: {e}"}), 500
+                
             tecnico_travel.atribuito =  True 
             
             tecnico_travel.data_inicio = case_json(data, 'data_saida', tecnico_travel.data_inicio, date_iso=True)
             tecnico_travel.data_fim = case_json(data, 'data_retorno', tecnico_travel.data_fim, date_iso=True)
             tecnico_travel.n_diaria = case_json(data, 'quantidade_diarias', tecnico_travel.n_diaria)
-            tecnico_travel.v_diaria = case_json(data, 'valor_total', tecnico_travel.v_diaria)
+            
+            
             tecnico_travel.n_intranet = case_json(data, 'codigo_relatorio', tecnico_travel.n_intranet)
-
+            tecnico_travel.v_diaria = case_json(data, 'valor_total', tecnico_travel.v_diaria)
             db.session.commit()
             
             return jsonify({'success': True, 'message': 'Viagem editada com sucesso.'}), 200
@@ -355,3 +361,31 @@ def calendar_events():
     }
     
     return render_template('calendar/index.html', **context)
+
+
+@blueprint.route('/relatorio-diarias')
+def relatorio_diarias():
+    # Simule os dados
+    viagens = [
+        {
+            "codigo": 30,
+            "entidade": "PM NIOAQUE",
+            "data_saida": "12/08/2025 05:00",
+            "data_retorno": "12/08/2025 18:30",
+            "numero_relatorio": "44-2025",
+            "qtd_diarias": 1,
+            "valor_total": "35,00"
+        },
+        # ... outras viagens
+    ]
+
+    return render_template(
+        'relatorios/relatorio_diarias_user.html',
+        nome_tecnico="Julio Sales",
+        nome_supervisor="Ricardo Sandim",
+        data_inicio="01/07/2025",
+        data_fim="31/08/2025",
+        valor_diaria="35,00",
+        data_emissao=datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+        viagens=viagens
+    )

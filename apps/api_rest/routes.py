@@ -148,14 +148,19 @@ def finish_travel(integer):
     Conclui uma viagem pelo ID.
     """
     try: 
-        travel = validade_user_travel(integer)
+        travel = validade_user_travel(integer, validade=False)
+
+        if isinstance(travel, dict):
+            if not travel.get('success', False):
+                return jsonify(travel)
         
         travel.status = 'Concluída'
+        
         db.session.commit()
         
         return jsonify({"success": True, "message": "Viagem concluída com sucesso."}), 200
     
-    except Exception as e:
+    except ValueError as e:
         db.session.rollback()
         raise InvalidUsage(f'Erro ao concluir viagem: {str(e)}', status_code=500) 
     
