@@ -4,11 +4,13 @@ from sqlalchemy.orm import aliased
 from sqlalchemy import and_, not_
 from apps.exceptions.exception import InvalidUsage
 from apps.travel.models import RegistroViagens,db, TecnicosViagens
-from apps.models import Entidades
+from apps.models import Entidades, Parametros
 from apps.authentication.models import Users
 from apps.utils.fuctions_for_date import convert_to_datetime
 from datetime import datetime, date
 import calendar
+import locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  
 # from weasyprint import HTML
 
 
@@ -19,9 +21,35 @@ def print_report_daily_user(data):
     if not data: 
         raise InvalidUsage(message="Necessário o envio das informações:", status_code=401)
     
-    model_html = render_template(template_html, dailys = data)
+    data_daily = data.get('data_daily', [])
+    
+    param = Parametros.query.filter_by(id=1).first()
+    
+    responsible = param.supervisor if param else None
+    value_daily = param.valor_diaria if param else None
+    user_tecnico = data.get('user_tecnico', None)
+    
+    filter_date_start = data.get('filter_date_start',"")
+    filter_date_end= data.get('filter_date_end',"")
+    
+    total_quantity_daily = data.get('total_quantity_daily',0)
+    total_value_daily = locale.currency(data.get('total_value_daily', 0.0), grouping=True)   
     
     
+    model_html = render_template(template_html, 
+                                 data_daily = data_daily, 
+                                 total_quantity_daily=total_quantity_daily, 
+                                 total_value_daily=total_value_daily,
+                                 responsible = responsible,
+                                 user_tecnico = user_tecnico,
+                                 data_emissao=datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                                 filter_date_start = filter_date_start ,
+                                 filter_date_end = filter_date_end ,
+                                 value_daily = value_daily
+                                 
+                                 )
+    
+    return model_html
     
     
     pass
@@ -55,6 +83,7 @@ def get_competence(month: int, year: int = 2025):
 def query_daily_travel(date_start, date_end,db,user):
    
     try:
+        user_tecnico = None
         # Aliases opcionais para facilitar leitura
         rv = RegistroViagens
         tv = TecnicosViagens
@@ -108,15 +137,23 @@ def query_daily_travel(date_start, date_end,db,user):
                 'data_inicio': q[9].strftime('%d/%m/%Y %H:%M'),
                 'data_fim': q[10].strftime('%d/%m/%Y %H:%M'),
                 'quantidade_diarias': q[11],
-                'valor_diarias': q[12],
+                'valor_diarias': locale.currency(q[12], grouping=True)  ,
                 'relatorio_intranet': q[13]               
             }
             data_daily.append(lis)
             total_value_daily += float(q[12])
             total_quantity_daily += 1
+            if user_tecnico is None:
+                user_tecnico = q[8] 
             
 
-        return {'total_quantity_daily': total_quantity_daily, 'total_value_daily':total_value_daily, 'data_daily':data_daily }
+        return {'user_tecnico': user_tecnico ,
+                'total_quantity_daily': total_quantity_daily, 
+                'total_value_daily': total_value_daily, 
+                'data_daily': data_daily,
+                'filter_date_start': date_start.strftime('%d/%m/%Y'),
+                'filter_date_end': date_end.strftime('%d/%m/%Y')
+                }
     except Exception as e:
         raise InvalidUsage(message=f"Ocorreu um erro ao executar a função query_daily_travel: {str(e)}", status_code=500)
       
@@ -158,12 +195,16 @@ def get_daily_travels(data):
         daily = query_daily_travel(compentece.get('date_start', date.today()), 
                                    compentece.get('date_end', date.today()),
                                    db, (user if user else current_user.id))
+        
+        return print_report_daily_user(daily)
     else :  
         daily = query_daily_travel(date_start, 
                                    date_end,
                                    db, (user if user else current_user.id))    
+        
+        return print_report_daily_user(daily)
      
-    print(f'\n\n{daily}\n\n')  
+    
 
     pass
 

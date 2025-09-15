@@ -380,7 +380,7 @@ def relatorio_diarias():
     ]
 
     return render_template(
-        'relatorios/relatorio_diarias_user.html',
+        'relatorios/model_print/relatorio_diarias_user.html',
         nome_tecnico="Julio Sales",
         nome_supervisor="Ricardo Sandim",
         data_inicio="01/07/2025",

@@ -11,7 +11,7 @@ from apps.reports.services import get_daily_travels
 def reports_travel():
     context= {
         'segment' : 'reports_travel',
-        'title': 'Relatorios viagems'
+        'title': 'Relatorios viagens'
     }
 
     if request.method == 'GET':
@@ -35,8 +35,8 @@ def reports_travel():
 
                 return jsonify({'success': True, 'message': 'Utilizado a opção do sistema Travels'})
             case 'daily':
-                get_daily_travels(data)
-                return jsonify({'success': True, 'message': 'Utilizado a opção do sistema daily'})
+                return jsonify({'success': True, 'message': 'Utilizado a opção do sistema daily' , 'data' : get_daily_travels(data)}) 
+                # return jsonify({'success': True, 'message': 'Utilizado a opção do sistema daily'})
             case _:
                 return jsonify({'success': False, 'message': 'Opção Não é valida '})
 
