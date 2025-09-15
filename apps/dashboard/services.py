@@ -89,9 +89,16 @@ def get_travel_statistics_user(user_id):
         TecnicosViagens.tecnico == user_id
     ).scalar() or 0
     
-    daily_equivalent_previous_month = ((total_daily_month - total_daily_previous_month)/ total_daily_previous_month) * 100
+    try:
+        daily_equivalent_previous_month = ((total_daily_month - total_daily_previous_month)/ total_daily_previous_month) * 100  
+    except: 
+        daily_equivalent_previous_month = 0
     
-    daily_equivalent_travel_previous_month = ((total_travels_current_month - total_travels_previous_month)/ total_travels_previous_month) * 100
+    try:
+        daily_equivalent_travel_previous_month = ((total_travels_current_month - total_travels_previous_month)/ total_travels_previous_month) * 100
+    except:
+        daily_equivalent_travel_previous_month = 0
+
 
     return {
         "user_id": user_id,

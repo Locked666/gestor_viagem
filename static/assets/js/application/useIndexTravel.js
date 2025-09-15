@@ -209,7 +209,7 @@ async function getFilteredTravels() {
   const responseFiltered = await postJSON("/travel", payloadFiltered);
 
   if (responseFiltered.success) {
-    console.log(responseFiltered.data);
+    // console.log(responseFiltered.data);
     document.getElementById("tabela-lista-viagens").innerHTML = "";
     responseFiltered.data.forEach((e) => {
       creatNewLineTravel(e);
@@ -296,6 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("btnLimpar").addEventListener("click", async (e) => {
     e.preventDefault();
     clearFieldFiltered();
+    await getFilteredTravels();
   });
 
   // Ao editar o campo da entidade verificar se esta vazio e limpar o input

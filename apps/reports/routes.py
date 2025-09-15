@@ -1,0 +1,43 @@
+from apps.reports import blueprint
+from flask import redirect, render_template, jsonify, request
+from flask_login import current_user
+from apps.authentication.models import Users, db
+from apps.exceptions.exception import InvalidUsage
+from apps.reports.services import get_daily_travels
+
+
+
+@blueprint.route('/travel', methods = ['GET', 'POST'])
+def reports_travel():
+    context= {
+        'segment' : 'reports_travel',
+        'title': 'Relatorios viagems'
+    }
+
+    if request.method == 'GET':
+        users_travel = Users.query.filter(Users.active == True, Users.diaria == True).all()
+
+
+
+        return render_template("relatorios/index_travel.html", current_month = '9', users_daily = users_travel, **context)
+    
+    elif request.method == 'POST':
+
+        data = request.get_json()
+
+        report_request = data.get('reportRequest', None)
+
+        if report_request is  None and report_request == "":
+            return jsonify({'success': False, 'message': 'reportRequest unknow'})
+
+        match report_request:
+            case 'travels':
+
+                return jsonify({'success': True, 'message': 'Utilizado a opção do sistema Travels'})
+            case 'daily':
+                get_daily_travels(data)
+                return jsonify({'success': True, 'message': 'Utilizado a opção do sistema daily'})
+            case _:
+                return jsonify({'success': False, 'message': 'Opção Não é valida '})
+
+            

@@ -451,7 +451,7 @@ function creatLineForTableFinance(data) {
   const tabelaFinanceiro = document.getElementById("tabelaFinanceiro");
   const novaLinha = tabelaFinanceiro.insertRow();
   novaLinha.setAttribute("data-movimento-id", data.id);
-  if (tabelaFinanceiro.querySelector('tr td[colspan="4"]')) {
+  if (tabelaFinanceiro.querySelector('tr td[colspan="5"]')) {
     tabelaFinanceiro.innerHTML = "";
   }
   novaLinha.innerHTML = `

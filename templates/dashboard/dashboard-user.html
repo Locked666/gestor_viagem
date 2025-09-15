@@ -324,6 +324,13 @@ block content %}
             ).toFixed(2)}% </span>
                 Comparação Mês Anterior
             `;
+        } else if (Number(result.daily_equivalent_previous_month === 0)) {
+          cardEquivalenceDaily.innerHTML = `
+            <span class="text-dark font-weight-bolder">${Number(
+              result.daily_equivalent_previous_month
+            ).toFixed(2)}% </span>
+                Comparação Mês Anterior
+            `;
         } else {
           cardEquivalenceDaily.innerHTML = `
             <span class="text-danger font-weight-bolder">${Number(
@@ -332,6 +339,7 @@ block content %}
                 Comparação Mês Anterior
             `;
         }
+
 
         cardTotalTravel.innerText = `${result.total_travels_current_month}`;
 
@@ -342,6 +350,14 @@ block content %}
             ).toFixed(2)}% </span>
                 Comparação Mês Anterior
             `;
+        } else if (Number(result.daily_equivalent_travel_previous_month === 0)){
+          cardEquivalenceTotalTravel.innerHTML = `
+            <span class="text-dark font-weight-bolder">${Number(
+              result.daily_equivalent_travel_previous_month
+            ).toFixed(2)}% </span>
+                Comparação Mês Anterior
+            `;
+
         } else {
           cardEquivalenceTotalTravel.innerHTML = `
             <span class="text-danger font-weight-bolder">${Number(

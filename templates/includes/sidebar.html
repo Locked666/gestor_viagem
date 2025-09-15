@@ -130,6 +130,25 @@
           <span class="nav-link-text ms-1">Tables</span>
         </a>
       </li>
+
+      <li class="nav-item mt-3">
+        <h6
+          class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5"
+        >
+          Relatórios
+        </h6>
+      </li>
+
+      <!--Tables-->
+      <li class="nav-item">
+        <a
+          class="nav-link {% if 'reports_travel' == segment %} active bg-gradient-dark text-white {% else %} text-dark {% endif %}"
+          href="{{ url_for('reports_blueprint.reports_travel') }}"
+        >
+          <i class="material-symbols-rounded opacity-5">contract</i>
+          <span class="nav-link-text ms-1">Viagens</span>
+        </a>
+      </li>
       <!--<li class="nav-item">
         <a
           class="nav-link {% if 'billing' == segment %} active bg-gradient-dark text-white {% else %} text-dark {% endif %}"
