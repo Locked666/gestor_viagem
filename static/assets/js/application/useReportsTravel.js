@@ -22,7 +22,7 @@ function printReport() {
     @media print {
       @page {
         margin: 0;
-        size: A4 portrait;
+        size: A4 landscape;
       }
 
       html, body {

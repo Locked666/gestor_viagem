@@ -38,6 +38,8 @@ def index():
             ~RegistroViagens.status.in_(["Concluída", "Cancelada"])
         ).order_by(RegistroViagens.id.desc()).all()
 
+        # print(f'\n\n\n{travels}\n\n\n')
+
         if not travels:
             return render_template('travel/index.html', **context, travels=None)
         

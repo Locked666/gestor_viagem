@@ -1,0 +1,18 @@
+SELECT ID,
+       ENTIDADE_DESTINO,
+       DATA_INICIO,
+       DATA_FIM,
+       "Concluída" AS STATUS,
+       TIPO_VIAGEM,
+       "Cliente" AS local_viagem,
+       CASE WHEN descricao <> "" THEN descricao || " " || "IMPORTACAO" ELSE "IMPORTACAO" END AS DECRICAO,
+       null AS veiculo,
+       null AS placa,
+       null AS km_inicial,
+       null AS km_final,
+       null AS n_combustivel,
+       0.0 AS total_gasto,
+       USUARIO, 
+       1 AS ativo,
+       data
+  FROM REGISTRO_VIAGENS;
