@@ -69,6 +69,24 @@ async function openTravelViewModal(travelId) {
             
             <!-- Aba Viagem -->
             <div class="tab-pane fade show active" id="viagem" role="tabpanel" aria-labelledby="viagem-tab">
+              <div class="mb-3"><strong>Destino:</strong> ${
+                travel.entidade_destino || "-"
+              }</div>
+              <div class="row"> 
+                <div class="col-md-6"> 
+                  <div class="mb-3"><strong>Data de Início:</strong> ${
+                    travel.data_inicio || "-"
+                  }</div>
+
+                </div>
+
+                <div class="col-md-6"> 
+                  <div class="mb-3"><strong>Data de Retorno:</strong> ${
+                    travel.data_fim || "-"
+                  }</div>
+
+                </div>
+              </div>
               <div class="mb-3"><strong>Tipo de Viagem:</strong> ${
                 travel.tipo_viagem || "-"
               }</div>
@@ -81,12 +99,8 @@ async function openTravelViewModal(travelId) {
                   travel.descricao || "-"
                 }</p>
               </div>
-              <div class="mb-3"><strong>Data de Início:</strong> ${
-                travel.data_inicio || "-"
-              }</div>
-              <div class="mb-3"><strong>Destino:</strong> ${
-                travel.entidade_destino || "-"
-              }</div>
+              
+              
             </div>
             
             <!-- Aba Técnicos -->
