@@ -297,7 +297,7 @@ def get_events_travel():
                 "id": travel.id,
                 "title": travel.descricao, 
                 "start": travel.data_inicio.strftime('%Y-%m-%d') if travel.data_inicio else None,
-                "end": travel.data_inicio.strftime('%Y-%m-%d') if travel.data_inicio else None,
+                "end": travel.data_fim.strftime('%Y-%m-%d') if travel.data_fim else None,
                 "backgroundColor": ""
             }
             

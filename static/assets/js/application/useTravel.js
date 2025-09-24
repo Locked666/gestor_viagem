@@ -151,6 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const entidadeId = document.getElementById("entidade-id").value;
     const tecnicosId = getTecnicosSelecionados();
     const dataSaida = document.getElementById("dataSaida").value;
+    const dataRetorno = document.getElementById("dataRetorno").value;
     const tipoViagem = document.getElementById("tipoViagem").value;
     const localViagem = document.getElementById("localViagem").value;
     const descricaoViagem = document.getElementById("descricao").value;
@@ -193,6 +194,17 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("dataSaida").focus();
       return;
     }
+    if (!dataRetorno) {
+      execToast(
+        "Preencha todos os campos obrigatórios.\n Data de Retorno",
+        "danger",
+        "Erro",
+        "Agora",
+        "error"
+      );
+      document.getElementById("dataSaida").focus();
+      return;
+    }
 
     if (!descricaoViagem) {
       execToast(
@@ -213,6 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
       local_viagem: localViagem,
       descricao: descricaoViagem,
       envia_email: checkEnviaEmail,
+      data_retorno: dataRetorno,
     };
     console.log("Payload enviado:", payloadData);
     const sendDataPost = await postJSON("/travel/add", payloadData);

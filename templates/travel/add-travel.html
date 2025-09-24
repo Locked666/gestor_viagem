@@ -86,7 +86,7 @@
             <input type="hidden" id="entidade-id" name="entidade_id" required />
           </div>
 
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label for="dataSaida" class="form-label">Data de Saída *</label>
             <input
               type="datetime-local"
@@ -94,6 +94,20 @@
               id="dataSaida"
               name="dataSaida"
               value="{% if date_start %}{{ date_start }}{% endif %}"
+              required
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label for="dataRetorno" class="form-label"
+              >Data de Retorno *</label
+            >
+            <input
+              type="datetime-local"
+              class="form-control border ps-1"
+              id="dataRetorno"
+              name="dataRetorno"
+              value="{% if date_end %}{{ date_end }}{% endif %}"
               required
             />
           </div>
@@ -130,7 +144,6 @@
             <select class="form-select" id="localViagem" name="localViagem">
               <option value="Cliente">Cliente</option>
               <option value="Quality">Quality</option>
-              
             </select>
           </div>
         </div>

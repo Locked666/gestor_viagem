@@ -144,36 +144,44 @@ def add_travel():
         tecnicos = Users.query.filter_by(diaria= True, active = True).all()
         
         date_start = request.args.get('date_start', None)
+        date_end = request.args.get('date_end', date_start)
         
         print(f'\n\n{date_start}\n\n')
         
         if date_start is not None and date_start != "":
             # Converte 'YY-mm-dd' para 'yyyy-MM-ddThh:mm' com hora padrão 07:30
             try:
-                date_obj = datetime.strptime(date_start, "%Y-%m-%d")
-                date_start_convert = date_obj.strftime("%Y-%m-%dT07:30")
+                date_start_obj = datetime.strptime(date_start, "%Y-%m-%d")
+                date_start_convert = date_start_obj.strftime("%Y-%m-%dT07:30")
+                
+                date_end_obj = datetime.strptime(date_end, "%Y-%m-%d")
+                date_end_convert = date_end_obj.strftime("%Y-%m-%dT17:30")
+                
             except Exception:
                 date_start_convert = None
+                date_end_convert = None
         else:
             date_start_convert = None
+            date_end_convert = None
         
         context = {
             'segment': 'travel',
             'title': 'Adicionar - Viagens'
         }
 
-        return render_template('travel/add-travel.html', **context, tecnicos = tecnicos, date_start = date_start_convert)
+        return render_template('travel/add-travel.html', **context, tecnicos = tecnicos, date_start = date_start_convert, date_end = date_end_convert)
     
     elif request.method == 'POST':
         data = request.get_json()
 
         data['data_saida'] = convert_to_datetime(data.get('data_saida'))
+        data['data_retorno'] = convert_to_datetime(data.get('data_retorno'))
         
         try:
             new_travel =  RegistroViagens(
                 entidade_destino = data.get('entidade_id', 0),
                 data_inicio = data.get('data_saida', None),
-                data_fim = data.get('data_fim', None),
+                data_fim = data.get('data_retorno', None),
                 tipo_viagem = data.get('tipo_viagem', None),
                 local_viagem = data.get('local_viagem', None),
                 descricao = data.get('descricao', ""),
@@ -365,29 +373,3 @@ def calendar_events():
     return render_template('calendar/index.html', **context)
 
 
-@blueprint.route('/relatorio-diarias')
-def relatorio_diarias():
-    # Simule os dados
-    viagens = [
-        {
-            "codigo": 30,
-            "entidade": "PM NIOAQUE",
-            "data_saida": "12/08/2025 05:00",
-            "data_retorno": "12/08/2025 18:30",
-            "numero_relatorio": "44-2025",
-            "qtd_diarias": 1,
-            "valor_total": "35,00"
-        },
-        # ... outras viagens
-    ]
-
-    return render_template(
-        'relatorios/model_print/relatorio_diarias_user.html',
-        nome_tecnico="Julio Sales",
-        nome_supervisor="Ricardo Sandim",
-        data_inicio="01/07/2025",
-        data_fim="31/08/2025",
-        valor_diaria="35,00",
-        data_emissao=datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-        viagens=viagens
-    )

@@ -181,7 +181,7 @@ function openConfirmModal(start, end) {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
           </div>
           <div class="modal-body">
-            Deseja criar a viagem <b>${startBR}</b></b>?
+            Deseja criar a viagem <b>${startBR} a ${endBR}</b></b>?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
@@ -203,7 +203,7 @@ function openConfirmModal(start, end) {
 
   // Adiciona evento ao botão "Sim"
   document.getElementById("btnConfirmYes").addEventListener("click", () => {
-    window.location.href = `/travel/add?date_start=${start}`;
+    window.location.href = `/travel/add?date_start=${start}&date_end=${end}`;
   });
 }
 
