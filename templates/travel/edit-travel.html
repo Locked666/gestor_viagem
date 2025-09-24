@@ -152,7 +152,7 @@ block content %}
                   readonly
                 />
               </div>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <label for="data_inicio" class="form-label"
                   >Data de Início:</label
                 >
@@ -165,7 +165,23 @@ block content %}
                   readonly
                 />
               </div>
-              <div class="col-md-4">
+
+              <div class="col-md-2">
+                <label for="data_fim" class="form-label"
+                  >Data Fim:</label
+                >
+                <input
+                  type="text"
+                  class="form-control border"
+                  id="data_fim"
+                  name="data_fim"
+                  value="{{ travel.data_fim_convert }}"
+                  readonly
+                />
+              </div>
+
+
+              <div class="col-md-3">
                 <label for="tipo_viagem" class="form-label"
                   >Tipo de Viagem:</label
                 >
@@ -877,7 +893,22 @@ block content %}
                   class="form-control border ps-1"
                   id="dataSaida-modal"
                   name="dataSaida"
-                  value="{{ travel.data_inicio_convert }}" 
+                  value="{{ travel.data_inicio_convert_iso }}" 
+                  
+                />
+              </div>
+
+              <!-- Data de Fim -->
+              <div class="col-md-3">
+                <label for="dataRetorno-modal" class="form-label"
+                  >Data de Retorno*</label
+                >
+                <input
+                  type="datetime-local"
+                  class="form-control border ps-1"
+                  id="dataRetorno-modal"
+                  name="dataRetorno"
+                  value="{{ travel.data_fim_convert_iso }}" 
                   
                 />
               </div>
@@ -895,10 +926,8 @@ block content %}
                   <option value="Outra" {% if travel.tipo_viagem == 'Outra' %}selected{% endif %}>Outra</option>
                 </select>
               </div>
-            </div>
 
-            <!-- Status e Descrição -->
-            <div class="row gy-3 mt-3">
+              <!-- Status e Descrição -->
               <div class="col-md-4">
                 <label for="status" class="form-label fw-bold">Status:</label>
                 <select class="form-select border" id="status-modal" name="status">
@@ -908,8 +937,13 @@ block content %}
                   <option value="Cancelada" {% if travel.status == 'Cancelada' %}selected{% endif %}>Cancelada</option>
                 </select>
               </div>
-
             </div>
+
+            
+            <!--<div class="row gy-3 mt-3">-->
+              
+
+            <!--</div>-->
             <div class="row gy-3 mt-3">
               <div class="col-md-8">
                 <label for="descricao" class="form-label fw-bold">Descrição:</label>

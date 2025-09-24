@@ -99,6 +99,9 @@ async function reloadInfoTravel() {
       document.getElementById("entidadeReadonly").value =
         response.data.entidade_destino;
       document.getElementById("data_inicio").value = response.data.data_inicio;
+
+      document.getElementById("data_fim").value = response.data.data_fim;
+
       document.getElementById("tipo_viagem").value = response.data.tipo_viagem;
       document.getElementById("status").value = response.data.status;
       document.getElementById("descricao").innerText = response.data.descricao;
@@ -116,6 +119,8 @@ async function editTravel() {
     entidade: document.getElementById("entidade").value.trim(),
     entidade_destino: document.getElementById("entidade-id").value.trim(),
     data_inicio: document.getElementById("dataSaida-modal").value.trim(),
+    data_fim: document.getElementById("dataRetorno-modal").value.trim(),
+
     tipo_viagem: document.getElementById("tipo-travel").value,
     status: document.getElementById("status-modal").value,
     descricao: document.getElementById("descricao-modal").value.trim(),

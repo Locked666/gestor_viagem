@@ -266,6 +266,11 @@ def edit_travel():
             return redirect(url_for('travel_blueprint.index', message='404'))
         
         travel.data_inicio_convert = travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None
+        travel.data_fim_convert = travel.data_fim.strftime('%d/%m/%Y %H:%M') if travel.data_fim else None
+        
+        travel.data_inicio_convert_iso = travel.data_inicio.strftime("%Y-%m-%dT%H:%M") if travel.data_inicio else None
+        travel.data_fim_convert_iso = travel.data_fim.strftime("%Y-%m-%dT%H:%M") if travel.data_fim else None
+        
         travel.entidade_nome = Entidades.query.filter_by(id=travel.entidade_destino).first().nome if travel.entidade_destino else None
         
         expenses_for_travel = GastosViagens.query.filter_by(viagem=id_viagem, tecnico = current_user.id).all()

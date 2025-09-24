@@ -63,6 +63,8 @@ def get_viagens(integer):
             "status": travel.status,
             "descricao": travel.descricao,
             "data_inicio": travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None,
+            
+            "data_fim": travel.data_fim.strftime('%d/%m/%Y %H:%M') if travel.data_fim else None,
             "entidade_destino": (
                 Entidades.query.with_entities(Entidades.nome)
                 .filter_by(id=travel.entidade_destino)
@@ -185,10 +187,16 @@ def edit_travel():
     tipo_viagem = data.get('tipo_viagem', None)
     descricao = data.get('descricao', None)
     data_inicio = data.get('data_inicio', None)
+    
+    data_fim = data.get('data_fim', None)
+    
     status = data.get('status', None)
     
     if data_inicio is not None or data_inicio != "":
         data_inicio = convert_to_datetime(data.get('data_inicio'))
+        
+    if data_fim is not None or data_fim != "":    
+        data_fim = convert_to_datetime(data.get('data_fim'))
     
     
     try: 
@@ -196,6 +204,7 @@ def edit_travel():
         travel.tipo_viagem = tipo_viagem if tipo_viagem is not None else travel.tipo_viagem
         travel.descricao = descricao if descricao is not None and descricao != "" else travel.descricao
         travel.data_inicio = data_inicio if data_inicio is not None else travel.data_inicio
+        travel.data_fim = data_fim if data_fim is not None else travel.data_fim
         travel.status = status if status is not None else travel.status
         db.session.commit()
         return jsonify({"success": True, "message": "Viagem atualizada com sucesso."}), 200
@@ -326,6 +335,7 @@ def get_events_travel():
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS    
+
 
 @blueprint.route('/upload', methods=['POST', 'PUT', 'GET'])
 @login_required
