@@ -122,7 +122,7 @@
       </div>
       <div class="col-md-6 text-end">
         <div class="info-line">
-          <strong>Valor da Diária:</strong> R$ {{ value_daily }}
+          <strong>Valor da Diária:</strong> {{ value_daily }}
         </div>
         <div class="info-line">
           <strong>Cálculo:</strong> Qtd. Diárias * Valor Diária
@@ -160,12 +160,12 @@
         <tr>
           <!--<td colspan="1" class="text-start"><strong>Quantidade Diárias:</strong></td>
           <td id="totalGastos" class="text-end">00</td>-->
-          <td colspan="5"></td>  
+          <td colspan="5"></td>
           <td colspan="1" class="text-start"><strong>Valor Total:</strong></td>
-          <td id="totalGastosEstorno" class="text-start">{{ total_value_daily }}</td>
-
+          <td id="totalGastosEstorno" class="text-start">
+            {{ total_value_daily }}
+          </td>
         </tr>
-
       </tfoot>
     </table>
 

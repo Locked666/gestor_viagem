@@ -26,7 +26,7 @@ def print_report_daily_user(data):
     param = Parametros.query.filter_by(id=1).first()
     
     responsible = param.supervisor if param else None
-    value_daily = param.valor_diaria if param else None
+    value_daily = locale.currency(param.valor_diaria , grouping=True) if param else None
     user_tecnico = data.get('user_tecnico', None)
     
     filter_date_start = data.get('filter_date_start',"")
