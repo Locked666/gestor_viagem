@@ -1,48 +1,50 @@
 {% extends "layouts/base.html" %}{%
 block content %}
-<div class="main">
-    <div class="row">
-        <div class="col-12 col-md-4 mt-4 ms-3">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Relatórios Diárias</h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">Relatório de Diárias por data ou competencia.</p>
-                </div>
-                <hr class="dark horizontal my-0">
-                <div class="card-footer text-muted">
-                    <div class="col-md-3">
-                        <button type="button" class="btn btn-primary w-full" id="bntPrintDaily" data-bs-toggle="modal" data-bs-target="#modal-filter" data-source="daily">
-                            <i class="material-symbols-rounded me-2">print</i> 
-                            Filtrar 
-                        </button>
+<div class="main w-auto h-auto min-vh-70">
+    <div class="container ms-0 mt-4 justify-content-start w-100 h-100 ">
+        <div class="row justify-content-start">
+            <div class="col-12 col-md-4 mt-4 ms-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Relatórios Diárias</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Relatório de Diárias por data ou competencia.</p>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer text-muted">
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-primary w-full" id="bntPrintDaily" data-bs-toggle="modal" data-bs-target="#modal-filter" data-source="daily">
+                                <i class="material-symbols-rounded me-2">print</i> 
+                                Filtrar 
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!--<div class="col-12 col-md-4 mt-4 ms-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Relatórios Viagens</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Relatório de Viagens por data ou competencia.</p>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer text-muted">
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-primary w-full" id="bntPrintDaily" data-bs-toggle="modal" data-bs-target="#modal-filter" data-source="travels">
+                                <i class="material-symbols-rounded me-2">print</i> 
+                                Filtrar 
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
         </div>
-        <!--<div class="col-12 col-md-4 mt-4 ms-3">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Relatórios Viagens</h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">Relatório de Viagens por data ou competencia.</p>
-                </div>
-                <hr class="dark horizontal my-0">
-                <div class="card-footer text-muted">
-                    <div class="col-md-3">
-                        <button type="button" class="btn btn-primary w-full" id="bntPrintDaily" data-bs-toggle="modal" data-bs-target="#modal-filter" data-source="travels">
-                            <i class="material-symbols-rounded me-2">print</i> 
-                            Filtrar 
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>-->
     </div>
-{% include "includes/footer.html" %} 
-{% include  "includes/viewer-file.html"%}
+    
+
 
     <div class="modal fade" id="modal-filter" tabindex="-1" aria-labelledby="modalFilterLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -138,7 +140,9 @@ block content %}
     </div>
 
 
+{% include  "includes/viewer-file.html"%}
 </div>
+{% include "includes/footer.html" %} 
 
 {% block javascripts %}
 
