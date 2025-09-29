@@ -68,7 +68,7 @@ message %}
           </div>
 
           <!--Checkboxes-->
-          <div class="col-md-2 mt-4 row g-2">
+          <div class="col-md-4 mt-4 row g-2">
             <!--Checkbox Filtro Conlcuida-->
             <div class="col-md-2 align-items-start">
               <div class="form-check">
@@ -85,7 +85,7 @@ message %}
             </div>
 
             <!--Checkbox Filtro Cancelada-->
-            <div class="col-md-2 mx-auto align-items-end">
+            <div class="col-md-2 align-items-start ms-4 me-4">
               <div class="form-check">
                 <input
                   class="form-check-input"
@@ -95,6 +95,26 @@ message %}
                 />
                 <label class="form-check-label" for="filtroCancelada">
                   Cancelados
+                </label>
+              </div>
+            </div>
+
+            <!--Checkbox Filtro Minhas Viagens-->
+            <div class="col-md-2 align-items-start">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="filtroMinhasViagens"
+                  title="Exibe apenas as viagens atribuídas a mim"
+                />
+                <label
+                  class="form-check-label"
+                  title="Exibe apenas as viagens atribuídas a mim"
+                  for="filtroMinhasViagens"
+                >
+                  Atribuidos
                 </label>
               </div>
             </div>

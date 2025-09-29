@@ -40,6 +40,7 @@ def index():
 
         # print(f'\n\n\n{travels}\n\n\n')
 
+        # travels = travels.join(TecnicosViagens, TecnicosViagens.viagem == RegistroViagens.id).filter(TecnicosViagens.tecnico == current_user.id)
         if not travels:
             return render_template('travel/index.html', **context, travels=None)
         
@@ -68,15 +69,24 @@ def index():
         filter_entity_id = data.get('filterEntityId', None)
         filter_completed = data.get('filterCompleted', False)
         filter_canceled = data.get('filterCanceled', False)
+        filter_my_travel = data.get('filterMyTravel', True)
         filter_description = data.get('filterDescription', None)
         
         
         # Comece com o filtro base
         query = RegistroViagens.query.filter(RegistroViagens.ativo == True)
+        # query = (
+        #         db.session.query(RegistroViagens,TecnicosViagens)
+        #         .join(RegistroViagens, TecnicosViagens.viagem == RegistroViagens.id)
+        #         .filter(RegistroViagens.ativo == True)
+        #     )
+        
+        print(f"\n\n\n\n{query}\n\n\n\n")
 
         # Adiciona filtros conforme necessário
         if filter_date_start:
             query = query.filter(RegistroViagens.data >= filter_date_start)
+            
         if filter_date_end:
             query = query.filter(RegistroViagens.data <= filter_date_end)
        
@@ -86,14 +96,19 @@ def index():
         if filter_description:
             query = query.filter(RegistroViagens.descricao.ilike(f'%{filter_description}%'))
         
+        # if filter_my_travel:
+        #     query = query.filter(TecnicosViagens.tecnico == current_user.id)    
+        
         status = []
         
         if filter_status_travel == 'todos':
+            
             status.append('Agendada')
             status.append('Em Andamento')
             
             if filter_completed:
                 status.append("Concluída")
+                
             if filter_canceled:
                 status.append("Cancelada") 
         else:
@@ -102,6 +117,8 @@ def index():
         query = query.filter(RegistroViagens.status.in_(status))        
         query = query.order_by(RegistroViagens.id.desc())        
         
+        if filter_my_travel:
+            query = query.join(TecnicosViagens, TecnicosViagens.viagem == RegistroViagens.id).filter(TecnicosViagens.tecnico == current_user.id)
             
         travels = query.all()
         
@@ -290,7 +307,10 @@ def edit_travel():
         
         totais =  {'total': locale.currency(total, grouping=True), 'total_estorno': locale.currency(total_estorno, grouping=True)}     
 
-        finance_for_travel = MovFinanceira.query.filter(and_(MovFinanceira.viagem==id_viagem, MovFinanceira.tecnico==current_user.id)).all()
+        finance_for_travel = MovFinanceira.query.filter(
+            and_(MovFinanceira.viagem==id_viagem, 
+                 MovFinanceira.tecnico==current_user.id
+                 )).all()
         
         for finance in finance_for_travel:
             finance.data_lanc_convert = finance.data_lanc.strftime('%d/%m/%Y %H:%M') if finance.data_lanc else None
@@ -310,7 +330,7 @@ def edit_travel():
                                expenses = expenses_for_travel, 
                                totalizado = totais, 
                                finance = finance_for_travel
-                               )
+                            )
 
     elif request.method == 'PUT':
         

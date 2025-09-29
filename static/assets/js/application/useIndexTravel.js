@@ -185,6 +185,8 @@ async function getFilteredTravels() {
   const filterCompleted = document.getElementById("filtroConcluida").checked;
   const filterCanceled = document.getElementById("filtroCancelada").checked;
 
+  const filterMyTravel = document.getElementById("filtroMinhasViagens").checked;
+
   const filterDescription = document
     .getElementById("filtroDescricao")
     .value.trim();
@@ -193,6 +195,7 @@ async function getFilteredTravels() {
     filter: true,
     filterCompleted: filterCompleted,
     filterCanceled: filterCanceled,
+    filterMyTravel: filterMyTravel,
 
     ...(filterDateStart ? { filterDateStart: filterDateStart } : {}),
 
