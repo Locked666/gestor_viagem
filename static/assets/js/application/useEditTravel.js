@@ -148,6 +148,7 @@ async function editTravel() {
 
 async function sendDataTravel() {
   const tecnicoUserEl = document.getElementById("tecnicoUser");
+  const statusAtribuido = document.getElementById("statusAtribuido");
 
   if (document.getElementById("quantidadeDiarias").value.trim() === "") {
     execToast("Informe  a quantidade de diárias", "info");
@@ -178,6 +179,11 @@ async function sendDataTravel() {
 
     if (response.success) {
       funcHideLoader();
+      statusAtribuido.innerHTML = "";
+      statusAtribuido.innerHTML = `
+      <i class="material-symbols-rounded text-success me-2" title="Dados foram atribuitos">offline_pin</i>
+      <span class="text-success ml-4"><strong>Atribuído</strong></Span>
+      `;
     }
   } catch (error) {
     console.log(error);
@@ -364,7 +370,7 @@ function calcularDiasEDiaria() {
 
   if (quantidadeDiarias.value) {
     const diarias = parseInt(quantidadeDiarias.value);
-    valorDiaria.value = (diarias * VALOR_DIARIA).toFixed(2);
+    valorDiaria.value = `R$ ${(diarias * VALOR_DIARIA).toFixed(2)}`;
   }
 }
 

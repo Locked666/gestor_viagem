@@ -10,7 +10,7 @@ from apps.models import Entidades, Parametros
 from apps.finance.models import MovFinanceira
 
 from apps.api_rest.services import validade_user_travel
-from apps.utils.fuctions_for_date import convert_to_datetime
+from apps.utils.fuctions_for_date import convert_to_datetime, calcular_diarias
 import locale
 from datetime import datetime
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Define a localidade para português do Brasil
@@ -318,6 +318,17 @@ def edit_travel():
             finance.tipo_full = 'Crédito' if finance.tipo == 'C' else 'Débito' if finance.tipo == 'D' else 'N/A'
             
 
+        info_tec_in_travel =  TecnicosViagens.query.filter_by(viagem=id_viagem, tecnico = current_user.id).first()
+        valor_atual_diaria = db.session.query(Parametros.valor_diaria).first()[0]
+        
+        if info_tec_in_travel:
+            info_tec_in_travel.data_inicio_convert = info_tec_in_travel.data_inicio.strftime("%Y-%m-%dT%H:%M") if info_tec_in_travel.data_inicio else travel.data_inicio_convert_iso
+            info_tec_in_travel.data_fim_convert = info_tec_in_travel.data_fim.strftime("%Y-%m-%dT%H:%M") if info_tec_in_travel.data_fim else travel.data_fim_convert_iso
+            info_tec_in_travel.n_diaria = info_tec_in_travel.n_diaria if info_tec_in_travel.n_diaria else calcular_diarias(travel.data_inicio, travel.data_fim)
+            info_tec_in_travel.v_diaria_convert = locale.currency(info_tec_in_travel.v_diaria, grouping=True) if info_tec_in_travel.v_diaria else locale.currency((float(valor_atual_diaria)*float(calcular_diarias(travel.data_inicio, travel.data_fim))), grouping=True)
+            
+            
+
         context = {
                 'segment': 'travel',
                 'title': 'Editar - Viagens'
@@ -329,7 +340,8 @@ def edit_travel():
                                tecnicos=tec_travel,
                                expenses = expenses_for_travel, 
                                totalizado = totais, 
-                               finance = finance_for_travel
+                               finance = finance_for_travel,
+                               info_tec_in_travel = info_tec_in_travel
                             )
 
     elif request.method == 'PUT':
@@ -356,11 +368,16 @@ def edit_travel():
 
             
             if data.get('valor_total', 0.0) is not None and data.get('valor_total', 0.6) != "":
+                
+                
 
                 try:
                     valor_atual_diaria = db.session.query(Parametros.valor_diaria).first()[0]
                     valor_diaria_informado = data.get('valor_total', 0.0)
                     valor_quantidade_informado = case_json(data, 'quantidade_diarias', 0.0)
+                    
+                    if isinstance(valor_diaria_informado, str):
+                        valor_diaria_informado = float(valor_diaria_informado.replace(',','.').replace('R$','').strip())
                     
                     calc_valor_diaria = (float(valor_atual_diaria) * float(valor_quantidade_informado))
                     if (float(calc_valor_diaria)) != (float(valor_diaria_informado)): 
@@ -377,12 +394,12 @@ def edit_travel():
             
             
             tecnico_travel.n_intranet = case_json(data, 'codigo_relatorio', tecnico_travel.n_intranet)
-            tecnico_travel.v_diaria = case_json(data, 'valor_total', tecnico_travel.v_diaria)
+            tecnico_travel.v_diaria = valor_diaria_informado if data.get('valor_total', None) else tecnico_travel.v_diaria  #case_json(data, 'valor_total', tecnico_travel.v_diaria)
             db.session.commit()
             
             return jsonify({'success': True, 'message': 'Viagem editada com sucesso.'}), 200
         
-        except Exception as e:
+        except ValueError as e:
             db.session.rollback()
             raise InvalidUsage(f'Erro ao editar viagem: {str(e)}', status_code=500)
         

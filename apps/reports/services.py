@@ -114,7 +114,7 @@ def query_daily_travel(date_start, date_end,db,user):
                 tv.atribuito == True,
                 rv.status != 'Cancelada',
                 tv.data_inicio >= date_start,
-                tv.data_fim <= date_end,
+                #tv.data_fim <= date_end,
                 tv.tecnico == int(user)
             )
         ).all()

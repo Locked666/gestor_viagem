@@ -362,6 +362,7 @@ block content %}
                   id="dataSaida"
                   name="dataSaida"
                   required
+                  value="{{ info_tec_in_travel.data_inicio_convert if info_tec_in_travel else travel.data_inicio_convert_iso }}"
                 />
               </div>
               <!--Data Retorno-->
@@ -375,8 +376,22 @@ block content %}
                   id="dataRetorno"
                   name="dataRetorno"
                   required
+                  value="{{ info_tec_in_travel.data_fim_convert if info_tec_in_travel else travel.data_fim_convert_iso}}"
                 />
               </div>
+              <!--Se está atribuido ou Não-->
+              <div class="col-md-6 justify-content-end d-flex align-items-center" id="statusAtribuido">
+                {% if info_tec_in_travel.atribuito == True %}
+                <i class="material-symbols-rounded text-success me-2" title="Dados foram atribuitos">offline_pin</i>
+                <span class="text-success ml-4"><strong>Atribuído</strong></Span>
+                {% else %}
+                <i class="material-symbols-rounded text-primary me-2" title="Dados Não atribuitos">offline_pin_off</i>
+                <span class="text-primary ml-4"><strong>Não Atribuído</strong></Span>
+                {% endif %}
+
+
+              </div>
+
             </div>
 
             <div class="row mb-3">
@@ -389,6 +404,7 @@ block content %}
                   class="form-control border ps-1"
                   id="codigoRelatorio"
                   name="codigoRelatorio"
+                  value="{{ info_tec_in_travel.n_intranet if info_tec_in_travel else ''}}"
                   required
                 />
               </div>
@@ -401,6 +417,7 @@ block content %}
                   class="form-control border ps-1"
                   id="quantidadeDiarias"
                   name="quantidadeDiarias"
+                  value="{{ info_tec_in_travel.n_diaria if info_tec_in_travel else 0}}"
                 />
               </div>
               <div class="col-md-4">
@@ -408,14 +425,14 @@ block content %}
                   >Valor da Diária</label
                 >
                 <div class="input-group">
-                  <span class="input-group-text">R$</span>
+                  
                   <input
-                    type="number"
-                    step="0.01"
+                    type="text"
+                    
                     class="form-control border ps-1"
                     id="valorDiaria"
                     name="valorDiaria"
-                    value="0.00"
+                    value="{{ info_tec_in_travel.v_diaria_convert if info_tec_in_travel else 0.0}}"
                     readonly
                   />
                 </div>
