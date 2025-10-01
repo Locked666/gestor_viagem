@@ -67,4 +67,5 @@ def calcular_diarias(data_saida, data_retorno):
 
         return quantidade_diarias
     except Exception as e:
-        raise InvalidUsage(f"Erro ao calcular diárias: {str(e)}", status_code=400)
+        return
+        # raise InvalidUsage(f"Erro ao calcular diárias: {str(e)}", status_code=400)
