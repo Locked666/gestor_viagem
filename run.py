@@ -14,6 +14,7 @@ from apps import create_app, db
 # WARNING: Don't run with debug turned on in production!
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
+
 # The configuration
 get_config_mode = 'Debug' if DEBUG else 'Production'
 
@@ -54,7 +55,8 @@ if DEBUG:
     app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
 
-
+# socketio = SocketIO(app, cors_allowed_origins="*")  # Evita problemas com CORS
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
+    # socketio.run(app, host='0.0.0.0', port=5500, debug=True)
     
