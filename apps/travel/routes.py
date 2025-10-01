@@ -371,8 +371,6 @@ def edit_travel():
 
             
             if data.get('valor_total', 0.0) is not None and data.get('valor_total', 0.6) != "":
-                
-                
 
                 try:
                     valor_atual_diaria = db.session.query(Parametros.valor_diaria).first()[0]
