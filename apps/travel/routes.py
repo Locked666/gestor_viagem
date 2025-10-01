@@ -326,10 +326,8 @@ def edit_travel():
             info_tec_in_travel.data_fim_convert = info_tec_in_travel.data_fim.strftime("%Y-%m-%dT%H:%M") if info_tec_in_travel.data_fim else travel.data_fim_convert_iso
             info_tec_in_travel.n_diaria = info_tec_in_travel.n_diaria if info_tec_in_travel.n_diaria else calcular_diarias(travel.data_inicio, travel.data_fim)
             # info_tec_in_travel.v_diaria_convert = locale.currency(0, grouping=True)
-            # try:
-            #     info_tec_in_travel.v_diaria_convert = locale.currency(info_tec_in_travel.v_diaria, grouping=True) if info_tec_in_travel.v_diaria else locale.currency((float(valor_atual_diaria)*float(calcular_diarias(travel.data_inicio, travel.data_fim))), grouping=True)
-            # except:
-            #     info_tec_in_travel.v_diaria_convert = locale.currency(0, grouping=True)
+            info_tec_in_travel.v_diaria_convert = locale.currency(info_tec_in_travel.v_diaria, grouping=True) if info_tec_in_travel.v_diaria else locale.currency((float(valor_atual_diaria)*float(calcular_diarias(travel.data_inicio, travel.data_fim))), grouping=True)
+            
                     
             
             
