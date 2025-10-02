@@ -279,7 +279,18 @@ function setActionForButton() {
             .catch(() => alert("Erro na conexão com o servidor."));
         }
       } else if (currentAction === "assign") {
-        window.location.href = `/travel/assign?idTravel=${travelId}`;
+        // Abrir modal de atribuição de viagem
+        const assignModal = document.getElementById("assignTechnicalModal");
+        if (assignModal) {
+          // Preencher o campo hidden com o id da viagem
+          const travelIdInput = assignModal.querySelector("#assign-travel-id");
+          if (travelIdInput) {
+            travelIdInput.value = travelId;
+          }
+          // Abrir o modal usando Bootstrap
+          const modalInstance = new bootstrap.Modal(assignModal);
+          modalInstance.show();
+        }
       }
     });
   });

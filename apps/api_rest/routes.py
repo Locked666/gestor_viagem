@@ -329,8 +329,6 @@ def get_events_travel():
     except Exception as e: 
         raise InvalidUsage(message=f"Ocorreu um erro ao executar a consulta dos eventos {e}", status_code=500)    
     
-    
-    
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -426,4 +424,26 @@ def get_documento_info(documento_id):
         'tipo': documento.tipo,
         'extensao': extensao
     })
-          
+
+
+
+@blueprint.route('/users/technicians', methods=['POST', 'PUT', 'GET'])
+@login_required          
+
+def get_technicians():
+    """Retorna a lista de técnicos cadastrados"""
+    if request.method == 'GET':
+        try:
+            users = Users.query.filter_by(active=True, diaria = True).all()
+            return jsonify({
+                'success': True,
+                'message': 'Técnicos encontrados',
+                'data': [
+                    {
+                        'id': user.id,
+                        'username': user.username,
+                    } for user in users
+                ]
+            }), 200
+        except Exception as e:
+            raise InvalidUsage(f'Erro ao buscar técnicos: {str(e)}', status_code=500)

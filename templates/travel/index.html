@@ -406,7 +406,8 @@ message %}
     aria-labelledby="userModalLabel"
     aria-hidden="true"
   ></div>
-  {% include "includes/footer.html" %}
+  {% include "includes/footer.html" %} {% if current_user.admin %} {% include
+  "travel/modal/assign-technical.html" %} {% endif %}
 </div>
 
 {% block javascripts %}

@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const tabelaTecnicos = document.getElementById("tabelaTecnicos");
   const addBntSave = document.getElementById("bnt-salvar-principal");
 
-  let tecnicosAdicionados = [];
+  window.tecnicosAdicionados = [];
 
   autoComplete("#entidade", "#entidade-id", "/api/v1/entidade");
 
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
       envia_email: checkEnviaEmail,
       data_retorno: dataRetorno,
     };
-    console.log("Payload enviado:", payloadData);
+    // console.log("Payload enviado:", payloadData);
     const sendDataPost = await postJSON("/travel/add", payloadData);
 
     if (sendDataPost.success) {

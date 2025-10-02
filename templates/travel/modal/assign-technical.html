@@ -1,0 +1,161 @@
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<div
+  class="modal fade"
+  id="assignTechnicalModal"
+  tabindex="-1"
+  aria-labelledby="assignTechnicalModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="assignTechnicalModalLabel">
+          Atribuir Técnicos
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6 justify-content-center">
+            <h5>Adicionar Técnicos</h5>
+            <input type="hidden" id="assign-travel-id" value="" />
+            <form id="tecnicoUserForm">
+              <div class="mb-3">
+                <label for="tecnicoUser" class="form-label">Técnico *</label>
+                <select
+                  class="form-select"
+                  id="tecnicoUser"
+                  name="tecnicoUser"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Selecione um Técnico
+                  </option>
+                  <!-- Técnicos serão inseridos via JavaScript -->
+                </select>
+              </div>
+              <div class="d-flex justify-content-start mb-2">
+                <button
+                  type="button"
+                  id="addTecnicoBtn"
+                  class="btn btn-success me-2"
+                >
+                  <i class="material-symbols-rounded">add_circle</i>
+                </button>
+                <button type="button" id="addTodosBtn" class="btn btn-primary">
+                  <i class="material-symbols-rounded">group_add</i>
+                </button>
+                <button
+                  type="button"
+                  id="removerTodosBtn"
+                  class="btn btn-outline-danger ms-2"
+                >
+                  <i class="material-symbols-rounded">delete_forever</i>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-6">
+            <h5>Técnicos Adicionados</h5>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th
+                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      >
+                        Nome
+                      </th>
+                      <th
+                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      >
+                        Ações
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabelaTecnicos">
+                    <tr>
+                      <td colspan="2" class="text-center">
+                        Nenhum técnico adicionado
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="saveTecnicosBtn">
+          Salvar.
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block javascripts %}
+
+<script
+  type="module"
+  src="{{ url_for('static', filename='/assets/js/application/useTravel.js') }}"
+></script>
+<script>
+  async function fetchTechnicians() {
+    try {
+      const response = await fetch(
+        `/api/v1/users/technicians?idTravel=${
+          document.getElementById("assign-travel-id").value
+        }`
+      );
+      if (!response.ok) {
+        throw new Error("Erro ao buscar técnicos: " + response.statusText);
+      }
+      const technicians = await response.json();
+      return technicians;
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+      return [];
+    }
+  }
+
+  async function sendAlteredTechnicians(tech) {
+    const travel = document.getElementById("assign-travel-id").value;
+    const newTechnicians = window.tecnicosAdicionados.map((t) => t.id);
+    // Obtenha o ID da viagem de algum lugar, talvez de um campo oculto ou variável global
+    console.log(travel);
+    console.log(newTechnicians);
+  }
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const technicians = await fetchTechnicians();
+    const tecnicoUserSelect = document.getElementById("tecnicoUser");
+
+    technicians.data.map((tech) => {
+      const option = document.createElement("option");
+      option.value = tech.id;
+      option.textContent = tech.username;
+      tecnicoUserSelect.appendChild(option);
+    });
+
+    document
+      .getElementById("saveTecnicosBtn")
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
+        await sendAlteredTechnicians();
+      });
+  });
+</script>
+
+{% endblock javascripts %} {% endblock content%}
