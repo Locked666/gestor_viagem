@@ -111,13 +111,12 @@
   type="module"
   src="{{ url_for('static', filename='/assets/js/application/useTravel.js') }}"
 ></script>
+
 <script>
-  async function fetchTechnicians() {
+  async function fetchTechnicians(travel) {
     try {
       const response = await fetch(
-        `/api/v1/users/technicians?idTravel=${
-          document.getElementById("assign-travel-id").value
-        }`
+        `/api/v1/users/technicians?idTravel=${travel}`
       );
       if (!response.ok) {
         throw new Error("Erro ao buscar técnicos: " + response.statusText);
@@ -134,12 +133,39 @@
     const travel = document.getElementById("assign-travel-id").value;
     const newTechnicians = window.tecnicosAdicionados.map((t) => t.id);
     // Obtenha o ID da viagem de algum lugar, talvez de um campo oculto ou variável global
-    console.log(travel);
-    console.log(newTechnicians);
+
+    const payLoadNewTech = {
+      idTravel: travel,
+      newTechnicians: newTechnicians,
+    };
+
+    const response = await fetch("/api/v1/users/technicians", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payLoadNewTech),
+    })
+      .then((res) => res.json())
+      .catch((error) => {
+        console.error("Erro na requisição:", error);
+        throw error;
+      });
+    if (response.success) {
+      // Fechar o modal após o envio bem-sucedido
+      alert("Técnicos salvos com sucesso!");
+      windows.local.reload();
+
+      // Atualizar a lista de técnicos na interface principal
+    } else {
+      console.error("Erro ao salvar técnicos:", response.message);
+      alert("Erro ao salvar técnicos: " + response.message);
+    }
   }
 
   document.addEventListener("DOMContentLoaded", async () => {
-    const technicians = await fetchTechnicians();
+    const idTravel = document.getElementById("assign-travel-id").value;
+    const technicians = await fetchTechnicians(idTravel);
     const tecnicoUserSelect = document.getElementById("tecnicoUser");
 
     technicians.data.map((tech) => {

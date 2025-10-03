@@ -447,3 +447,34 @@ def get_technicians():
             }), 200
         except Exception as e:
             raise InvalidUsage(f'Erro ao buscar técnicos: {str(e)}', status_code=500)
+    
+    elif request.method == 'POST':
+        data = request.get_json()
+        id_travel = data.get('idTravel', None)
+        tecnicos =  data.get('newTechnicians', [])
+        
+        if not id_travel:
+            raise InvalidUsage(message='ID da viagem é obrigatório', status_code=400)
+        
+        if len(tecnicos) == 0:
+            raise InvalidUsage(message='Nenhum técnico selecionado', status_code=400)
+        
+        
+        try:
+            for tec in tecnicos:
+                existing_entry = TecnicosViagens.query.filter_by(viagem=id_travel, tecnico=tec).first()
+                if not existing_entry:
+                    novo_tecnico = TecnicosViagens(
+                        viagem = id_travel,
+                        tecnico = Users.query.get(tec).id,
+                        atribuito = False,
+                        
+                    )
+                    db.session.add(novo_tecnico)
+                    db.session.commit()
+            return jsonify({
+                'success': True,
+                'message': 'Técnicos da viagem encontrados',
+            }), 200
+        except Exception as e:
+            raise InvalidUsage(f'Erro ao buscar técnicos da viagem: {str(e)}', status_code=500)    
