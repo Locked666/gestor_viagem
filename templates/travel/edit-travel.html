@@ -221,7 +221,7 @@ block content %}
               </div>
 
               {% if current_user.admin %}
-              <div class = "col-md-4">
+              <div class = "col-md-4 d-flex">
                 <div class="mb-3">
                   <label for="tecnicoUser" class="form-label">Técnico *</label>
                   <select
@@ -232,10 +232,15 @@ block content %}
                   >
                     <option value="" selected disabled>Selecione um Técnico</option>
                     {% for tecnico in tecnicos %}
-                    <option value="{{ tecnico.tecnico }}">{{ tecnico.username }}</option>
+                      <option value="{{ tecnico.tecnico }}">{{ tecnico.username }}</option>
                     {% endfor %}
                   </select>
+                  <button type="button" id="addTodosBtn" class="btn btn-primary">
+                    <i class="material-symbols-rounded">group_add</i>
+                  </button>
                 </div>
+              </div>
+              <div class="col-md-4 d-flex align-items-end">
               </div>
               {% endif %}
 

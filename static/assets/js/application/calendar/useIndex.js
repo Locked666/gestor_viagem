@@ -258,6 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth", // mês por padrão
     themeSystem: "bootstrap5", // usa Bootstrap
+    timeZone: "local",
     locale: "pt-br", // localização em português
 
     headerToolbar: {
