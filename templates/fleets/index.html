@@ -1,0 +1,48 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Map {% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1>Frotas</h1>
+                        
+        </div>
+        <div class="card-body">
+
+            <div class="mb-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <input type="text" id="filtro-nome" class="form-control" placeholder="Nome">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="filtro-placa" class="form-control" placeholder="Placa">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="filtro-marca" class="form-control" placeholder="Marca">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="filtro-modelo" class="form-control" placeholder="Modelo">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-secondary" id="btn-limpar-filtros">Limpar Filtros</button>
+                        <button type="button" class="btn btn-primary" id="btn-filtrar">Filtrar</button>
+                        <a href="{% url 'fleets:add_vehicle' %}" class="btn btn-success">Adicionar Veículo</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    </div>
+</div>
+
+
+
+{% endblock content%}
