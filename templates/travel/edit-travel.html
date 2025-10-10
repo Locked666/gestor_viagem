@@ -221,13 +221,13 @@ block content %}
               </div>
 
               {% if current_user.admin %}
-              <div class = "col-md-4 d-flex">
-                <div class="mb-3">
-                  <label for="tecnicoUser" class="form-label">Técnico *</label>
+                <div class="col-md-4">
+                <label for="tecnicoUserSelectAdmin" class="form-label">Técnico *</label>
+                <div class="d-flex gap-2">
                   <select
                     class="form-select"
-                    id="tecnicoUser"
-                    name="tecnicoUser"
+                    id="tecnicoUserSelectAdmin"
+                    name="tecnicoUserSelectAdmin"
                     required
                   >
                     <option value="" selected disabled>Selecione um Técnico</option>
@@ -235,13 +235,12 @@ block content %}
                       <option value="{{ tecnico.tecnico }}">{{ tecnico.username }}</option>
                     {% endfor %}
                   </select>
-                  <button type="button" id="addTodosBtn" class="btn btn-primary">
+                  <button type="button" id="assingTechForTravel" class="btn btn-primary">
                     <i class="material-symbols-rounded">group_add</i>
                   </button>
                 </div>
               </div>
-              <div class="col-md-4 d-flex align-items-end">
-              </div>
+
               {% endif %}
 
               
@@ -997,7 +996,9 @@ block content %}
     {% include  "includes/viewer-file.html"%}
 
 
-    {% include "includes/footer.html" %}
+    {% include "includes/footer.html" %} 
+    {% if current_user.admin %} {% include
+  "travel/modal/assign-technical.html" %} {% endif %}
   </div>
   {% block javascripts %}
 

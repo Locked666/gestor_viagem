@@ -147,7 +147,7 @@ async function editTravel() {
 }
 
 async function sendDataTravel() {
-  const tecnicoUserEl = document.getElementById("tecnicoUser");
+  const tecnicoUserEl = document.getElementById("tecnicoUserSelectAdmin");
   const statusAtribuido = document.getElementById("statusAtribuido");
 
   if (document.getElementById("quantidadeDiarias").value.trim() === "") {
@@ -184,6 +184,8 @@ async function sendDataTravel() {
       <i class="material-symbols-rounded text-success me-2" title="Dados foram atribuitos">offline_pin</i>
       <span class="text-success ml-4"><strong>Atribuído</strong></Span>
       `;
+    } else {
+      funcHideLoader();
     }
   } catch (error) {
     console.log(error);
@@ -516,6 +518,20 @@ async function excluirMovimentoFinance(idMovimento) {
   } catch (error) {}
 }
 
+function openModalAssingTech() {
+  const assignModal = document.getElementById("assignTechnicalModal");
+  if (assignModal) {
+    // Preencher o campo hidden com o id da viagem
+    const travelIdInput = assignModal.querySelector("#assign-travel-id");
+    if (travelIdInput) {
+      travelIdInput.value = viagemId;
+    }
+    // Abrir o modal usando Bootstrap
+    const modalInstance = new bootstrap.Modal(assignModal);
+    modalInstance.show();
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const cardInfoTravel = document.querySelector(".card-info-travel");
   document
@@ -591,5 +607,10 @@ document.addEventListener("DOMContentLoaded", function () {
       } else if (target.classList.contains("excluir-movimento")) {
         excluirMovimentoFinance(idMovimento);
       }
+    });
+  document
+    .getElementById("assingTechForTravel")
+    .addEventListener("click", function (event) {
+      openModalAssingTech();
     });
 });

@@ -90,6 +90,9 @@ async function openTravelViewModal(travelId) {
               <div class="mb-3"><strong>Tipo de Viagem:</strong> ${
                 travel.tipo_viagem || "-"
               }</div>
+              <div class="mb-3"><strong>Loca:</strong> ${
+                travel.local_viagem || "-"
+              }</div>
               <div class="mb-3"><strong>Status:</strong> ${
                 travel.status || "-"
               }</div>

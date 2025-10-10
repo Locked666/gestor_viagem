@@ -63,6 +63,7 @@ def get_viagens(integer):
             "status": travel.status,
             "descricao": travel.descricao,
             "data_inicio": travel.data_inicio.strftime('%d/%m/%Y %H:%M') if travel.data_inicio else None,
+            "local_viagem": travel.local_viagem,
             
             "data_fim": travel.data_fim.strftime('%d/%m/%Y %H:%M') if travel.data_fim else None,
             "entidade_destino": (
@@ -307,7 +308,7 @@ def get_events_travel():
                 "id": travel.id,
                 "title": travel.descricao, 
                 "start": travel.data_inicio.strftime('%Y-%m-%dT%H:%M') if travel.data_inicio else None,
-                "end": travel.data_fim.strftime('%Y-%m-%dT%H:%M') if travel.data_fim else None,
+                "end": travel.data_fim.strftime('%Y-%m-%d') if travel.data_fim else None,
                 "backgroundColor": ""
             }
             

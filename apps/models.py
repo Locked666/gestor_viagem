@@ -43,6 +43,7 @@ class Parametros(db.Model):
     
     valor_diaria = db.Column(db.Float, comment = "Valor padrão da diária")
     supervisor =  db.Column(db.String(100), comment= "supervisor")
+    n_script = db.Column(db.Integer, default=0, comment="Número do último script executado")
     
     
     

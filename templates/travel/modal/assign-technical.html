@@ -114,6 +114,7 @@
 
 <script>
   async function fetchTechnicians(travel) {
+    console.log("Init fetch for tech");
     try {
       const response = await fetch(
         `/api/v1/users/technicians?idTravel=${travel}`
@@ -122,6 +123,7 @@
         throw new Error("Erro ao buscar técnicos: " + response.statusText);
       }
       const technicians = await response.json();
+
       return technicians;
     } catch (error) {
       console.error("Erro na requisição:", error);

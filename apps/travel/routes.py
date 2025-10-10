@@ -365,7 +365,7 @@ def edit_travel():
             tecnico_travel = TecnicosViagens.query.filter_by(viagem=id_viagem, tecnico=tecnico_of_travel).first()
 
             if tecnico_travel == None:
-                raise InvalidUsage(message='Técnico não encontrado para esta viagem', status_code=404)
+                raise InvalidUsage(message='Técnico não encontrado para esta viagem', status_code=403)
             
             
 
