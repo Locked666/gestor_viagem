@@ -57,6 +57,6 @@ if DEBUG:
 
 # socketio = SocketIO(app, cors_allowed_origins="*")  # Evita problemas com CORS
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
     # socketio.run(app, host='0.0.0.0', port=5500, debug=True)
     
