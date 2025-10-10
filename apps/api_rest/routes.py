@@ -11,7 +11,7 @@ from apps.utils.fuctions_for_date import convert_to_datetime
 from werkzeug.utils import secure_filename
 
 from werkzeug.exceptions import BadRequest
-from datetime import datetime
+from datetime import datetime, timedelta
 import os 
 
 import locale
@@ -307,10 +307,20 @@ def get_events_travel():
             n_events = {
                 "id": travel.id,
                 "title": travel.descricao, 
-                "start": travel.data_inicio.strftime('%Y-%m-%dT%H:%M') if travel.data_inicio else None,
-                "end": travel.data_fim.strftime('%Y-%m-%d') if travel.data_fim else None,
+                "start": "",
+                "end": "",
                 "backgroundColor": ""
+                # "start": travel.data_inicio.strftime('%Y-%m-%dT%H:%M') if travel.data_inicio else None,
+                # "end": travel.data_fim.strftime('%Y-%m-%d') if travel.data_fim else None,
             }
+            
+            if travel.dia_todo:
+                n_events['start'] = travel.data_inicio.strftime('%Y-%m-%d') if travel.data_inicio else None
+                n_events['end'] = (travel.data_fim + timedelta(days=1)).strftime('%Y-%m-%d') if travel.data_fim else None
+            else:
+                n_events['start'] = travel.data_inicio.strftime('%Y-%m-%dT%H:%M') if travel.data_inicio else None
+                n_events['end'] = travel.data_fim.strftime('%Y-%m-%dT%H:%M') if travel.data_fim else None
+            
             
             match travel.status:
                 case "Agendada": 

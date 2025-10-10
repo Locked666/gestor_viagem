@@ -241,7 +241,7 @@ function setActionForButton() {
               if (response.success) {
                 setInterval(() => {
                   window.location.href = "/travel";
-                }, 2000);
+                }, 1000);
               } else {
                 alert(response.message || "Erro ao excluir a viagem.");
               }

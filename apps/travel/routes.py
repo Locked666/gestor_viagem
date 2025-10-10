@@ -163,7 +163,8 @@ def add_travel():
         date_start = request.args.get('date_start', None)
         date_end = request.args.get('date_end', date_start)
         
-        print(f'\n\n{date_start}\n\n')
+        
+        # print(f'\n\n{date_start}\n\n')
         
         if date_start is not None and date_start != "":
             # Converte 'YY-mm-dd' para 'yyyy-MM-ddThh:mm' com hora padrão 07:30
@@ -199,6 +200,7 @@ def add_travel():
                 entidade_destino = data.get('entidade_id', 0),
                 data_inicio = data.get('data_saida', None),
                 data_fim = data.get('data_retorno', None),
+                dia_todo = True if data.get('dia_todo', False) else False,
                 tipo_viagem = data.get('tipo_viagem', None),
                 local_viagem = data.get('local_viagem', None),
                 descricao = data.get('descricao', ""),
@@ -391,6 +393,9 @@ def edit_travel():
             
             tecnico_travel.data_inicio = case_json(data, 'data_saida', tecnico_travel.data_inicio, date_iso=True)
             tecnico_travel.data_fim = case_json(data, 'data_retorno', tecnico_travel.data_fim, date_iso=True)
+            # tecnico_travel.dia_todo = case_json(data, 'dia_todo', tecnico_travel.dia_todo)
+            
+            tecnico_travel.dia_todo = True if data.get('dia_todo', False) else False
             tecnico_travel.n_diaria = case_json(data, 'quantidade_diarias', tecnico_travel.n_diaria)
             
             

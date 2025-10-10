@@ -9,6 +9,7 @@ class RegistroViagens(db.Model):
     entidade_destino = db.Column(db.Integer,db.ForeignKey('entidades.id') ,nullable=False)
     data_inicio = db.Column(db.DateTime)
     data_fim = db.Column(db.DateTime)
+    dia_todo = db.Column(db.Boolean, default=True, comment='Se a viagem é de dia todo')
     status = db.Column(db.String(100), default='Agendada', comment='Status da viagem (Agendada, Concluida, Cancelada, Parcial)')
     tipo_viagem = db.Column(db.String(100))
     local_viagem = db.Column(db.String(100), comment='Local da viagem')

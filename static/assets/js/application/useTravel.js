@@ -156,6 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const localViagem = document.getElementById("localViagem").value;
     const descricaoViagem = document.getElementById("descricao").value;
     const checkEnviaEmail = document.getElementById("checkEnviaEmail").checked;
+    const checkAllDay = document.getElementById("checkAllDay").checked;
     const tabTecnicosSelect = document.getElementById("tecnicoUser-tab");
 
     // Validação da Entidade
@@ -226,8 +227,9 @@ document.addEventListener("DOMContentLoaded", function () {
       descricao: descricaoViagem,
       envia_email: checkEnviaEmail,
       data_retorno: dataRetorno,
+      dia_todo: checkAllDay,
     };
-    // console.log("Payload enviado:", payloadData);
+    console.log("Payload enviado:", payloadData);
     const sendDataPost = await postJSON("/travel/add", payloadData);
 
     if (sendDataPost.success) {

@@ -23,7 +23,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6 justify-content-center">
-            <h5>Adicionar Técnicos</h5>
+            <!--<h5>Adicionar Técnicos</h5>-->
             <input type="hidden" id="assign-travel-id" value="" />
             <form id="tecnicoUserForm">
               <div class="mb-3">
@@ -156,7 +156,7 @@
     if (response.success) {
       // Fechar o modal após o envio bem-sucedido
       alert("Técnicos salvos com sucesso!");
-      windows.local.reload();
+      local.reload();
 
       // Atualizar a lista de técnicos na interface principal
     } else {
