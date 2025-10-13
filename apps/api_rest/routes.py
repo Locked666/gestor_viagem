@@ -490,3 +490,12 @@ def get_technicians():
             }), 200
         except Exception as e:
             raise InvalidUsage(f'Erro ao buscar técnicos da viagem: {str(e)}', status_code=500)    
+        
+        
+        
+#  integracao com sistema de notificao 
+
+
+@blueprint.route('/notify/CheckStatus', methods = ['GET'])
+def notify_check_status():
+    return jsonify({'status': 'ok', 'message': 'API de Notificações está ativa'}), 200        
