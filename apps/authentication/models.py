@@ -26,6 +26,8 @@ class Users(db.Model, UserMixin):
     admin = db.Column(db.Boolean, default=False)
     diaria = db.Column(db.Boolean, default=True)
     active = db.Column(db.Boolean, default=True)
+    supply_request = db.Column(db.Boolean, default=True, comment = "Permissão para emitir requisição de abastecimento")
+    
     first_acess = db.Column(db.Boolean, default = True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 

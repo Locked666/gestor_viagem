@@ -2,13 +2,24 @@ import os
 import sqlite3
 import re
 
-DB_PATH = os.path.abspath(os.path.join("..", "apps", "db.sqlite3"))
-SCRIPTS_DIR = os.path.join(os.path.dirname(__file__), "scripts")
+DB_PATH = os.path.abspath(os.path.join( "apps", "db.sqlite3"))
+# SCRIPTS_DIR = os.path.join(os.path.dirname(__file__), "scripts")
+SCRIPTS_DIR = os.path.abspath(os.path.join("update_db", "scripts"))
 
 def get_current_script_number(conn):
     """Obtém o número do último script executado."""
     cursor = conn.cursor()
-    cursor.execute("SELECT n_script FROM parametros LIMIT 1;")
+    try: 
+        cursor.execute("SELECT n_script FROM parametros LIMIT 1;")
+    except sqlite3.OperationalError as e:
+        if "no such column" in str(e):
+            print("Tabela 'parametros' não existe. Criando tabela...")
+            cursor.execute("ALTER TABLE parametros ADD n_script VARCHAR(10);")
+            cursor.execute("UPDATE parametros SET n_script = '0000' WHERE ID = 1;")
+            conn.commit()
+            
+        print(f"Erro ao acessar a tabela parametros: {e}")
+        return 0    
     row = cursor.fetchone()
     return row[0] if row else 0
 
@@ -26,7 +37,7 @@ def get_pending_scripts(current_n):
             match = re.match(r"(\d+)_.*\.sql", file)
             if match:
                 script_num = int(match.group(1))
-                if script_num > current_n:
+                if int(script_num) > int(current_n):
                     scripts.append((script_num, file))
     return sorted(scripts)
 
