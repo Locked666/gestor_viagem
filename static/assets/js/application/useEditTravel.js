@@ -155,6 +155,22 @@ async function sendDataTravel() {
     return;
   }
 
+  const dataSaida = document.getElementById("dataSaida").value.trim();
+  const dataRetorno = document.getElementById("dataRetorno").value.trim();
+
+  if (dataSaida && dataRetorno) {
+    const dtSaida = new Date(dataSaida);
+    const dtRetorno = new Date(dataRetorno);
+    if (dtRetorno < dtSaida) {
+      execToast(
+        "A data de retorno deve ser maior ou igual à data de saída.",
+        "info"
+      );
+      funcHideLoader();
+      return;
+    }
+  }
+
   const payloadtravel = {
     id_viagem: viagemId,
     data_saida: document.getElementById("dataSaida").value.trim(),

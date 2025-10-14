@@ -81,7 +81,8 @@ def get_competence(month: int, year: int = 2025):
     }
 
 def query_daily_travel(date_start, date_end,db,user):
-   
+    
+  
     try:
         user_tecnico = None
         # Aliases opcionais para facilitar leitura
@@ -113,11 +114,15 @@ def query_daily_travel(date_start, date_end,db,user):
             .filter(
                 tv.atribuito == True,
                 rv.status != 'Cancelada',
+                tv.tecnico == int(user),
                 tv.data_inicio >= date_start,
-                tv.data_fim <= date_end,
-                tv.tecnico == int(user)
+                tv.data_fim <= date_end
             )
         ).all()
+        
+        
+        
+
         
         data_daily = []
         total_value_daily = 0.0
@@ -197,6 +202,7 @@ def get_daily_travels(data):
                                    db, (user if user else current_user.id))
         
         return print_report_daily_user(daily)
+    
     else :  
         daily = query_daily_travel(date_start, 
                                    date_end,
