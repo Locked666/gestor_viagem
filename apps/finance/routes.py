@@ -7,12 +7,6 @@ from apps.finance.services import validade_data_finance, insert_data_finance,del
 from apps.api_rest.services import validade_user_travel
 # Define a localidade para português do Brasil
 
-
-
-
-
-
-
 @blueprint.route('/finance', methods=['GET'])
 @login_required
 def index():
@@ -51,7 +45,7 @@ def add_finance():
     if not travel:
         return jsonify({'success':False,'message':'Viagem não encontrada ou você não tem permissão para adicionar financeiro nesta viagem'})
     
-    print(f"\n\n{data_va}\n\n")
+
     data_insert = insert_data_finance(data_va)
     
     

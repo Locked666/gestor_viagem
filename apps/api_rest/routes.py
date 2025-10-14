@@ -9,6 +9,7 @@ from apps.exceptions.exception import InvalidUsage
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
 from werkzeug.utils import secure_filename
+from flask_socketio import emit
 
 from werkzeug.exceptions import BadRequest
 from datetime import datetime, timedelta
@@ -30,7 +31,6 @@ def get_entidades():
         {"id": e.id, "nome": e.nome}
         for e in resultados
     ])
-
 
 
 ### Travell APIs    
@@ -113,7 +113,25 @@ def delete_travel(integer):
         
         # Deletar os técnicos associados primeiro
         TecnicosViagens.query.filter_by(viagem=int(integer)).delete()
+        expenses = GastosViagens.query.filter_by(viagem=int(integer)).all()
         
+        if expenses:
+            for expense in expenses:
+                if expense.arquivo is not None and expense.arquivo != '':
+                    # Remover o arquivo do sistema de arquivos
+                    try:
+                        file = DocumentosViagens.query.filter_by(id=expense.arquivo).first() 
+                        if os.path.exists(file.arquivo):
+                            os.remove(file.arquivo)
+                            
+                        if file:
+                            db.session.delete(file)
+                            db.session.commit()
+                            
+                    except Exception as e:
+                        raise InvalidUsage(message=f"Erro ao remover o arquivo associado: {e}", status_code=500)
+        GastosViagens.query.filter_by(viagem=int(integer)).delete()            
+
         # Depois deletar a viagem
         db.session.delete(travel)
         db.session.commit()
@@ -123,7 +141,7 @@ def delete_travel(integer):
     except Exception as e:
         db.session.rollback()
         raise InvalidUsage(f'Erro ao deletar viagem: {str(e)}', status_code=500)    
-    
+   
     
 @blueprint.route('/travel/cancel/<integer>', methods = ['PUT'])  
 @login_required
@@ -436,7 +454,6 @@ def get_documento_info(documento_id):
         'tipo': documento.tipo,
         'extensao': extensao
     })
-
 
 
 @blueprint.route('/users/technicians', methods=['POST', 'PUT', 'GET'])

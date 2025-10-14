@@ -7,7 +7,8 @@ import os
 from   flask_migrate import Migrate
 from   flask_minify  import Minify
 from   sys import exit
-from flask_socketio import SocketIO
+# from flask_socketio import SocketIO
+from apps.socketio_instance import socketio
 from apps.config import config_dict
 from apps import create_app, db
 
@@ -57,6 +58,6 @@ if DEBUG:
 
 # socketio = SocketIO(app, cors_allowed_origins="*")  # Evita problemas com CORS
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
-    # socketio.run(app, host='0.0.0.0', port=5500, debug=True)
+    # app.run(host='0.0.0.0', port=5000, debug=True)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
     

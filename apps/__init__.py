@@ -7,10 +7,13 @@ import os
 from flask import Flask,jsonify
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+# from flask_socketio import SocketIO
 from importlib import import_module
+from .socketio_instance import socketio 
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+
 
 from apps.exceptions.exception import InvalidUsage
 
@@ -58,7 +61,9 @@ def create_app(config):
     register_extensions(app)
     register_blueprints(app)
     app.register_blueprint(github_blueprint, url_prefix="/login")    
-    app.register_blueprint(google_blueprint, url_prefix="/login") 
+    app.register_blueprint(google_blueprint, url_prefix="/login")
+    socketio.init_app(app)
+    
     
     @app.errorhandler(InvalidUsage)
     

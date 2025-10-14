@@ -108,7 +108,7 @@ def include_data_expense(data):
         db.session.add(new_expense)
         db.session.commit()
         
-        return jsonify({'success': True, 'message': f"Gasto Adicionado com sucesso:{new_expense.id}-{new_expense.descricao} ", "id": new_expense.id})
+        return jsonify({'success': True, 'message': f"Gasto Adicionado com sucesso:{new_expense.id}-{new_expense.descricao}", "id": new_expense.id})
         
     except Exception as e: 
         db.session.rollback()
