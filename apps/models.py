@@ -45,7 +45,19 @@ class Parametros(db.Model):
     supervisor =  db.Column(db.String(100), comment= "supervisor")
     n_script = db.Column(db.Integer, default=0, comment="Número do último script executado")
     
+# class Notify(db.model):
+#     __tablename__ = 'notificacoes'
     
+#     id = db.Column(db.Integer, primary_key = True)
+    
+#     user = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     viagem = db.Column(db.Integer, db.ForeignKey('registro_viagens.id'), nullable=True)
+#     tipo = db.Column(db.String(50), nullable=False, comment= "tipo de notificação, ex: altered, new_travel, canceled")
+#     mensagem = db.Column(db.String(255), nullable=False)
+#     is_read = db.Column(db.Boolean, default=False)
+#     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
+#     user = db.relationship('Users', backref=db.backref('notifications', lazy=True))    
     
 
 #__MODELS__END

@@ -8,6 +8,8 @@ from apps.exceptions.exception import InvalidUsage
 from apps.authentication.models import Users
 from apps.models import Entidades, Parametros
 from apps.finance.models import MovFinanceira
+from apps.socketio_instance import socketio
+from apps.notify import send_notification
 
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime, calcular_diarias
@@ -216,6 +218,23 @@ def add_travel():
             
             db.session.commit()
             tecnicos = data.get('tecnicos', [])
+            tecnicos_nome = []
+            if len(tecnicos) >= 0 :
+                for tecnico in tecnicos:
+                    user_nome = (Users.query.with_entities(Users.username)
+                                        .filter_by(id=int(tecnico))
+                                        .scalar()
+                                        if tecnico else None
+                                    )
+                    if user_nome:
+                        tecnicos_nome.append(user_nome)
+            
+            entidade_nome = (Entidades.query.with_entities(Entidades.nome)
+                                .filter_by(id=int(data.get('entidade_id',0)))
+                                .scalar()
+                                if (data.get('entidade_id',0)) else None
+                            ),
+                        
             if len(tecnicos) == 0 :
                 raise InvalidUsage(message='É necessário informar pelo menos um técnico', status_code=400)
             
@@ -232,6 +251,8 @@ def add_travel():
             if data.get('envia_email', False):
             # Aqui você pode implementar a lógica para enviar o e-mail
                 pass
+            
+            send_notification('new_travel', data, message=f'Uma nova viagem foi agendada - {data.get('descricao', "")}', id_viagem=new_travel.id)
             
             return jsonify({'success': True, 'message': 'Viagem Agendada com sucesso', 'id': new_travel.id}), 200
         
@@ -329,10 +350,7 @@ def edit_travel():
             info_tec_in_travel.n_diaria = info_tec_in_travel.n_diaria if info_tec_in_travel.n_diaria else calcular_diarias(travel.data_inicio, travel.data_fim)
             # info_tec_in_travel.v_diaria_convert = locale.currency(0, grouping=True)
             info_tec_in_travel.v_diaria_convert = locale.currency(info_tec_in_travel.v_diaria, grouping=True) if info_tec_in_travel.v_diaria else locale.currency((float(valor_atual_diaria)*float(calcular_diarias(travel.data_inicio, travel.data_fim))), grouping=True)
-            
-                    
-            
-            
+           
 
         context = {
                 'segment': 'travel',

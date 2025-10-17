@@ -9,8 +9,7 @@ from apps.exceptions.exception import InvalidUsage
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
 from werkzeug.utils import secure_filename
-from flask_socketio import emit
-
+from apps.notify import send_notification
 from werkzeug.exceptions import BadRequest
 from datetime import datetime, timedelta
 import os 
@@ -133,9 +132,21 @@ def delete_travel(integer):
         GastosViagens.query.filter_by(viagem=int(integer)).delete()            
 
         # Depois deletar a viagem
-        db.session.delete(travel)
-        db.session.commit()
         
+        
+        data =  {
+            'entidade_id': travel.entidade_destino,
+            'data_saida': travel.data_inicio,
+            
+            'data_retorno': travel.data_fim,
+            'tecnicos': [tec.tecnico for tec in TecnicosViagens.query.filter_by(viagem=travel.id).all()]
+                        
+        }
+        
+        
+        send_notification('delete_travel',data=data ,message=f'Viagem Deletada', id_viagem=travel.id)
+        db.session.delete(travel)
+        db.session.commit()    
         return jsonify({"success": True,"message": "Viagem deletada com sucesso."}), 200
     
     except Exception as e:
@@ -152,6 +163,17 @@ def cancel_travel(integer):
     try: 
                
         travel = validade_user_travel(integer)
+        
+        data =  {
+            'entidade_id': travel.entidade_destino,
+            'data_saida': travel.data_inicio,
+            
+            'data_retorno': travel.data_fim,
+            'tecnicos': [tec.tecnico for tec in TecnicosViagens.query.filter_by(viagem=travel.id).all()]
+                        
+        }
+        
+        send_notification('cancel_travel',data=data ,message=f'Viagem Cancelada', id_viagem=travel.id)
         
         travel.status = 'Cancelada'
         db.session.commit()
@@ -226,6 +248,9 @@ def edit_travel():
         travel.data_fim = data_fim if data_fim is not None else travel.data_fim
         travel.status = status if status is not None else travel.status
         db.session.commit()
+        
+        
+        
         return jsonify({"success": True, "message": "Viagem atualizada com sucesso."}), 200
     
     except Exception as e:
