@@ -38,6 +38,7 @@ apps/static/assets/node_modules
 apps/static/assets/yarn.lock
 apps/static/assets/.temp
 uploads/
+#download/
 
 node_modules/
 README_bk.md

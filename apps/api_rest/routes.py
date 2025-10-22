@@ -201,6 +201,16 @@ def finish_travel(integer):
         
         db.session.commit()
         
+        data =  {
+            'entidade_id': travel.entidade_destino,
+            'data_saida': travel.data_inicio,
+            
+            'data_retorno': travel.data_fim,
+            'tecnicos': [tec.tecnico for tec in TecnicosViagens.query.filter_by(viagem=travel.id).all()]
+                        
+        }
+        send_notification('finish_travel',data=data ,message=f'A viagem Foi Concluida', id_viagem=travel.id)
+        
         return jsonify({"success": True, "message": "Viagem concluída com sucesso."}), 200
     
     except ValueError as e:
@@ -250,6 +260,15 @@ def edit_travel():
         db.session.commit()
         
         
+        data =  {
+            'entidade_id': travel.entidade_destino,
+            'data_saida': travel.data_inicio,
+            
+            'data_retorno': travel.data_fim,
+            'tecnicos': [tec.tecnico for tec in TecnicosViagens.query.filter_by(viagem=travel.id).all()]
+                        
+        }
+        send_notification('edit_travel',data=data ,message=f'A viagem foi alterada', id_viagem=travel.id)
         
         return jsonify({"success": True, "message": "Viagem atualizada com sucesso."}), 200
     
@@ -541,3 +560,11 @@ def get_technicians():
 @blueprint.route('/notify/CheckStatus', methods = ['GET'])
 def notify_check_status():
     return jsonify({'status': 'ok', 'message': 'API de Notificações está ativa'}), 200        
+
+@blueprint.route('/download/file/<file>', methods = ['GET'])
+def download_file(file):
+    file_for_download = os.path.join('download', file)
+    absolute_path = os.path.abspath('download/')
+    print('\n\n> download_file: file_for_download=',file_for_download,'\n\n')
+    return send_from_directory(absolute_path, file, as_attachment=True)
+    

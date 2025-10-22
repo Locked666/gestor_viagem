@@ -50,7 +50,7 @@ def send_notification(type_notify = None, data: dict | list = None, message: str
         
     elif type_notify == 'delete_travel':
         socketio.emit('new_travel', {
-            'message': message if message else 'Uma viagem foi cancelada.', 
+            'message': message if message else 'Uma viagem foi Deletada.', 
             'id_viagem': id_viagem,
             'entidade_nome': entidade_nome[0],
             'data_saida': data.get('data_saida', None).strftime('%d/%m/%Y %H:%M') if data.get('data_saida', None) else None,
@@ -61,6 +61,25 @@ def send_notification(type_notify = None, data: dict | list = None, message: str
     elif type_notify == 'cancel_travel':
         socketio.emit('new_travel', {
             'message': message if message else 'Uma viagem foi cancelada.', 
+            'id_viagem': id_viagem,
+            'entidade_nome': entidade_nome[0],
+            'data_saida': data.get('data_saida', None).strftime('%d/%m/%Y %H:%M') if data.get('data_saida', None) else None,
+            'data_retorno': data.get('data_retorno', None).strftime('%d/%m/%Y %H:%M') if data.get('data_retorno', None) else None,
+            'tecnicos': tecnicos_nome
+            })    
+        
+    elif type_notify == 'finish_travel':
+        socketio.emit('new_travel', {
+            'message': message if message else 'Uma viagem foi Finalizada.', 
+            'id_viagem': id_viagem,
+            'entidade_nome': entidade_nome[0],
+            'data_saida': data.get('data_saida', None).strftime('%d/%m/%Y %H:%M') if data.get('data_saida', None) else None,
+            'data_retorno': data.get('data_retorno', None).strftime('%d/%m/%Y %H:%M') if data.get('data_retorno', None) else None,
+            'tecnicos': tecnicos_nome
+            })    
+    elif type_notify == 'edit_travel':
+        socketio.emit('new_travel', {
+            'message': message if message else 'Uma viagem foi Editada.', 
             'id_viagem': id_viagem,
             'entidade_nome': entidade_nome[0],
             'data_saida': data.get('data_saida', None).strftime('%d/%m/%Y %H:%M') if data.get('data_saida', None) else None,

@@ -252,7 +252,7 @@ def add_travel():
             # Aqui você pode implementar a lógica para enviar o e-mail
                 pass
             
-            send_notification('new_travel', data, message=f'Uma nova viagem foi agendada - {data.get('descricao', "")}', id_viagem=new_travel.id)
+            send_notification('new_travel', data, message=f'Nova viagem foi agendada - {data.get('descricao', "")}', id_viagem=new_travel.id)
             
             return jsonify({'success': True, 'message': 'Viagem Agendada com sucesso', 'id': new_travel.id}), 200
         
