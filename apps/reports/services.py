@@ -116,7 +116,7 @@ def query_daily_travel(date_start, date_end,db,user):
                 rv.status != 'Cancelada',
                 tv.tecnico == int(user),
                 tv.data_inicio >= date_start,
-                tv.data_fim <= date_end
+                tv.data_fim <= date_end.strftime('%Y-%m-%d 23:59:59')
             )
         ).all()
         
