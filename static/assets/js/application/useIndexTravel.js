@@ -1,5 +1,6 @@
 import { autoComplete } from "./autoComplete.js";
 import { putJSON, deleteJSON, execToast, postJSON } from "./request.js";
+import { openTravelViewModal } from "./utils/useModalViewerTravel.js";
 
 // criar linha na tabela
 async function creatNewLineTravel(travel) {
@@ -153,6 +154,31 @@ async function creatNewLineTravel(travel) {
   `;
 }
 
+async function openModalViewer(travelid) {
+  if (!travelid) {
+    alert("Necessário existir o id");
+  }
+
+  const request = await fetch(
+    `/api/v1/travel/get/${travelid}?calendar=${true}`
+  );
+
+  if (!request.ok || request.status === 404) {
+    alert("Viagem não encontrada");
+
+    setInterval(() => {
+      location.reload();
+    }, 1000);
+  }
+
+  if (!request.ok) throw new Error("Erro ao buscar viagem.");
+
+  const result = await request.json();
+  if (!result.success) throw new Error(result.message || "Erro desconhecido.");
+
+  openTravelViewModal(result.data);
+}
+
 // limpar campos do filtro
 function clearFieldFiltered() {
   document.getElementById("filtroDataInicio").value = "";
@@ -249,7 +275,7 @@ function setActionForButton() {
             .catch(() => alert("Erro na conexão com o servidor."));
         }
       } else if (currentAction === "viewer") {
-        alert("Visualização não implementada.");
+        openModalViewer(travelId);
       } else if (currentAction === "finish") {
         if (confirm("Tem certeza que deseja concluir esta viagem?")) {
           putJSON(`/api/v1/travel/finish/${travelId}`)

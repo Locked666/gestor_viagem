@@ -83,7 +83,7 @@ def index():
         #         .filter(RegistroViagens.ativo == True)
         #     )
         
-        print(f"\n\n\n\n{query}\n\n\n\n")
+        # print(f"\n\n\n\n{query}\n\n\n\n")
 
         # Adiciona filtros conforme necessário
         if filter_date_start:
