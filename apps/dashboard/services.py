@@ -23,6 +23,7 @@ MESES_ABREVIADOS = [
 
 
 def convert_value_in_reais(value, symbol = False):
+    
     try: 
         if value: 
             convert_value = locale.currency(value, grouping=True, symbol= symbol)
@@ -211,3 +212,18 @@ def get_travels_last_12_months(user_id):
         "data": data,
         "tooltips": tooltips
     }
+
+
+# Get statistics for travel edit cards
+def get_statistics_card_edit_travel(travel_id):
+    
+    if not travel_id: 
+        raise InvalidUsage('Travel ID in required', status_code=400)
+        
+        statistics_travel = {}
+    
+    
+    
+    total_travels = db.session.query(
+        
+    )

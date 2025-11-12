@@ -1,9 +1,10 @@
 from apps.dashboard import blueprint
+from apps.exceptions. exception import InvalidUsage
 from flask_login import login_required, current_user, login_user
 from flask import render_template, request, redirect, url_for, jsonify
 from apps.dashboard.services import (get_travel_statistics_user,
                                      get_diaries_last_12_months, 
-                                     get_travels_last_12_months)
+                                     get_travels_last_12_months,get_statistics_card_edit_travel)
 
 
 
@@ -30,4 +31,23 @@ def user_graphic():
     
     
     return jsonify(statistics)
-        
+
+
+@blueprint.route('dashboard/cards/travels', methods=['GET'])
+@login_required
+def get_cards_travels():
+    
+    data = request.get_json()
+    
+    if not data: 
+        raise InvalidUsage('É necessário Conter o json', status_code = 400)
+    
+    if 'travel_id' not in data:
+        raise InvalidUsage('É necessário Conter o id a viagem', status_code = 400)
+    
+    travel_id = data.get('travelId','')
+    
+    if not travel_id:
+        raise InvalidUsage('ID da viagem é obrigatório', status_code=400)
+    
+    statistics = get_statistics_card_edit_travel(travel_id)
