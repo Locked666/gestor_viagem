@@ -54,12 +54,7 @@ def index():
         return render_template('travel/index.html', **context, travels=travels)
     
     if request.method == 'POST':
-        
-        # query = RegistroViagens.query.filter(
-        #     RegistroViagens.ativo == True,
-        #     ~RegistroViagens.status.in_(["Concluída", "Cancelada"])
-        # ).order_by(RegistroViagens.id.desc()).all()
-        
+
         data =  request.get_json()
         
         if not data:
@@ -77,15 +72,7 @@ def index():
         
         # Comece com o filtro base
         query = RegistroViagens.query.filter(RegistroViagens.ativo == True)
-        # query = (
-        #         db.session.query(RegistroViagens,TecnicosViagens)
-        #         .join(RegistroViagens, TecnicosViagens.viagem == RegistroViagens.id)
-        #         .filter(RegistroViagens.ativo == True)
-        #     )
-        
-        # print(f"\n\n\n\n{query}\n\n\n\n")
-
-        # Adiciona filtros conforme necessário
+ 
         if filter_date_start:
             query = query.filter(RegistroViagens.data >= filter_date_start)
             
@@ -98,9 +85,7 @@ def index():
         if filter_description:
             query = query.filter(RegistroViagens.descricao.ilike(f'%{filter_description}%'))
         
-        # if filter_my_travel:
-        #     query = query.filter(TecnicosViagens.tecnico == current_user.id)    
-        
+
         status = []
         
         if filter_status_travel == 'todos':

@@ -33,8 +33,8 @@ def user_graphic():
     return jsonify(statistics)
 
 
-@blueprint.route('dashboard/cards/travels', methods=['GET'])
-@login_required
+@blueprint.route('/cards/travel/edit', methods=['GET'])
+#@login_required
 def get_cards_travels():
     
     data = request.get_json()
@@ -51,3 +51,5 @@ def get_cards_travels():
         raise InvalidUsage('ID da viagem é obrigatório', status_code=400)
     
     statistics = get_statistics_card_edit_travel(travel_id)
+    
+    return jsonify(statistics)
