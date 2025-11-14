@@ -548,8 +548,50 @@ function openModalAssingTech() {
   }
 }
 
+async function getInfoCard() {
+  try {
+    const response = await getJSON(`/dashboard/cards/travel/edit/${viagemId}`);
+    if (response.success) {
+      document.getElementById("total-gasto-viagem").innerText =
+        response.data.total_value_expense;
+      document.getElementById("movimentacao-financeira").innerText =
+        response.data.total_value_financial_movement;
+      document.getElementById("diferenca-gasto-financeiro").innerText =
+        response.data.difference_expense_financial;
+
+      if (Number(response.data.expense_financial_equivalent) > 0) {
+        document.getElementById("equivalencia-gasto-financeiro").innerHTML = `
+      <span class="text-success font-weight-bolder">${response.data.expense_financial_equivalent.toFixed(
+        2
+      )}% </span> Gasto X Financeiro
+
+      `;
+      } else if (Number(response.data.expense_financial_equivalent) === 0) {
+        document.getElementById("equivalencia-gasto-financeiro").innerHTML = `
+      <span class="text-dark font-weight-bolder">${response.data.expense_financial_equivalent.toFixed(
+        2
+      )}% </span> Gasto X Financeiro
+
+      `;
+      } else if (Number(response.data.expense_financial_equivalent) < 0) {
+        document.getElementById("equivalencia-gasto-financeiro").innerHTML = `
+      <span class="text-danger font-weight-bolder">${response.data.expense_financial_equivalent.toFixed(
+        2
+      )}% </span> Gasto X Financeiro
+
+      `;
+      }
+      document.getElementById("total-daily").innerText =
+        response.data.total_value_daily;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const cardInfoTravel = document.querySelector(".card-info-travel");
+
   document
     .getElementById("quantidadeDiarias")
     .addEventListener("change", calcularDiasEDiaria);
@@ -624,6 +666,7 @@ document.addEventListener("DOMContentLoaded", function () {
         excluirMovimentoFinance(idMovimento);
       }
     });
+  getInfoCard();
   document
     .getElementById("assingTechForTravel")
     .addEventListener("click", function (event) {

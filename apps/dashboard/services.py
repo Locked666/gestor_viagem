@@ -228,56 +228,63 @@ def get_statistics_card_edit_travel(travel_id):
     total_value_daily = 0
     total_value_financial_movement = 0
     total_value_expense = 0
+    try:
+        total_daily_travel = TecnicosViagens.query.filter_by(viagem = travel_id, atribuito = True)
 
-    total_daily_travel = TecnicosViagens.query.filter_by(viagem = travel_id, atribuito = True)
-
-    # total de movimentacao financeira na viagem
-    
-    total_financial_movement_travel = MovFinanceira.query.filter_by( viagem = travel_id)
-    
-    total_expense_travel = GastosViagens.query.filter_by(viagem = travel_id)
-    
-    # Verificar se é administrador  
-    if not current_user.admin:
-        total_daily_travel = total_daily_travel.filter(tecnico = current_user.id)
-        total_financial_movement_travel = total_financial_movement_travel.filter(tecnico = current_user.id)
-    
-    
-    # Calculara total da diaria     
-    for data_daily in  total_daily_travel.all():
-        if data_daily.atribuito == True:
-            total_value_daily += data_daily.v_diaria 
-            
-    # Calcular total do movimento financeiro         
-    for data_mf in total_financial_movement_travel.all():
-        if data_mf.tipo == "C":
-            total_value_financial_movement += data_mf.valor
-        else:
-            total_value_financial_movement -= data_mf.valor
-            
-            
-    # Calcularo total de gastos
-    for data_expense in total_expense_travel.all():
-        if data_expense.status == 'Pendente' or data_expense.status == 'Aprovado' or data_expense.status == 'Parcial' :
-            if data_expense.status == 'Parcial':
-                total_value_expense += data_expense.valor_atual
-            else: 
-                total_value_expense += data_expense.valor
+        # total de movimentacao financeira na viagem
+        
+        total_financial_movement_travel = MovFinanceira.query.filter_by( viagem = travel_id)
+        
+        total_expense_travel = GastosViagens.query.filter_by(viagem = travel_id)
+        
+        # Verificar se é administrador  
+        if not current_user.admin:
+            total_daily_travel = total_daily_travel.filter(TecnicosViagens.tecnico == current_user.id)
+            total_financial_movement_travel = total_financial_movement_travel.filter(MovFinanceira.tecnico == current_user.id)
+        
+        
+        # Calculara total da diaria     
+        for data_daily in  total_daily_travel.all():
+            if data_daily.atribuito == True:
+                total_value_daily += data_daily.v_diaria 
                 
-    difference_expense_financial =  (total_value_expense - total_value_financial_movement)
-    #daily_equivalent_travel_previous_month = ((total_travels_current_month - total_travels_previous_month)/ total_travels_previous_month) * 100
-    expense_financial_equivalent = ((difference_expense_financial/total_value_expense)*100)
-    
+        # Calcular total do movimento financeiro         
+        for data_mf in total_financial_movement_travel.all():
+            if data_mf.tipo == "C":
+                total_value_financial_movement += data_mf.valor
+            else:
+                total_value_financial_movement -= data_mf.valor
                 
-                                  
+                
+        # Calcularo total de gastos
+        for data_expense in total_expense_travel.all():
+            if data_expense.status == 'Pendente' or data_expense.status == 'Aprovado' or data_expense.status == 'Parcial' :
+                if data_expense.status == 'Parcial':
+                    total_value_expense += data_expense.valor_atual
+                else: 
+                    total_value_expense += data_expense.valor
+                    
+        difference_expense_financial =  (total_value_financial_movement - total_value_expense)
+        #daily_equivalent_travel_previous_month = ((total_travels_current_month - total_travels_previous_month)/ total_travels_previous_month) * 100
+        
+        try:
+            expense_financial_equivalent = ((difference_expense_financial/total_value_expense)*100)
+        except: 
+            expense_financial_equivalent = 0    
+        
+                    
+                                    
 
-    statistics_travel = {
-        'total_value_daily': convert_value_in_reais(total_value_daily, True),
-        'total_value_expense': convert_value_in_reais(total_expense_travel, True),
-        'total_value_financial_movement': convert_value_in_reais(total_value_financial_movement, True),
-        'difference_expense_financial': convert_value_in_reais(difference_expense_financial, True),
-        'expense_financial_equivalent': convert_value_in_reais(expense_financial_equivalent,True)
-    }
-    
-    return statistics_travel
-   
+        statistics_travel = {
+            'total_value_daily': convert_value_in_reais(total_value_daily, True),
+            'total_value_expense': convert_value_in_reais(total_value_expense, True),
+            'total_value_financial_movement': convert_value_in_reais(total_value_financial_movement, True),
+            'difference_expense_financial': convert_value_in_reais(difference_expense_financial, True),
+            'expense_financial_equivalent': (expense_financial_equivalent)
+        }
+        
+
+        
+        return statistics_travel
+    except Exception as e: 
+        return InvalidUsage(f'Erro a executar função: {e}', status_code=500)
