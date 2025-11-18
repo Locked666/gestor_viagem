@@ -53,6 +53,9 @@ def get_travel_statistics_user(user_id):
     # Primeiro e último dia do mês anterior
     first_day_previous_month = (first_day_current_month - timedelta(days=1)).replace(day=1)
     last_day_previous_month = first_day_current_month - timedelta(days=1)
+    
+    first_day_previous_month = first_day_previous_month.strftime('%Y-%m-%d 00:00:00')
+    last_day_previous_month = last_day_previous_month.strftime('%Y-%m-%d 23:59:59')
 
     # Total de diárias do mês atual
     total_daily_month = db.session.query(
@@ -104,7 +107,9 @@ def get_travel_statistics_user(user_id):
     except:
         daily_equivalent_travel_previous_month = 0
 
-
+    first_day_previous_month = (first_day_current_month - timedelta(days=1)).replace(day=1)
+    last_day_previous_month = first_day_current_month - timedelta(days=1)
+    
     return {
         "user_id": user_id,
         "total_daily_month": convert_value_in_reais(total_daily_month, True),
