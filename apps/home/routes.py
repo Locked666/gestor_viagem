@@ -147,6 +147,7 @@ def profile():
         pass
 
     readonly_fields = Users.readonly_fields
+    field_remove = Users.remove_fields
     full_width_fields = {"bio"}
 
     for column in Users.__table__.columns:
@@ -156,7 +157,9 @@ def profile():
         field_name = column.name
         if field_name in full_width_fields:
             continue
-
+        
+        if field_name in field_remove:
+            continue
         field = getField(column)
         setattr(ProfileForm, field_name, field)
 

@@ -35,6 +35,7 @@ class Users(db.Model, UserMixin):
     oauth_google  = db.Column(db.String(100), nullable=True)
 
     readonly_fields = ["id", "username", "email", "setor", "oauth_github", "oauth_google"]
+    remove_fields = ["admin","password", "active", "first_acess", "created_at", "supply_request", "diaria","oauth_google","oauth_github", "foto"]
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
