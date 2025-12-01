@@ -4,6 +4,13 @@ from flask_login import current_user
 from apps.authentication.models import Users, db
 from apps.exceptions.exception import InvalidUsage
 from apps.reports.services import get_daily_travels
+from datetime import datetime
+
+
+def get_current_month():
+    return datetime.now().month
+
+print(f"\n\n\nCurrent Month: {get_current_month()}\n\n\n")
 
 
 
@@ -19,7 +26,7 @@ def reports_travel():
 
 
 
-        return render_template("relatorios/index_travel.html", current_month = '9', users_daily = users_travel, **context)
+        return render_template("relatorios/index_travel.html", current_month = str(get_current_month()), users_daily = users_travel, **context)
     
     elif request.method == 'POST':
 

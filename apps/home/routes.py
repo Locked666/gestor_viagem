@@ -47,8 +47,8 @@ def index():
         # Lógica para usuários não administradores
         return render_template('dashboard/dashboard-user.html', **context, datenow = datenow, current_month = mes_formatado)
         
-    return render_template('pages/index.html', segment='dashboard', parent='dashboard')
-
+    return render_template('dashboard/dashboard-user.html', **context, datenow = datenow, current_month = mes_formatado)
+        
 @blueprint.route('/tables')
 def tables():
     context = {
