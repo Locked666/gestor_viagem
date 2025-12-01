@@ -218,6 +218,17 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    if (new Date(dataSaida) > new Date(dataRetorno)) {
+      execToast(
+        "A data de saída não pode ser maior que a data de retorno.",
+        "danger",
+        "Erro",
+        "Agora",
+        "error"
+      );
+      return;
+    }
+
     const payloadData = {
       entidade_id: entidadeId,
       tecnicos: tecnicosId,

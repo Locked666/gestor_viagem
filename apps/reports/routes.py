@@ -10,10 +10,6 @@ from datetime import datetime
 def get_current_month():
     return datetime.now().month
 
-print(f"\n\n\nCurrent Month: {get_current_month()}\n\n\n")
-
-
-
 @blueprint.route('/travel', methods = ['GET', 'POST'])
 def reports_travel():
     context= {
@@ -23,8 +19,6 @@ def reports_travel():
 
     if request.method == 'GET':
         users_travel = Users.query.filter(Users.active == True, Users.diaria == True).all()
-
-
 
         return render_template("relatorios/index_travel.html", current_month = str(get_current_month()), users_daily = users_travel, **context)
     

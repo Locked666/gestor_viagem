@@ -16,8 +16,6 @@ const urlAtual = new URL(window.location.href);
 const viagemId = urlAtual.searchParams.get("idTravel");
 const VALOR_DIARIA = 35.0; // Valor fixo da diária
 
-const debugStatus = true;
-
 let modalEditTravel = null;
 const modalEl = document.getElementById("editTravelModal");
 
@@ -548,6 +546,16 @@ function openModalAssingTech() {
   }
 }
 
+async function selectInfoForUser() {
+  const selectUserAdmin = document.querySelector("#tecnicoUserSelectAdmin");
+
+  if (selectUserAdmin.value != "") {
+    const response = await getJSON(
+      `api/v1/get/infoForTravel/tecnical?idTravel=${viagemId}&idTecnical=${selectUserAdmin.value}`
+    );
+  }
+}
+
 async function getInfoCard() {
   try {
     const response = await getJSON(`/dashboard/cards/travel/edit/${viagemId}`);
@@ -592,6 +600,17 @@ async function getInfoCard() {
 document.addEventListener("DOMContentLoaded", function () {
   const cardInfoTravel = document.querySelector(".card-info-travel");
 
+  const selectUserAdmin = document.querySelector("#tecnicoUserSelectAdmin");
+
+  // event alterar  usuário selecionado
+
+  if (selectUserAdmin) {
+    selectUserAdmin.addEventListener("change", async (e) => {
+      e.preventDefault();
+      selectInfoForUser();
+    });
+  }
+
   document
     .getElementById("quantidadeDiarias")
     .addEventListener("change", calcularDiasEDiaria);
@@ -604,6 +623,8 @@ document.addEventListener("DOMContentLoaded", function () {
         await editTravel();
       });
   }
+
+  // event alterar
 
   // event lancar aba principal
   document

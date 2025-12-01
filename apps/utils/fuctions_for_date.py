@@ -45,7 +45,8 @@ def calcular_diarias(data_saida, data_retorno):
 
     # Validação de ordem cronológica
     if data_retorno < data_saida:
-        raise ValueError("A data de retorno não pode ser anterior à data de saída.")
+        # raise ValueError("A data de retorno não pode ser anterior à data de saída.")
+        return 0
 
     # Horários base
     hora_base_entrada = datetime.strptime("07:30", "%H:%M").time()

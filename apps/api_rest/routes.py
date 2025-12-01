@@ -99,6 +99,18 @@ def get_viagens(integer):
     
     except ValueError as e:
         raise InvalidUsage(f'Erro ao buscar viagens: {str(e)}', status_code=500)
+
+
+# Trazer informações da viagem por tecnico
+@blueprint.route('/get/infoForTravel/tecnical/', methods = ['GET'])
+@login_required
+def get_info_for_travel_tecnical():
+# idTravel=<integer>&idTecnical=<integer>
+
+    id_travel = request.args.get('idTravel', None)
+    id_tecnical = request.args.get('idTecnical', None)
+    if not id_travel or not id_tecnical:
+        raise InvalidUsage(message='ID da viagem e do técnico são obrigatórios', status_code=400)
     
     
 @blueprint.route('/travel/delete/<integer>', methods = ['DELETE'])
@@ -501,8 +513,7 @@ def get_documento_info(documento_id):
 
 
 @blueprint.route('/users/technicians', methods=['POST', 'PUT', 'GET'])
-@login_required          
-
+@login_required         
 def get_technicians():
     """Retorna a lista de técnicos cadastrados"""
     if request.method == 'GET':
@@ -555,7 +566,6 @@ def get_technicians():
         
         
 #  integracao com sistema de notificao 
-
 
 @blueprint.route('/notify/CheckStatus', methods = ['GET'])
 def notify_check_status():
