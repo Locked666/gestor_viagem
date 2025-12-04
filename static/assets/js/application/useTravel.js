@@ -226,6 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Agora",
         "error"
       );
+      dataSaida.focus();
       return;
     }
 

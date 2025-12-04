@@ -550,9 +550,21 @@ async function selectInfoForUser() {
   const selectUserAdmin = document.querySelector("#tecnicoUserSelectAdmin");
 
   if (selectUserAdmin.value != "") {
-    const response = await getJSON(
-      `api/v1/get/infoForTravel/tecnical?idTravel=${viagemId}&idTecnical=${selectUserAdmin.value}`
-    );
+    console.log(selectUserAdmin.value);
+    try {
+      const response = await getJSON(
+        `/api/v1/get/infoForTravel/tecnical?idTravel=${viagemId}&idTecnical=${selectUserAdmin.value}`
+      );
+      console.log(response);
+      if (response.success) {
+        document.getElementById("dataSaida").value =
+          response.data.tecnico_viagem.data_inicio;
+        document.getElementById("dataRetorno").value =
+          response.data.tecnico_viagem.data_fim;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

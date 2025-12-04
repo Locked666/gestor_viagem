@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 from apps.authentication.models import Users
 from apps.models import Entidades
 from apps.travel.models import TecnicosViagens, db, GastosViagens, RegistroViagens,DocumentosViagens
+from apps.finance.models import MovFinanceira
 from apps.exceptions.exception import InvalidUsage
 from apps.api_rest.services import validade_user_travel
 from apps.utils.fuctions_for_date import convert_to_datetime
@@ -111,6 +112,54 @@ def get_info_for_travel_tecnical():
     id_tecnical = request.args.get('idTecnical', None)
     if not id_travel or not id_tecnical:
         raise InvalidUsage(message='ID da viagem e do técnico são obrigatórios', status_code=400)
+    
+    # Query informações tecnicos 
+    
+    query_tec_travel = TecnicosViagens.query.filter_by(viagem=id_travel, tecnico=id_tecnical).first()
+    if not query_tec_travel:
+        raise InvalidUsage(message='Técnico não está associado a essa viagem', status_code=404)
+    
+    # query informações Expense
+    query_tec_expense = GastosViagens.query.filter_by(viagem=id_travel, tecnico=id_tecnical, ativo=True).all()
+    # query informações financeiro
+    query_tec_finance = MovFinanceira.query.filter_by(viagem=id_travel, tecnico=id_tecnical).all()
+    
+    return jsonify({
+        'success': True,
+        'message': 'Informações encontradas',
+        'data': {
+            'tecnico_viagem': {
+                'id': query_tec_travel.id,
+                'data_inicio': query_tec_travel.data_inicio.strftime('%Y-%m-%dT%H:%M') if query_tec_travel.data_inicio else None,
+                'data_fim': query_tec_travel.data_fim.strftime('%Y-%m-%dT%H:%M') if query_tec_travel.data_fim else None,
+                'n_diaria': query_tec_travel.n_diaria,
+                'v_diaria': locale.currency(query_tec_travel.v_diaria, grouping=True) if query_tec_travel.v_diaria else locale.currency(0.0, grouping=True),
+                'atribuito': query_tec_travel.atribuito,
+                'n_intranet': query_tec_travel.n_intranet
+            },
+            'despesas': [
+                {
+                    'id': expense.id,
+                    'descricao': expense.descricao,
+                    'valor': locale.currency(expense.valor, grouping=True),
+                    'data': expense.data.strftime('%Y-%m-%dT%H:%M') if expense.data else None,
+                    'status': expense.status
+                } for expense in query_tec_expense
+            ],
+            'financeiro': [
+                {
+                    'id': finance.id,
+                    'descricao': finance.descricao,
+                    'valor': locale.currency(finance.valor, grouping=True),
+                    'data': finance.data.strftime('%Y-%m-%dT%H:%M') if finance.data else None,
+                    'tipo': finance.tipo
+                } for finance in query_tec_finance
+            ]
+        }
+    }), 200
+    
+    
+    
     
     
 @blueprint.route('/travel/delete/<integer>', methods = ['DELETE'])
