@@ -141,9 +141,11 @@ def get_info_for_travel_tecnical():
                 {
                     'id': expense.id,
                     'descricao': expense.descricao,
-                    'valor': locale.currency(expense.valor, grouping=True),
-                    'data': expense.data.strftime('%Y-%m-%dT%H:%M') if expense.data else None,
-                    'status': expense.status
+                    'tipo': expense.tipo_gasto,
+                    'valor': locale.currency(expense.valor, grouping=True,symbol=False),
+                    'data': expense.data.strftime('%d/%m/%Y %H:%M') if expense.data else None,
+                    'status': expense.status,
+                    'document': expense.arquivo
                 } for expense in query_tec_expense
             ],
             'financeiro': [
@@ -151,7 +153,7 @@ def get_info_for_travel_tecnical():
                     'id': finance.id,
                     'descricao': finance.descricao,
                     'valor': locale.currency(finance.valor, grouping=True),
-                    'data': finance.data.strftime('%Y-%m-%dT%H:%M') if finance.data else None,
+                    'data': finance.data.strftime('%d/%m/%Y %H:%M') if finance.data else None,
                     'tipo': finance.tipo
                 } for finance in query_tec_finance
             ]

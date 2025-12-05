@@ -41,7 +41,7 @@ async function deleteLineForTableExpense(idGasto) {
 }
 
 async function totalizerExpenseForTravel() {
-  const tecnicoUserEl = document.getElementById("tecnicoUser");
+  const tecnicoUserEl = document.getElementById("tecnicoUserSelectAdmin");
   const totalGastoTotalizer = document.getElementById("totalGastos");
   const totalGastoEstornoTotalizer =
     document.getElementById("totalGastosEstorno");
@@ -196,7 +196,11 @@ async function sendDataTravel() {
       statusAtribuido.innerHTML = "";
       statusAtribuido.innerHTML = `
       <i class="material-symbols-rounded text-success me-2" title="Dados foram atribuitos">offline_pin</i>
-      <span class="text-success ml-4"><strong>Atribuído</strong></Span>
+      <span class="text-success ml-4"><strong>Atribuído  ${
+        tecnicoUserEl && tecnicoUserEl.value.trim()
+          ? " - " + tecnicoUserEl.options[tecnicoUserEl.selectedIndex].text
+          : ""
+      }</strong></Span>
       `;
     } else {
       funcHideLoader();
@@ -557,10 +561,113 @@ async function selectInfoForUser() {
       );
       console.log(response);
       if (response.success) {
+        //Data inicio
         document.getElementById("dataSaida").value =
           response.data.tecnico_viagem.data_inicio;
+
+        // Data Fim
         document.getElementById("dataRetorno").value =
           response.data.tecnico_viagem.data_fim;
+
+        //  relatório
+        document.getElementById("codigoRelatorio").value =
+          response.data.tecnico_viagem.n_intranet;
+
+        //quantidade duariaris
+        document.getElementById("quantidadeDiarias").value =
+          response.data.tecnico_viagem.n_diaria;
+
+        // valor diárias
+        document.getElementById("valorDiaria").value =
+          response.data.tecnico_viagem.v_diaria;
+        const setAtributo = document.getElementById("statusAtribuido");
+        //document.querySelector("#tecnicoUserSelectAdmin").options[document.querySelector("#tecnicoUserSelectAdmin").selectedIndex].text
+        if (!response.data.tecnico_viagem.atribuito) {
+          setAtributo.innerHTML = `
+          <i class="material-symbols-rounded text-primary me-2" title="Dados Não atribuitos">offline_pin_off</i>
+          <span class="text-primary ml-4"><strong>Não Atribuído - ${
+            selectUserAdmin.options[selectUserAdmin.selectedIndex].text
+          }</strong></Span>
+          `;
+        } else {
+          setAtributo.innerHTML = `
+          <i class="material-symbols-rounded text-success me-2" title="Dados foram atribuitos">offline_pin</i>
+          <span class="text-success ml-4"><strong>Atribuído - ${
+            selectUserAdmin.options[selectUserAdmin.selectedIndex].text
+          }</strong></Span>
+                
+          `;
+        }
+        // add Gasto
+
+        if (response.data.despesas.length > 0) {
+          console.log("tem o data.despesas" + response.data.despesas);
+          response.data.despesas.map((e) => {
+            const tabelaGastos = document.getElementById("tabelaGastos");
+            const novaLinha = tabelaGastos.insertRow();
+            novaLinha.setAttribute("data-gasto-id", e.id);
+            if (tabelaGastos.querySelector('tr td[colspan="5"]')) {
+              tabelaGastos.innerHTML = "";
+            }
+
+            // const vlrGasto = frmdata.get("valorGasto");
+            novaLinha.innerHTML = `
+                <td>${e.id}</td>
+                <td>${e.data}</td>
+                <td>${e.tipo}</td>
+                <td>R$ ${e.valor}</td>
+                <td class="d-flex align-items-center gap-2">
+                  <div class="align-middle text-left text-sm p-0">
+                    <button class="btn btn-sm btn-action visualizar-gasto p-0" title="Visualizar" data-documento-id="{{ expense.documento_id }}">
+                      <span class="material-symbols-rounded">visibility</span>
+                    </button>
+
+                    <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar">
+                      <span class="material-symbols-rounded">edit</span>
+                    </button>
+
+                    <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir">
+                      <span class="material-symbols-rounded">delete</span>
+                    </button>
+
+                    ${
+                      e.document
+                        ? `
+                      <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento" data-documento-id="${e.document}">
+                        <span class="material-symbols-rounded">description</span>
+                      </button>
+                      `
+                        : `<button class="btn btn-sm btn-action add-documento p-0" title="Adicione o Documento">
+                            <span class="material-symbols-rounded">upload_file</span>
+                          </button>
+                        `
+                    }
+                  </div>  
+                </td>
+
+            `;
+            tabelaGastos.appendChild(novaLinha);
+          });
+          totalizerExpenseForTravel();
+        } else {
+          const tabela = document.querySelector("#tabelaGastos");
+          const linhas = tabela.rows; // Obtém todas as linhas da tabela
+
+          // Itera sobre as linhas em ordem inversa para evitar problemas ao remover elementos
+          for (let i = linhas.length - 1; i >= 0; i--) {
+            tabela.deleteRow(i);
+          }
+          // Verifica se ainda restam linhas
+          if (tabela.rows.length === 0) {
+            const lineNew = tabela.insertRow();
+            lineNew.innerHTML = `
+            <td colspan="5" class="text-center">
+              Nenhum gasto cadastrado
+            </td>
+          `;
+          }
+          totalizerExpenseForTravel();
+        }
       }
     } catch (error) {
       console.log(error);
