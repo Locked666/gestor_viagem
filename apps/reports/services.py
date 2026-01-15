@@ -55,7 +55,7 @@ def print_report_daily_user(data):
     pass
 
 
-def get_competence(month: int, year: int = 2025):
+def get_competence(month: int, year: int = datetime.now().year) -> dict:
     # Verifica se o mês está dentro do intervalo válido
     if not 1 <= month <= 12:
         raise ValueError("Mês inválido. Use um número de 1 a 12.")

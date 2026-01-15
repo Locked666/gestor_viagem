@@ -35,6 +35,7 @@ def reports_travel():
             case 'travels':
 
                 return jsonify({'success': True, 'message': 'Utilizado a opção do sistema Travels'})
+            
             case 'daily':
                 return jsonify({'success': True, 'message': 'Retornado relatório de diárias' , 'data' : get_daily_travels(data)}) 
                 # return jsonify({'success': True, 'message': 'Utilizado a opção do sistema daily'})
