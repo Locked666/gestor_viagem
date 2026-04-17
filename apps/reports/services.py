@@ -119,11 +119,7 @@ def query_daily_travel(date_start, date_end,db,user):
                 tv.data_fim <= date_end.strftime('%Y-%m-%d 23:59:59')
             )
         ).all()
-        
-        
-        
 
-        
         data_daily = []
         total_value_daily = 0.0
         total_quantity_daily = 0
@@ -150,7 +146,6 @@ def query_daily_travel(date_start, date_end,db,user):
             total_quantity_daily += 1
             if user_tecnico is None:
                 user_tecnico = q[8] 
-            
 
         return {'user_tecnico': user_tecnico ,
                 'total_quantity_daily': total_quantity_daily, 
@@ -181,9 +176,7 @@ def get_daily_travels(data):
 
     if month == '0' and date_start is None and date_end is None:
         raise InvalidUsage(message=f"Se a competencia for 0 (todos), deve ser enviado o periodo selecionado", status_code=401)
-    
-    
-    
+
     if date_start: 
         date_start = datetime.strptime(date_start,"%Y-%m-%d")
         # date_start = datetime.strftime("%Y-%m-%d")
