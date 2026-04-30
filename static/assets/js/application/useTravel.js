@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
       row.innerHTML = `
           <td>${tecnico.name}</td>
           <td class="align-middle text-centers">
-            <a class="btn btn-link text-dark px-3 mb-0 " data-index="${index}">
+            <a class="btn btn-link app-action-link px-3 mb-0" data-index="${index}">
               <i class="material-symbols-rounded me-2"
               
               >delete</i>

@@ -84,7 +84,7 @@ export function openTravelViewModal(data) {
               }</div>
               <div class="mb-3">
                 <strong>Descrição:</strong><br>
-                <p class="border rounded p-2 bg-light">${
+                <p class="border rounded p-2 app-themed-panel">${
                   travel.descricao || "-"
                 }</p>
               </div>
@@ -96,7 +96,7 @@ export function openTravelViewModal(data) {
             <div class="tab-pane fade" id="tecnicos" role="tabpanel" aria-labelledby="tecnicos-tab">
               <div class="table-responsive">
                 <table class="table table-bordered align-middle">
-                  <thead class="table-light">
+                  <thead class="app-themed-panel">
                     <tr>
                       <th>ID Usuário</th>
                       <th>Nome</th>

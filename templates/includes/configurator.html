@@ -103,12 +103,15 @@
         <h6 class="mb-0">Light / Dark</h6>
         <div class="form-check form-switch ps-0 ms-auto my-auto">
           <input
+            data-theme-switcher
             class="form-check-input mt-1 ms-auto"
             type="checkbox"
             id="dark-version"
-            onclick="darkMode(this)"
           />
         </div>
+      </div>
+      <div class="mt-3 d-flex justify-content-end">
+        {% include "includes/theme-switcher.html" %}
       </div>
       <hr class="horizontal dark my-sm-4" />
       <!--<a

@@ -1,0 +1,432 @@
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --app-bg: #f5f6fa;
+  --app-surface: #ffffff;
+  --app-surface-elevated: #ffffff;
+  --app-surface-muted: #f8f9fb;
+  --app-text: #1f2937;
+  --app-text-strong: #111827;
+  --app-text-muted: #667085;
+  --app-border: #d9dee7;
+  --app-border-strong: #c8ced8;
+  --app-shadow: 0 12px 32px rgba(17, 24, 39, 0.08);
+  --app-input-bg: #ffffff;
+  --app-input-text: #1f2937;
+  --app-input-placeholder: #8a94a6;
+  --app-table-hover: #f0f4f8;
+  --app-focus-ring: rgba(25, 118, 210, 0.28);
+  --app-overlay: rgba(17, 24, 39, 0.55);
+  --app-chart-grid: #e5e7eb;
+  --app-chart-tick: #737373;
+  --app-chart-accent: #2e7d32;
+  --app-calendar-bg: #ffffff;
+  --app-calendar-border: #d9dee7;
+  --app-calendar-muted: #f2f4f7;
+  --app-calendar-today: #ecfdf3;
+  --app-calendar-text: #1f2937;
+  --app-sidebar-bg: #ffffff;
+  --app-sidebar-text: #1f2937;
+  --app-sidebar-muted: #7b8797;
+  --app-sidebar-hover: #eef2f7;
+  --app-sidebar-active-bg: #1f2937;
+  --app-sidebar-active-text: #ffffff;
+  --bs-body-bg: var(--app-bg);
+  --bs-body-color: var(--app-text);
+  --bs-border-color: var(--app-border);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --app-bg: #0f1720;
+  --app-surface: #151f2c;
+  --app-surface-elevated: #1b2635;
+  --app-surface-muted: #111a25;
+  --app-text: #e7edf5;
+  --app-text-strong: #ffffff;
+  --app-text-muted: #a7b2c3;
+  --app-border: #2c394a;
+  --app-border-strong: #3a4a5f;
+  --app-shadow: 0 16px 40px rgba(0, 0, 0, 0.34);
+  --app-input-bg: #111a25;
+  --app-input-text: #edf2f7;
+  --app-input-placeholder: #8fa0b5;
+  --app-table-hover: #1e2b3a;
+  --app-focus-ring: rgba(96, 165, 250, 0.34);
+  --app-overlay: rgba(0, 0, 0, 0.68);
+  --app-chart-grid: #314156;
+  --app-chart-tick: #b8c2d2;
+  --app-chart-accent: #58d178;
+  --app-calendar-bg: #151f2c;
+  --app-calendar-border: #2c394a;
+  --app-calendar-muted: #111a25;
+  --app-calendar-today: #173526;
+  --app-calendar-text: #e7edf5;
+  --app-sidebar-bg: #111a25;
+  --app-sidebar-text: #e7edf5;
+  --app-sidebar-muted: #8fa0b5;
+  --app-sidebar-hover: #1b2a3a;
+  --app-sidebar-active-bg: #2d3748;
+  --app-sidebar-active-text: #ffffff;
+  --bs-body-bg: var(--app-bg);
+  --bs-body-color: var(--app-text);
+  --bs-border-color: var(--app-border);
+}
+
+html,
+body {
+  background: var(--app-bg) !important;
+  color: var(--app-text);
+}
+
+body,
+.main-content,
+.container-fluid,
+.container-xxl,
+.container {
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.card,
+.modal-content,
+.dropdown-menu,
+.fixed-plugin .card,
+.toast,
+.list-group-item {
+  background-color: var(--app-surface) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+  box-shadow: var(--app-shadow);
+}
+
+.card-header,
+.card-footer,
+.modal-header,
+.modal-footer,
+.toast-header,
+.toast-body,
+.tab-content {
+  background-color: transparent !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+.bg-white,
+.bg-gray-100,
+.bg-light,
+.table-light,
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--app-surface-muted) !important;
+  color: var(--app-text) !important;
+}
+
+.sidenav.bg-white,
+.sidenav.bg-transparent,
+.app-sidebar,
+.app-sidebar.bg-white,
+.app-sidebar.bg-transparent,
+.app-sidebar.bg-gradient-dark {
+  background: var(--app-sidebar-bg) !important;
+  border: 1px solid var(--app-border);
+}
+
+.app-sidebar {
+  box-shadow: var(--app-shadow);
+}
+
+.app-sidebar .navbar-brand,
+.app-sidebar .app-sidebar-brand-text,
+.app-sidebar .app-sidebar-link,
+.app-sidebar .app-sidebar-link .material-symbols-rounded,
+.app-sidebar .nav-link:not(.active),
+.app-sidebar .nav-link:not(.active) .material-symbols-rounded {
+  color: var(--app-sidebar-text) !important;
+}
+
+.app-sidebar .app-sidebar-section {
+  color: var(--app-sidebar-muted) !important;
+  opacity: 1 !important;
+}
+
+.app-sidebar .nav-link {
+  border-radius: 0.5rem;
+  margin-inline: 0.5rem;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.app-sidebar .nav-link:not(.active):hover,
+.app-sidebar .nav-link:not(.active):focus {
+  background: var(--app-sidebar-hover) !important;
+  color: var(--app-sidebar-text) !important;
+}
+
+.app-sidebar .nav-link.active,
+.app-sidebar .nav-link.active.bg-gradient-dark {
+  background: var(--app-sidebar-active-bg) !important;
+  color: var(--app-sidebar-active-text) !important;
+  box-shadow: none;
+}
+
+.app-sidebar .nav-link.active .material-symbols-rounded,
+.app-sidebar .nav-link.active .nav-link-text {
+  color: var(--app-sidebar-active-text) !important;
+  opacity: 1 !important;
+}
+
+.app-themed-panel {
+  background-color: var(--app-surface) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+.nav-tabs {
+  border-color: var(--app-border) !important;
+}
+
+.nav-tabs .nav-link {
+  color: var(--app-text-muted) !important;
+  border-color: transparent !important;
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  color: var(--app-text) !important;
+  border-color: var(--app-border) !important;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--app-surface) !important;
+  border-color: var(--app-border) var(--app-border) var(--app-surface) !important;
+  color: var(--app-text-strong) !important;
+}
+
+.app-action-link {
+  color: var(--app-text) !important;
+}
+
+.app-action-link:hover,
+.app-action-link:focus {
+  color: var(--app-text-strong) !important;
+}
+
+.navbar-main,
+.navbar-main.blur {
+  background-color: color-mix(in srgb, var(--app-surface) 88%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--app-border) 80%, transparent);
+  color: var(--app-text) !important;
+}
+
+.sidenav .text-dark,
+.navbar .text-dark,
+.breadcrumb .text-dark,
+.text-body,
+.text-dark,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+p,
+label,
+.form-label,
+.form-check-label,
+.dropdown-item,
+.nav-link:not(.active) {
+  color: var(--app-text) !important;
+}
+
+.text-secondary,
+.text-muted,
+small,
+.breadcrumb-item,
+.card .text-sm,
+.card .text-xs {
+  color: var(--app-text-muted) !important;
+}
+
+.nav-link.active,
+.bg-gradient-dark,
+.bg-gradient-primary,
+.bg-gradient-success,
+.bg-gradient-info,
+.bg-gradient-warning,
+.bg-gradient-danger,
+.alert,
+.badge {
+  color: #fff !important;
+}
+
+.horizontal.dark,
+.horizontal.light,
+hr {
+  background-color: var(--app-border) !important;
+  border-color: var(--app-border) !important;
+}
+
+.form-control,
+.form-select,
+input,
+select,
+textarea,
+.input-group.input-group-outline .form-control,
+.input-group.input-group-outline .form-select {
+  background-color: var(--app-input-bg) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-input-text) !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+input:focus,
+select:focus,
+textarea:focus,
+.btn:focus,
+.nav-link:focus {
+  border-color: var(--app-border-strong) !important;
+  box-shadow: 0 0 0 0.2rem var(--app-focus-ring) !important;
+}
+
+::placeholder,
+.form-control::placeholder {
+  color: var(--app-input-placeholder) !important;
+  opacity: 1;
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--app-text);
+  --bs-table-border-color: var(--app-border);
+  color: var(--app-text) !important;
+}
+
+.table > :not(caption) > * > * {
+  background-color: transparent !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+.table-hover > tbody > tr:hover > * {
+  background-color: var(--app-table-hover) !important;
+}
+
+.modal-backdrop,
+.spm-backdrop {
+  background-color: var(--app-overlay) !important;
+}
+
+.btn-close {
+  filter: var(--app-close-filter, none);
+}
+
+:root[data-theme="dark"] {
+  --app-close-filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.loader-overlay {
+  background-color: color-mix(in srgb, var(--app-bg) 82%, transparent) !important;
+}
+
+.fixed-plugin-button,
+.theme-switcher-button {
+  background: var(--app-surface) !important;
+  border: 1px solid var(--app-border);
+  color: var(--app-text) !important;
+  box-shadow: var(--app-shadow);
+}
+
+.theme-switcher-button {
+  align-items: center;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+}
+
+.theme-switcher-button .material-symbols-rounded {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.fc {
+  color: var(--app-calendar-text) !important;
+}
+
+.fc .fc-scrollgrid,
+.fc .fc-scrollgrid-section > *,
+.fc .fc-daygrid-day,
+.fc .fc-timegrid-slot,
+.fc-theme-standard td,
+.fc-theme-standard th {
+  background: var(--app-calendar-bg) !important;
+  border-color: var(--app-calendar-border) !important;
+  color: var(--app-calendar-text) !important;
+}
+
+.fc .fc-col-header-cell,
+.fc .fc-list-day-cushion,
+.fc .fc-button {
+  background: var(--app-calendar-muted) !important;
+  border-color: var(--app-calendar-border) !important;
+  color: var(--app-calendar-text) !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:hover {
+  background: #1f2937 !important;
+  border-color: #1f2937 !important;
+  color: #fff !important;
+}
+
+.fc .fc-day-today {
+  background: var(--app-calendar-today) !important;
+}
+
+.fc .fc-list,
+.fc .fc-list-table td {
+  background: var(--app-calendar-bg) !important;
+  border-color: var(--app-calendar-border) !important;
+}
+
+.selector select,
+.selector .selector-filter,
+.selector ul.selector-chooser,
+fieldset.collapsed h2 {
+  background: var(--app-surface-muted) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+.spm-modal {
+  background: var(--app-surface) !important;
+  color: var(--app-text) !important;
+}
+
+.spm-header,
+.spm-footer {
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+.spm-body {
+  background: var(--app-surface-muted) !important;
+}
+
+.spm-btn {
+  background: var(--app-surface-elevated) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+.spm-btn:hover {
+  background: var(--app-table-hover) !important;
+}

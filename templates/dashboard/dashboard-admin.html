@@ -145,15 +145,49 @@ block content %}
 <script src="{{ url_for('static', filename='assets/js/plugins/chartjs.min.js') }}"></script>
 
 <script>
+  let dailyChart;
+  let travelChart;
+
+  function getThemeToken(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  function getChartTheme() {
+    return {
+      accent: getThemeToken("--app-chart-accent") || "seagreen",
+      grid: getThemeToken("--app-chart-grid") || "silver",
+      tick: getThemeToken("--app-chart-tick") || "gray",
+    };
+  }
+
+  function refreshChartTheme(chart) {
+    if (!chart) return;
+    const theme = getChartTheme();
+    chart.data.datasets.forEach((dataset) => {
+      dataset.pointBackgroundColor = theme.accent;
+      dataset.borderColor = theme.accent;
+    });
+    chart.options.scales.y.grid.color = theme.grid;
+    chart.options.scales.y.ticks.color = theme.tick;
+    chart.options.scales.x.ticks.color = theme.tick;
+    chart.update();
+  }
+
+  window.addEventListener("app:themechange", function () {
+    refreshChartTheme(dailyChart);
+    refreshChartTheme(travelChart);
+  });
+
   async function getValueGraphic() {
     var ctx2 = document.getElementById("chart-line").getContext("2d");
     var ctx3 = document.getElementById("chart-line-travels").getContext("2d");
+    const chartTheme = getChartTheme();
 
     fetch("/dashboard/get/user/graphics")
       .then((res) => res.json())
       .then((result) => {
         // graphic daily value
-        new Chart(ctx2, {
+        dailyChart = new Chart(ctx2, {
           type: "line",
           data: {
             labels: result.graphic_daily.labels,
@@ -163,9 +197,9 @@ block content %}
                 tension: 0,
                 borderWidth: 2,
                 pointRadius: 3,
-                pointBackgroundColor: "#43A047",
+                pointBackgroundColor: chartTheme.accent,
                 pointBorderColor: "transparent",
-                borderColor: "#43A047",
+                borderColor: chartTheme.accent,
                 backgroundColor: "transparent",
                 fill: true,
                 data: result.graphic_daily.data,
@@ -201,11 +235,11 @@ block content %}
                   drawOnChartArea: true,
                   drawTicks: false,
                   borderDash: [4, 4],
-                  color: "#e5e5e5",
+                  color: chartTheme.grid,
                 },
                 ticks: {
                   display: true,
-                  color: "#737373",
+                  color: chartTheme.tick,
                   padding: 10,
                   font: {
                     size: 12,
@@ -223,7 +257,7 @@ block content %}
                 },
                 ticks: {
                   display: true,
-                  color: "#737373",
+                  color: chartTheme.tick,
                   padding: 10,
                   font: {
                     size: 12,
@@ -235,7 +269,7 @@ block content %}
           },
         });
 
-        new Chart(ctx3, {
+        travelChart = new Chart(ctx3, {
           type: "line",
           data: {
             labels: result.graphic_travels.labels,
@@ -245,9 +279,9 @@ block content %}
                 tension: 0,
                 borderWidth: 2,
                 pointRadius: 3,
-                pointBackgroundColor: "#43A047",
+                pointBackgroundColor: chartTheme.accent,
                 pointBorderColor: "transparent",
-                borderColor: "#43A047",
+                borderColor: chartTheme.accent,
                 backgroundColor: "transparent",
                 fill: true,
                 data: result.graphic_travels.data,
@@ -284,12 +318,12 @@ block content %}
                   drawOnChartArea: true,
                   drawTicks: false,
                   borderDash: [4, 4],
-                  color: "#e5e5e5",
+                  color: chartTheme.grid,
                 },
                 ticks: {
                   display: true,
                   padding: 10,
-                  color: "#737373",
+                  color: chartTheme.tick,
                   font: {
                     size: 12,
                     lineHeight: 2,
@@ -306,7 +340,7 @@ block content %}
                 },
                 ticks: {
                   display: true,
-                  color: "#737373",
+                  color: chartTheme.tick,
                   padding: 10,
                   font: {
                     size: 12,

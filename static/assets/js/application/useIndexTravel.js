@@ -100,7 +100,7 @@ async function creatNewLineTravel(travel) {
 
         <!-- Dropdown -->
         <div class="dropdown">
-          <a href="javascript:;" class="text-dark p-0 m-0" id="dropdownMenuButton${
+          <a href="javascript:;" class="app-action-link p-0 m-0" id="dropdownMenuButton${
             travel.id
           }" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-ellipsis-v text-xs m-0 p-0"></i>

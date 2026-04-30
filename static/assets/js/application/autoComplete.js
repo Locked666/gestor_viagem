@@ -39,7 +39,7 @@ export function autoComplete(inputSelector, hiddenInputSelector, apiUrl) {
         // itemDiv.style.position = "absolute";
         itemDiv.style.zIndex = "9999";
         // itemDiv.style.background = "#fff";
-        itemDiv.style.border = "1px solid #ccc";
+        itemDiv.style.border = "1px solid var(--app-border)";
         itemDiv.style.cursor = "pointer";
 
         // const rect = input.getBoundingClientRect();

@@ -3,7 +3,7 @@ block content %}
 <style>
   .form-control.border,
   .form-select.border {
-    border: 1px solid #d3d3d3 !important;
+    border: 1px solid var(--app-border) !important;
     box-shadow: none;
   }
 
@@ -12,8 +12,8 @@ block content %}
   }
 
   .nav-tabs .nav-link.active {
-    background-color: #f8f9fa;
-    border-color: #dee2e6 #dee2e6 #fff;
+    background-color: var(--app-surface-muted);
+    border-color: var(--app-border) var(--app-border) var(--app-surface);
   }
 
   .tab-content {
@@ -348,7 +348,7 @@ block content %}
 
       <!-- Tabs Content -->
       <div
-        class="tab-content bg-white p-4 border-top-0 border rounded-3"
+        class="tab-content app-themed-panel p-4 border-top-0 border rounded-3"
         id="viagemTabsContent"
       >
         <!-- Aba 1: Dados Principais -->

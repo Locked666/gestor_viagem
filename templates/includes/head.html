@@ -16,6 +16,27 @@
 
 <title>{{title}} - Sistema de Controle de Viagens</title>
 
+<script>
+  (function () {
+    var storageKey = "app-theme";
+    var defaultTheme = "light";
+    var theme = defaultTheme;
+
+    try {
+      var storedTheme = window.localStorage.getItem(storageKey);
+      if (storedTheme === "dark" || storedTheme === "light") {
+        theme = storedTheme;
+      }
+    } catch (error) {
+      theme = defaultTheme;
+    }
+
+    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute("data-bs-theme", theme);
+    document.documentElement.style.colorScheme = theme;
+  })();
+</script>
+
 <link
   rel="canonical"
   href="https://app-generator.dev/product/material-dashboard/flask/"
@@ -51,5 +72,9 @@
 <link
   id="pagestyle"
   href="{{ url_for('static', filename='assets/css/material-dashboard.css') }}?v=3.2.0"
+  rel="stylesheet"
+/>
+<link
+  href="{{ url_for('static', filename='assets/css/theme.css') }}"
   rel="stylesheet"
 />

@@ -37,7 +37,7 @@ function toast(
             <i class="fas fa-times text-md text-white ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
         </div>
         <hr class="horizontal dark m-0">
-        <div class="toast-body bg-white text-dark rounded-bottom">
+        <div class="toast-body rounded-bottom">
             ${message}
         </div>
     `;
