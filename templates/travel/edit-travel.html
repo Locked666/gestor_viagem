@@ -1,291 +1,230 @@
-{% extends "layouts/base.html" %} {% block title %}Home{% endblock title %} {%
-block content %}
-<style>
-  .form-control.border,
-  .form-select.border {
-    border: 1px solid var(--app-border) !important;
-    box-shadow: none;
-  }
+{% extends "layouts/base.html" %} {% block title %}Editar Viagem{% endblock
+title %} {% block content %}
 
-  .nav-tabs .nav-link {
-    border-radius: 0.5rem 0.5rem 0 0;
-  }
+<div class="container-fluid py-4 edit-travel-page">
+  <div class="edit-travel-header">
+    <div>
+      <p class="text-sm text-muted mb-1">Gest&atilde;o de viagens</p>
+      <h2 class="mb-1">Editar viagem #{{ travel.id }}</h2>
+      <p class="text-sm text-muted mb-0">
+        Atualize dados operacionais, despesas, movimenta&ccedil;&otilde;es
+        financeiras e transporte.
+      </p>
+    </div>
 
-  .nav-tabs .nav-link.active {
-    background-color: var(--app-surface-muted);
-    border-color: var(--app-border) var(--app-border) var(--app-surface);
-  }
-
-  .tab-content {
-    border-radius: 0 0 0.5rem 0.5rem;
-  }
-</style>
-
-<div class="container-xxl py-2">
-  <div class="ms-3 mb-3">
-      <h3 class="mb-0 h4 font-weight-bolder">Editar Viagens - <strong>#{{travel.id}} </strong></h3>
-      <p class="mb-4">Tela de Edição de viagens.</p>
+    <div class="edit-travel-header__actions">
+      {% if current_user.admin %}
+      <button
+        class="btn btn-primary mb-0"
+        id="btnEditarViagem"
+        data-bs-toggle="modal"
+        data-bs-target="#editTravelModal"
+        type="button"
+      >
+        <i class="material-symbols-rounded">edit</i>
+        Editar viagem
+      </button>
+      {% endif %}
+      <a
+        href="{{ url_for('travel_blueprint.index') }}"
+        class="btn btn-outline-secondary mb-0"
+      >
+        <i class="material-symbols-rounded">arrow_back</i>
+        Voltar
+      </a>
+    </div>
   </div>
 
-  <div class="row">
-    <!-- Cards Estatísticos -->
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card shadow-sm rounded-3">
-        <div
-          class="card-header p-3 d-flex justify-content-between align-items-center"
-        >
-          <div>
-            <p class="text-sm mb-1 text-capitalize">Total de Gastos da Viagem</p>
-            <h4 class="mb-0" id="total-gasto-viagem">R$ 0,00</h4>
-          </div>
-          <div
-            class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
-          >
-            <i class="material-symbols-rounded opacity-10">payment_arrow_down</i>
-          </div>
-        </div>
-        <hr class="dark horizontal my-0" />
-        <div class="card-footer p-3 ps-3">
-          {% if current_user.admin%}
-            <p class="mb-0 text-sm">
-              Total de gastos de todos os técnicos. 
-            </p>
-          {% else %}  
-            <p class="mb-0 text-sm">
-              Total de gastos. 
-            </p>  
-          {% endif %}  
-        </div>
+  <section class="edit-travel-kpi-grid" aria-label="Indicadores da viagem">
+    <article class="edit-travel-kpi-card">
+      <div class="edit-travel-kpi-card__body">
+        <span class="edit-travel-kpi-card__label">Total de gastos</span>
+        <strong id="total-gasto-viagem">R$ 0,00</strong>
+        {% if current_user.admin %}
+        <small>Total de gastos de todos os t&eacute;cnicos.</small>
+        {% else %}
+        <small>Total de gastos do t&eacute;cnico.</small>
+        {% endif %}
       </div>
-    </div>
+      <span class="edit-travel-kpi-card__icon" aria-hidden="true">
+        <i class="material-symbols-rounded">payments</i>
+      </span>
+    </article>
 
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card shadow-sm rounded-3">
-        <div
-          class="card-header p-3 d-flex justify-content-between align-items-center"
+    <article class="edit-travel-kpi-card">
+      <div class="edit-travel-kpi-card__body">
+        <span class="edit-travel-kpi-card__label">Financeiro</span>
+        <strong id="movimentacao-financeira">R$ 0,00</strong>
+        {% if current_user.admin %}
+        <small
+          >Movimenta&ccedil;&atilde;o financeira dos t&eacute;cnicos.</small
         >
-          <div>
-            <p class="text-sm mb-1 text-capitalize">Movimentação Financeira</p>
-            <h4 class="mb-0" id="movimentacao-financeira">R$ 0,00</h4>
-          </div>
-          <div
-            class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
-          >
-            <i class="material-symbols-rounded opacity-10">payments</i>
-          </div>
-        </div>
-        <hr class="dark horizontal my-0" />
-        <div class="card-footer p-3 ps-3">
-          {% if current_user.admin%}
-            <p class="mb-0 text-sm">
-              Movimentação financeira dos tecnicos 
-            </p>
-          {% else %}  
-            <p class="mb-0 text-sm">
-              Total de financeiro
-            </p>  
-          {% endif %}  
-        </div>
+        {% else %}
+        <small>Total financeiro da viagem.</small>
+        {% endif %}
       </div>
-    </div>
+      <span class="edit-travel-kpi-card__icon" aria-hidden="true">
+        <i class="material-symbols-rounded">account_balance_wallet</i>
+      </span>
+    </article>
 
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card shadow-sm rounded-3">
-        <div
-          class="card-header p-3 d-flex justify-content-between align-items-center"
+    <article class="edit-travel-kpi-card">
+      <div class="edit-travel-kpi-card__body">
+        <span class="edit-travel-kpi-card__label">Gasto x financeiro</span>
+        <strong id="diferenca-gasto-financeiro">R$ 0,00</strong>
+        <small id="equivalencia-gasto-financeiro"
+          >Aguardando consolida&ccedil;&atilde;o.</small
         >
-          <div>
-            <p class="text-sm mb-1 text-capitalize">Diferença Gasto X Financeiro</p>
-            <h4 class="mb-0" id="diferenca-gasto-financeiro">R$ 0,00</h4>
-          </div>
-          <div
-            class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
-          >
-            <i class="material-symbols-rounded opacity-10">leaderboard</i>
-          </div>
-        </div>
-        <hr class="dark horizontal my-0" />
-        <div class="card-footer p-3 ps-3">
-          <p class="mb-0 text-sm" id="equivalencia-gasto-financeiro">
-            
+      </div>
+      <span class="edit-travel-kpi-card__icon" aria-hidden="true">
+        <i class="material-symbols-rounded">leaderboard</i>
+      </span>
+    </article>
+
+    <article class="edit-travel-kpi-card">
+      <div class="edit-travel-kpi-card__body">
+        <span class="edit-travel-kpi-card__label">Di&aacute;rias</span>
+        <strong id="total-daily">R$ 0,00</strong>
+        {% if current_user.admin %}
+        <small>Total de di&aacute;rias dos t&eacute;cnicos.</small>
+        {% else %}
+        <small>Total de di&aacute;rias.</small>
+        {% endif %}
+      </div>
+      <span class="edit-travel-kpi-card__icon" aria-hidden="true">
+        <i class="material-symbols-rounded">receipt_long</i>
+      </span>
+    </article>
+  </section>
+
+  <section class="edit-travel-shell card-info-travel">
+    <aside
+      class="edit-travel-summary-card"
+      aria-labelledby="edit-travel-summary-title"
+    >
+      <div class="edit-travel-section-heading">
+        <div>
+          <h5 id="edit-travel-summary-title" class="mb-1">Resumo da viagem</h5>
+          <p class="text-sm text-muted mb-0">
+            Dados principais registrados no agendamento.
           </p>
         </div>
+        <span class="edit-travel-status-chip">{{ travel.status }}</span>
       </div>
-    </div>
 
-    <div class="col-xl-3 col-sm-6">
-      <div class="card shadow-sm rounded-3">
-        <div
-          class="card-header p-3 d-flex justify-content-between align-items-center"
-        >
-          <div>
-            <p class="text-sm mb-1 text-capitalize">Total das Diárias</p>
-            <h4 class="mb-0" id="total-daily">R$ 0,00</h4>
-          </div>
-          <div
-            class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg"
+      <div class="edit-travel-readonly-grid">
+        <div class="edit-travel-field">
+          <label for="entidadeReadonly" class="form-label">Entidade</label>
+          <input
+            type="text"
+            class="form-control border"
+            id="entidadeReadonly"
+            name="entidadeReadonly"
+            value="{{ travel.entidade_nome }}"
+            readonly
+          />
+        </div>
+
+        <div class="edit-travel-field">
+          <label for="data_inicio" class="form-label"
+            >Data de in&iacute;cio</label
           >
-            <i class="material-symbols-rounded opacity-10">garage_money</i>
-          </div>
+          <input
+            type="text"
+            class="form-control border"
+            id="data_inicio"
+            name="data_inicio"
+            value="{{ travel.data_inicio_convert }}"
+            readonly
+          />
         </div>
-        <hr class="dark horizontal my-0" />
-        <div class="card-footer p-3 ps-3">
-          {% if current_user.admin%}
-            <p class="mb-0 text-sm">
-              Total de gastos de diárias dos técnicos
-            </p>
-          {% else %}  
-            <p class="mb-0 text-sm">
-              Total de Diárias.
-            </p>  
-          {% endif %}  
+
+        <div class="edit-travel-field">
+          <label for="data_fim" class="form-label">Data fim</label>
+          <input
+            type="text"
+            class="form-control border"
+            id="data_fim"
+            name="data_fim"
+            value="{{ travel.data_fim_convert }}"
+            readonly
+          />
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="row card-info-travel mt-4">
-    <div class="col-lg-12 col-md-12">
-      <div class="card shadow-sm rounded-3">
-        <div class="card-header pb-0 px-3 pt-3"></div>
-        <div class="card-body px-4 pt-0 pb-3">
-          <div class="mb-0">
-            <div class="row gy-3">
-              <!--Viagem id -->
-               
+        <div class="edit-travel-field">
+          <label for="tipo_viagem" class="form-label">Tipo de viagem</label>
+          <input
+            type="text"
+            class="form-control border"
+            id="tipo_viagem"
+            name="tipo_viagem"
+            value="{{ travel.tipo_viagem }}"
+            readonly
+          />
+        </div>
 
-              <div class="col-md-3">
-                <label for="entidadeReadonly" class="form-label">Entidade:</label>
-                <input
-                  type="text"
-                  class="form-control border"
-                  id="entidadeReadonly"
-                  name="entidadeReadonly"
-                  value="{{ travel.entidade_nome }}"
-                  readonly
-                />
-              </div>
-              <div class="col-md-2">
-                <label for="data_inicio" class="form-label"
-                  >Data de Início:</label
-                >
-                <input
-                  type="text"
-                  class="form-control border"
-                  id="data_inicio"
-                  name="data_inicio"
-                  value="{{ travel.data_inicio_convert }}"
-                  readonly
-                />
-              </div>
+        <div class="edit-travel-field">
+          <label for="status" class="form-label">Status</label>
+          <input
+            type="text"
+            class="form-control border"
+            id="status"
+            name="status"
+            value="{{ travel.status }}"
+            readonly
+          />
+        </div>
 
-              <div class="col-md-2">
-                <label for="data_fim" class="form-label"
-                  >Data Fim:</label
-                >
-                <input
-                  type="text"
-                  class="form-control border"
-                  id="data_fim"
-                  name="data_fim"
-                  value="{{ travel.data_fim_convert }}"
-                  readonly
-                />
-              </div>
-
-
-              <div class="col-md-3">
-                <label for="tipo_viagem" class="form-label"
-                  >Tipo de Viagem:</label
-                >
-                <input
-                  type="text"
-                  class="form-control border"
-                  id="tipo_viagem"
-                  name="tipo_viagem"
-                  value="{{ travel.tipo_viagem }}"
-                  readonly
-                />
-              </div>
-            </div>
-            <div class="row gy-3 mt-3">
-              <div class="col-md-4">
-                <label for="status" class="form-label">Status:</label>
-                <input
-                  type="text"
-                  class="form-control border"
-                  id="status"
-                  name="status"
-                  value="{{ travel.status }}"
-                  readonly
-                />
-              </div>
-              <div class="col-md-4">
-                <label for="descricao" class="form-label">Descrição:</label>
-                <input
-                  class="form-control border"
-                  id="descricao"
-                  name="descricao"
-                  value="{{ travel.descricao }}"
-                  readonly
-                >
-                </input>
-
-              </div>
-
-              {% if current_user.admin %}
-                <div class="col-md-4">
-                <label for="tecnicoUserSelectAdmin" class="form-label">Técnico *</label>
-                <div class="d-flex gap-2">
-                  <select
-                    class="form-select"
-                    id="tecnicoUserSelectAdmin"
-                    name="tecnicoUserSelectAdmin"
-                    required
-                  >
-                    <option value="" selected disabled>Selecione um Técnico</option>
-                    {% for tecnico in tecnicos %}
-                      <option value="{{ tecnico.tecnico }}">{{ tecnico.username }}</option>
-                    {% endfor %}
-                  </select>
-                  <button type="button" id="assingTechForTravel" class="btn btn-primary">
-                    <i class="material-symbols-rounded">group_add</i>
-                  </button>
-                </div>
-              </div>
-
-              {% endif %}
-
-              
-
-            </div>
-            <div class="row gy-3 mt-3">
-              <div class="col-md-12">
-                {% if current_user.admin %}
-                <button
-                  class="btn btn-primary "
-                  id="btnEditarViagem"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editTravelModal" 
-                >
-                  <i class="bi bi-pencil-square"></i> Editar Viagem
-                </button>  
-                {% endif %}
-                <!---->
-                <a href="{{ url_for('travel_blueprint.index') }}" class="btn btn-outline-secondary"
-                  ><i class="bi bi-arrow-left-circle me-2"></i>Voltar</a
-                >
-
-              </div>
-            </div>  
-          </div>
+        <div class="edit-travel-field edit-travel-field--wide">
+          <label for="descricao" class="form-label"
+            >Descri&ccedil;&atilde;o</label
+          >
+          <input
+            class="form-control border"
+            id="descricao"
+            name="descricao"
+            value="{{ travel.descricao }}"
+            readonly
+          />
         </div>
       </div>
-    </div>
 
-    <!-- Nav Tabs -->
-    <div class="row mt-4">
-      <ul class="nav nav-tabs" id="viagemTabs" role="tablist">
+      {% if current_user.admin %}
+      <div class="edit-travel-admin-picker">
+        <div>
+          <label for="tecnicoUserSelectAdmin" class="form-label"
+            >T&eacute;cnico *</label
+          >
+          <select
+            class="form-select border"
+            id="tecnicoUserSelectAdmin"
+            name="tecnicoUserSelectAdmin"
+            required
+          >
+            <option value="" selected disabled>
+              Selecione um t&eacute;cnico
+            </option>
+            {% for tecnico in tecnicos %}
+            <option value="{{ tecnico.tecnico }}">
+              {{ tecnico.username }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button
+          type="button"
+          id="assingTechForTravel"
+          class="btn btn-outline-primary mb-0"
+          title="Associar t&eacute;cnico"
+        >
+          <i class="material-symbols-rounded">group_add</i>
+        </button>
+      </div>
+      {% endif %}
+    </aside>
+
+    <div class="edit-travel-workspace">
+      <ul class="nav edit-travel-tabs" id="viagemTabs" role="tablist">
         <li class="nav-item" role="presentation">
           <button
             class="nav-link active"
@@ -297,7 +236,8 @@ block content %}
             aria-controls="dados"
             aria-selected="true"
           >
-            <i class="bi bi-card-checklist"></i> Dados Principais
+            <i class="material-symbols-rounded">fact_check</i>
+            Dados
           </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -311,10 +251,10 @@ block content %}
             aria-controls="gastos"
             aria-selected="false"
           >
-            <i class="bi bi-cash-stack"></i> Gastos
+            <i class="material-symbols-rounded">receipt</i>
+            Gastos
           </button>
         </li>
-
         <li class="nav-item" role="presentation">
           <button
             class="nav-link"
@@ -326,10 +266,10 @@ block content %}
             aria-controls="financeiro"
             aria-selected="false"
           >
-            <i class="bi bi-currency-dollar"></i> Financeiro
+            <i class="material-symbols-rounded">account_balance</i>
+            Financeiro
           </button>
         </li>
-
         <li class="nav-item" role="presentation">
           <button
             class="nav-link"
@@ -341,150 +281,165 @@ block content %}
             aria-controls="outros"
             aria-selected="false"
           >
-            <i class="bi bi-gear"></i> Outros
+            <i class="material-symbols-rounded">local_shipping</i>
+            Transporte
           </button>
         </li>
       </ul>
 
-      <!-- Tabs Content -->
-      <div
-        class="tab-content app-themed-panel p-4 border-top-0 border rounded-3"
-        id="viagemTabsContent"
-      >
-        <!-- Aba 1: Dados Principais -->
+      <div class="tab-content edit-travel-tab-content" id="viagemTabsContent">
         <div
           class="tab-pane fade show active"
           id="dados"
           role="tabpanel"
           aria-labelledby="dados-tab"
         >
-          <!--<form id="formDadosPrincipais" action>-->
-            <input type="hidden" id="viagemId" name="viagemId" value="" />
-            <input
-              type="hidden"
-              id="usuario"
-              name="usuario"
-              value="{{ session['usuarioConnect'] }}"
-            />
-
-            <div class="row mb-3">
-              <!--Data Saida-->
-              <div class="col-md-3">
-                <label for="dataSaida" class="form-label"
-                  >Data de Saída *</label
-                >
-                <input
-                  type="datetime-local"
-                  class="form-control border ps-1"
-                  id="dataSaida"
-                  name="dataSaida"
-                  required
-                  value="{{ info_tec_in_travel.data_inicio_convert if info_tec_in_travel else travel.data_inicio_convert_iso }}"
-                />
-              </div>
-              <!--Data Retorno-->
-              <div class="col-md-3">
-                <label for="dataRetorno" class="form-label"
-                  >Data de Retorno *</label
-                >
-                <input
-                  type="datetime-local"
-                  class="form-control border ps-1"
-                  id="dataRetorno"
-                  name="dataRetorno"
-                  required
-                  value="{{ info_tec_in_travel.data_fim_convert if info_tec_in_travel else travel.data_fim_convert_iso}}"
-                />
-              </div>
-              <!--Se está atribuido ou Não-->
-              <div class="col-md-6 justify-content-end d-flex align-items-center" id="statusAtribuido">
-                {% if info_tec_in_travel.atribuito == True %}
-                <i class="material-symbols-rounded text-success me-2" title="Dados foram atribuitos">offline_pin</i>
-                <span class="text-success ml-4"><strong>Atribuído</strong></Span>
-                {% else %}
-                <i class="material-symbols-rounded text-primary me-2" title="Dados Não atribuitos">offline_pin_off</i>
-                <span class="text-primary ml-4"><strong>Não Atribuído</strong></Span>
-                {% endif %}
-
-
-              </div>
-
+          <div class="edit-travel-section-heading">
+            <div>
+              <h5 class="mb-1">Dados do t&eacute;cnico</h5>
+              <p class="text-sm text-muted mb-0">
+                Per&iacute;odo realizado, relat&oacute;rio e total de
+                di&aacute;rias.
+              </p>
             </div>
-
-            <div class="row mb-3">
-              <div class="col-md-4">
-                <label for="codigoRelatorio" class="form-label"
-                  >Código do Relatório *</label
-                >
-                <input
-                  type="text"
-                  class="form-control border ps-1"
-                  id="codigoRelatorio"
-                  name="codigoRelatorio"
-                  value="{{ info_tec_in_travel.n_intranet if info_tec_in_travel else ''}}"
-                  required
-                />
-              </div>
-              <div class="col-md-4">
-                <label for="quantidadeDiarias" class="form-label"
-                  >Quantidade de Diárias</label
-                >
-                <input
-                  type="number"
-                  class="form-control border ps-1"
-                  id="quantidadeDiarias"
-                  name="quantidadeDiarias"
-                  value="{{ info_tec_in_travel.n_diaria if info_tec_in_travel else 0}}"
-                />
-              </div>
-              <div class="col-md-4">
-                <label for="valorDiaria" class="form-label"
-                  >Valor da Diária</label
-                >
-                <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    
-                    class="form-control border ps-1"
-                    id="valorDiaria"
-                    name="valorDiaria"
-                    value="{{ info_tec_in_travel.v_diaria_convert if info_tec_in_travel else 0.0}}"
-                    readonly
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-end">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                id="bnt-salvar-principal"
+            <div class="edit-travel-assignment-state" id="statusAtribuido">
+              {% if info_tec_in_travel.atribuito == True %}
+              <i
+                class="material-symbols-rounded text-success"
+                title="Dados foram atribu&iacute;dos"
+                >offline_pin</i
               >
-                Salvar Dados
-              </button>
+              <span class="text-success"><strong>Atribu&iacute;do</strong></span>
+              {% else %}
+              <i
+                class="material-symbols-rounded text-primary"
+                title="Dados n&atilde;o atribu&iacute;dos"
+                >offline_pin_off</i
+              >
+              <span class="text-primary"
+                ><strong>N&atilde;o atribu&iacute;do</strong></span
+              >
+              {% endif %}
             </div>
-          <!--</form>-->
+          </div>
+
+          <input type="hidden" id="viagemId" name="viagemId" value="" />
+          <input
+            type="hidden"
+            id="usuario"
+            name="usuario"
+            value="{{ session['usuarioConnect'] }}"
+          />
+
+          <div class="edit-travel-form-grid">
+            <div class="edit-travel-field">
+              <label for="dataSaida" class="form-label"
+                >Data de sa&iacute;da *</label
+              >
+              <input
+                type="datetime-local"
+                class="form-control border ps-1"
+                id="dataSaida"
+                name="dataSaida"
+                required
+                value="{{ info_tec_in_travel.data_inicio_convert if info_tec_in_travel else travel.data_inicio_convert_iso }}"
+              />
+            </div>
+
+            <div class="edit-travel-field">
+              <label for="dataRetorno" class="form-label"
+                >Data de retorno *</label
+              >
+              <input
+                type="datetime-local"
+                class="form-control border ps-1"
+                id="dataRetorno"
+                name="dataRetorno"
+                required
+                value="{{ info_tec_in_travel.data_fim_convert if info_tec_in_travel else travel.data_fim_convert_iso }}"
+              />
+            </div>
+
+            <div class="edit-travel-field">
+              <label for="codigoRelatorio" class="form-label"
+                >C&oacute;digo do relat&oacute;rio *</label
+              >
+              <input
+                type="text"
+                class="form-control border ps-1"
+                id="codigoRelatorio"
+                name="codigoRelatorio"
+                value="{{ info_tec_in_travel.n_intranet if info_tec_in_travel else '' }}"
+                required
+              />
+            </div>
+
+            <div class="edit-travel-field">
+              <label for="quantidadeDiarias" class="form-label"
+                >Quantidade de di&aacute;rias</label
+              >
+              <input
+                type="number"
+                class="form-control border ps-1"
+                id="quantidadeDiarias"
+                name="quantidadeDiarias"
+                value="{{ info_tec_in_travel.n_diaria if info_tec_in_travel else 0 }}"
+              />
+            </div>
+
+            <div class="edit-travel-field">
+              <label for="valorDiaria" class="form-label"
+                >Valor da di&aacute;ria</label
+              >
+              <input
+                type="text"
+                class="form-control border ps-1"
+                id="valorDiaria"
+                name="valorDiaria"
+                value="{{ info_tec_in_travel.v_diaria_convert if info_tec_in_travel else 0.0 }}"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="edit-travel-save-panel">
+            <button
+              type="submit"
+              class="btn btn-primary mb-0 edit-travel-save-main"
+              id="bnt-salvar-principal"
+            >
+              Salvar Dados
+            </button>
+          </div>
         </div>
 
-        <!-- Aba 2: Gastos -->
         <div
           class="tab-pane fade"
           id="gastos"
           role="tabpanel"
           aria-labelledby="gastos-tab"
         >
-          <div class="row">
-            <div class="col-md-6">
-              <h5>Adicionar Gasto</h5>
-              <!--<form id="formGasto">-->
-                <input type="hidden" id="gastoId" name="gastoId" />
-                <input type="hidden" id="viagemIdGasto" name="viagemIdGasto" />
+          <div class="edit-travel-split">
+            <section
+              class="edit-travel-subpanel"
+              aria-labelledby="expense-form-title"
+            >
+              <div class="edit-travel-section-heading">
+                <div>
+                  <h5 id="expense-form-title" class="mb-1">Adicionar gasto</h5>
+                  <p class="text-sm text-muted mb-0">
+                    Registre despesas e documentos da viagem.
+                  </p>
+                </div>
+              </div>
 
-                <div class="mb-3">
+              <input type="hidden" id="gastoId" name="gastoId" />
+              <input type="hidden" id="viagemIdGasto" name="viagemIdGasto" />
+
+              <div class="edit-travel-form-grid edit-travel-form-grid--single">
+                <div class="edit-travel-field">
                   <label for="tipoGasto" class="form-label"
-                    >Tipo do Gasto *</label
+                    >Tipo do gasto *</label
                   >
                   <select
                     class="form-select border"
@@ -495,16 +450,18 @@ block content %}
                     <option value="" selected disabled>
                       Selecione um tipo
                     </option>
-                    <option value="Alimentação">Alimentação</option>
-                    <option value="Combustível">Combustível</option>
+                    <option value="Alimentação">
+                      Alimenta&ccedil;&atilde;o
+                    </option>
+                    <option value="Combustível">Combust&iacute;vel</option>
                     <option value="Estadia">Estadia</option>
                     <option value="Outras">Outras</option>
                   </select>
                 </div>
 
-                <div class="mb-3">
+                <div class="edit-travel-field">
                   <label for="numeroDocumento" class="form-label"
-                    >Número do Documento</label
+                    >N&uacute;mero do documento</label
                   >
                   <input
                     type="text"
@@ -513,7 +470,8 @@ block content %}
                     name="numeroDocumento"
                   />
                 </div>
-                <div class="mb-3">
+
+                <div class="edit-travel-field">
                   <label for="valorGasto" class="form-label">Valor *</label>
                   <div class="input-group">
                     <span class="input-group-text">R$</span>
@@ -528,21 +486,9 @@ block content %}
                   </div>
                 </div>
 
-                <div class="mb-3">
-                  <label for="descricaoGasto" class="form-label"
-                    >Descrição do Gasto</label
-                  >
-                  <textarea
-                    class="form-control border"
-                    id="descricaoGasto"
-                    name="descricaoGasto"
-                    rows="2"
-                  ></textarea>
-                </div>
-
-                <div class="mb-3">
+                <div class="edit-travel-field">
                   <label for="dataHoraGasto" class="form-label"
-                    >Data e Hora do Gasto *</label
+                    >Data e hora do gasto *</label
                   >
                   <input
                     type="datetime-local"
@@ -553,23 +499,33 @@ block content %}
                   />
                 </div>
 
-                <div class="mb-3">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="estorno"
-                      name="estorno"
-                    />
-                    <label class="form-check-label" for="estorno"
-                      >Realizar estorno?</label
-                    >
-                  </div>
+                <div class="edit-travel-field">
+                  <label for="descricaoGasto" class="form-label"
+                    >Descri&ccedil;&atilde;o do gasto</label
+                  >
+                  <textarea
+                    class="form-control border"
+                    id="descricaoGasto"
+                    name="descricaoGasto"
+                    rows="3"
+                  ></textarea>
                 </div>
 
-                <div class="mb-3">
+                <div class="form-check edit-travel-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="estorno"
+                    name="estorno"
+                  />
+                  <label class="form-check-label" for="estorno"
+                    >Realizar estorno?</label
+                  >
+                </div>
+
+                <div class="edit-travel-field">
                   <label for="tipoDocumento" class="form-label"
-                    >Tipo do Documento</label
+                    >Tipo do documento</label
                   >
                   <select
                     class="form-select border"
@@ -577,15 +533,17 @@ block content %}
                     name="tipoDocumento"
                   >
                     <option value="Nota Fiscal">Nota Fiscal</option>
-                    <option value="Comprovante de Pagamento">Comprovante de Pagamento</option>
+                    <option value="Comprovante de Pagamento">
+                      Comprovante de Pagamento
+                    </option>
                     <option value="Recibo">Recibo</option>
                     <option value="Outros">Outros</option>
                   </select>
                 </div>
 
-                <div class="mb-3">
+                <div class="edit-travel-field">
                   <label for="documentoUpload" class="form-label"
-                    >Upload do Documento</label
+                    >Upload do documento</label
                   >
                   <input
                     class="form-control border"
@@ -595,235 +553,312 @@ block content %}
                     accept=".pdf,.jpg,.jpeg,.png"
                   />
                 </div>
+              </div>
 
-                <div class="d-flex justify-content-end">
-                  <button type="button" id="bntAddGasto" class="btn btn-primary me-2">
-                    Salvar Gasto
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary"
-                    id="limparGasto"
-                  >
-                    Limpar
-                  </button>
+              <div class="edit-travel-actions">
+                <button
+                  type="button"
+                  id="bntAddGasto"
+                  class="btn btn-primary mb-0"
+                >
+                  <i class="material-symbols-rounded">add_circle</i>
+                  Salvar gasto
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary mb-0"
+                  id="limparGasto"
+                >
+                  <i class="material-symbols-rounded">cleaning_services</i>
+                  Limpar
+                </button>
+              </div>
+            </section>
+
+            <section
+              class="edit-travel-subpanel"
+              aria-labelledby="expenses-table-title"
+            >
+              <div class="edit-travel-section-heading">
+                <div>
+                  <h5 id="expenses-table-title" class="mb-1">
+                    Gastos cadastrados
+                  </h5>
+                  <p class="text-sm text-muted mb-0">
+                    Hist&oacute;rico financeiro operacional.
+                  </p>
                 </div>
-              <!--</form>-->
-            </div>
+              </div>
 
-            <div class="col-md-6">
-              <h5>Gastos Cadastrados</h5>
-              <div class="table-responsive">
-                <table class="table table-striped table-hover">
+              <div class="table-responsive edit-travel-table-wrap">
+                <table class="table table-hover align-middle mb-0">
                   <thead>
                     <tr>
-                      <th>Código</th>
+                      <th>C&oacute;digo</th>
                       <th>Data</th>
                       <th>Tipo</th>
                       <th>Valor</th>
-                      <th>Ações</th>
+                      <th>A&ccedil;&otilde;es</th>
                     </tr>
                   </thead>
                   <tbody id="tabelaGastos">
-                    <!-- Dados serão preenchidos via JavaScript -->
-                     {% if expenses %}
-                     {% for expense in expenses %}
-                     <tr class="{{ "bg-success text-light" if expense.status == "Aprovado" else ""}}" data-gasto-id="{{ expense.id}}">
-                      <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">{{ expense.id }}</td>
-                      <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">{{ expense.data_convert}}</td>
-                      <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">{{ expense.tipo_gasto}}</td>
-                      <td class="{{ "text-light" if expense.status == "Aprovado" else ""}}">R$ {{ expense.valor }}</td>
-                      <td class="d-flex align-items-center gap-2">
-                        <div class="align-middle text-left text-sm p-0">
-                          <button class="btn btn-sm btn-action visualizar-gasto p-0" title="Visualizar">
-                            <span class="material-symbols-rounded">visibility</span>
+                    {% if expenses %} {% for expense in expenses %}
+                    <tr
+                      class="{{ 'bg-success text-light' if expense.status == 'Aprovado' else '' }}"
+                      data-gasto-id="{{ expense.id }}"
+                    >
+                      <td
+                        class="{{ 'text-light' if expense.status == 'Aprovado' else '' }}"
+                      >
+                        {{ expense.id }}
+                      </td>
+                      <td
+                        class="{{ 'text-light' if expense.status == 'Aprovado' else '' }}"
+                      >
+                        {{ expense.data_convert }}
+                      </td>
+                      <td
+                        class="{{ 'text-light' if expense.status == 'Aprovado' else '' }}"
+                      >
+                        {{ expense.tipo_gasto }}
+                      </td>
+                      <td
+                        class="{{ 'text-light' if expense.status == 'Aprovado' else '' }}"
+                      >
+                        R$ {{ expense.valor }}
+                      </td>
+                      <td>
+                        <div class="edit-travel-row-actions">
+                          <button
+                            class="btn btn-sm btn-action visualizar-gasto p-0"
+                            title="Visualizar"
+                          >
+                            <span class="material-symbols-rounded"
+                              >visibility</span
+                            >
                           </button>
-
-                          <button class="btn btn-sm btn-action editar-gasto p-0" title="Editar">
+                          <button
+                            class="btn btn-sm btn-action editar-gasto p-0"
+                            title="Editar"
+                          >
                             <span class="material-symbols-rounded">edit</span>
                           </button>
-
-                          <button class="btn btn-sm btn-action excluir-gasto p-0" title="Excluir" >
+                          <button
+                            class="btn btn-sm btn-action excluir-gasto p-0"
+                            title="Excluir"
+                          >
                             <span class="material-symbols-rounded">delete</span>
                           </button>
-
                           {% if expense.arquivo %}
-                            <button class="btn btn-sm btn-action ver-documento p-0" title="Ver Documento" data-documento-id="{{ expense.arquivo }}">
-                              <span class="material-symbols-rounded">description</span>
-                            </button>
+                          <button
+                            class="btn btn-sm btn-action ver-documento p-0"
+                            title="Ver documento"
+                            data-documento-id="{{ expense.arquivo }}"
+                          >
+                            <span class="material-symbols-rounded"
+                              >description</span
+                            >
+                          </button>
                           {% else %}
-                            <button class="btn btn-sm btn-action add-documento p-0" title="Adicione o Documento">
-                              <span class="material-symbols-rounded">upload_file</span>
-                            </button>
-
-
-                          {% endif %}  
-
-                        </div>  
+                          <button
+                            class="btn btn-sm btn-action add-documento p-0"
+                            title="Adicione o documento"
+                          >
+                            <span class="material-symbols-rounded"
+                              >upload_file</span
+                            >
+                          </button>
+                          {% endif %}
+                        </div>
                       </td>
-
-                     </tr>
-                     {% endfor %}
-
-                     {% else %}
-                      <tr>
-                        <td colspan="5" class="text-center">
-                          Nenhum gasto cadastrado
-                        </td>
-                      </tr>
-                    
-
-                     {% endif %}
-                    
+                    </tr>
+                    {% endfor %} {% else %}
+                    <tr>
+                      <td colspan="5" class="text-center">
+                        Nenhum gasto cadastrado
+                      </td>
+                    </tr>
+                    {% endif %}
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td colspan="1" class="text-end">
-                        <strong>Total Gasto:</strong>
+                      <td colspan="2"><strong>Total gasto</strong></td>
+                      <td id="totalGastos" class="text-end">
+                        {{ totalizado.total }}
                       </td>
-                      <td id="totalGastos" class="text-end">{{ totalizado.total}}</td>
-                      <td colspan="2" class="text-end">
-                        <strong>Total Estorno:</strong>
+                      <td><strong>Total estorno</strong></td>
+                      <td id="totalGastosEstorno" class="text-end">
+                        {{ totalizado.total_estorno }}
                       </td>
-                      <td id="totalGastosEstorno" class="text-end">{{ totalizado.total_estorno}}</td>
                     </tr>
                   </tfoot>
                 </table>
               </div>
-            </div>
+            </section>
           </div>
         </div>
 
-        <!-- Aba 3: Financeiro -->
         <div
           class="tab-pane fade"
           id="financeiro"
           role="tabpanel"
           aria-labelledby="financeiro-tab"
         >
-          <!--<form id="formFinanceiro">-->
           <input
             type="hidden"
             id="viagemIdFinanceiro"
             name="viagemIdFinanceiro"
           />
 
-          <div class="row mb-3">
-            <!--Data de Lançamento-->
-            <div class="col-md-4">
-              <label for="dataLancamento" class="form-label"
-                >Data de Lançamento *</label
-              >
-              <input
-                type="datetime-local"
-                class="form-control border ps-1"
-                id="dataLancamento"
-                name="dataLancamento"
-                required
-                
-              />
-            </div>
-              
-
-            <!--Tipo do Lançamento-->
-            <div class="col-md-4">
-              <label for="tipoLancamento" class="form-label"
-                >Tipo de Lançamento *</label
-              >
-              <select
-                class="form-select border"
-                id="tipoLancamento"
-                name="tipoLancamento"
-                required
-              >
-                <option value="" disabled selected>Selecione</option>
-                <option value="Crédito">Crédito</option>
-                <option value="Débito">Débito</option>
-              </select>
+          <section
+            class="edit-travel-subpanel mb-4"
+            aria-labelledby="finance-form-title"
+          >
+            <div class="edit-travel-section-heading">
+              <div>
+                <h5 id="finance-form-title" class="mb-1">
+                  Lan&ccedil;amento financeiro
+                </h5>
+                <p class="text-sm text-muted mb-0">
+                  Inclua cr&eacute;ditos e d&eacute;bitos associados &agrave;
+                  viagem.
+                </p>
+              </div>
             </div>
 
-            <!--Valor do Lançamento-->
-            <div class="col-md-2">
-              <label for="valorlancamento" class="form-label">Valor</label>
-              <input
-                type="number"
-                step="0.01"
-                class="form-control border"
-                id="valorlancamento"
-                name="valorlancamento"
-              />
+            <div class="edit-travel-form-grid">
+              <div class="edit-travel-field">
+                <label for="dataLancamento" class="form-label"
+                  >Data de lan&ccedil;amento *</label
+                >
+                <input
+                  type="datetime-local"
+                  class="form-control border ps-1"
+                  id="dataLancamento"
+                  name="dataLancamento"
+                  required
+                />
+              </div>
+
+              <div class="edit-travel-field">
+                <label for="tipoLancamento" class="form-label"
+                  >Tipo de lan&ccedil;amento *</label
+                >
+                <select
+                  class="form-select border"
+                  id="tipoLancamento"
+                  name="tipoLancamento"
+                  required
+                >
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="Crédito">Cr&eacute;dito</option>
+                  <option value="Débito">D&eacute;bito</option>
+                </select>
+              </div>
+
+              <div class="edit-travel-field">
+                <label for="valorlancamento" class="form-label">Valor</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control border"
+                  id="valorlancamento"
+                  name="valorlancamento"
+                />
+              </div>
+
+              <div class="edit-travel-field edit-travel-field--wide">
+                <label for="descricaoLancamento" class="form-label"
+                  >Descri&ccedil;&atilde;o</label
+                >
+                <input
+                  type="text"
+                  class="form-control border"
+                  id="descricaoLancamento"
+                  name="descricaoLancamento"
+                />
+              </div>
             </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-fluid">
-              <label for="descricaoLancamento" class="form-label"
-                >Descrição</label
+
+            <div class="edit-travel-actions">
+              <button
+                type="button"
+                class="btn btn-success mb-0"
+                id="bnt-lancar-financeiro"
               >
-              <input
-                type="text"
-                class="form-control border"
-                id="descricaoLancamento"
-                name="descricaoLancamento"
-              />
+                <i class="material-symbols-rounded">add_card</i>
+                Salvar lan&ccedil;amento
+              </button>
+              <button type="reset" class="btn btn-outline-secondary mb-0">
+                <i class="material-symbols-rounded">cleaning_services</i>
+                Limpar
+              </button>
             </div>
-          </div>
+          </section>
 
-          <div class="d-flex justify-content-end mb-4">
-            <button type="button" class="btn btn-success me-2" id="bnt-lancar-financeiro">
-              Salvar Lançamento
-            </button>
-            <button type="reset" class="btn btn-outline-secondary">
-              Limpar
-            </button>
-          </div>
-          <!--</form>-->
+          <section
+            class="edit-travel-subpanel"
+            aria-labelledby="finance-table-title"
+          >
+            <div class="edit-travel-section-heading">
+              <div>
+                <h5 id="finance-table-title" class="mb-1">
+                  Movimenta&ccedil;&otilde;es financeiras
+                </h5>
+                <p class="text-sm text-muted mb-0">
+                  Registros financeiros vinculados.
+                </p>
+              </div>
+            </div>
 
-          <h5 class="mt-4">Movimentações Financeiras</h5>
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-              <thead class="table-light">
-                <tr>
-                  <th>Data</th>
-                  <th>Tipo</th>
-                  <th>Descrição</th>
-                  <th>Valor</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="tabelaFinanceiro">
-                {% if finance %}
-                {% for movement in finance %}
-                <tr data-movimento-id="{{ movement.id }}">
-                  <td>{{ movement.data_lanc_convert }}</td>
-                  <td>{{ movement.tipo_full }}</td>
-                  <td>{{ movement.descricao }}</td>
-                  <td>{{ movement.valor_convert }}</td>
-                  <td class="d-flex align-items-center gap-2">
-                    <div class="align-middle text-left text-sm p-0">
-                      <button class="btn btn-sm btn-action editar-movimento p-0" title="Editar">
-                        <span class="material-symbols-rounded">edit</span>
-                      </button>
-
-                      <button class="btn btn-sm btn-action excluir-movimento p-0" title="Excluir" >
-                        <span class="material-symbols-rounded">delete</span>
-                      </button>
-                    </div>  
-                  </td>
-                
-                {% endfor %}
-                {% else %}
-                <tr>
-                  <td colspan="5" class="text-center">
-                    Nenhuma movimentação registrada
-                  </td>
-                </tr>
-                {% endif %}
-              </tbody>
-            </table>
-          </div>
+            <div class="table-responsive edit-travel-table-wrap">
+              <table class="table table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Descri&ccedil;&atilde;o</th>
+                    <th>Valor</th>
+                    <th>A&ccedil;&otilde;es</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaFinanceiro">
+                  {% if finance %} {% for movement in finance %}
+                  <tr data-movimento-id="{{ movement.id }}">
+                    <td>{{ movement.data_lanc_convert }}</td>
+                    <td>{{ movement.tipo_full }}</td>
+                    <td>{{ movement.descricao }}</td>
+                    <td>{{ movement.valor_convert }}</td>
+                    <td>
+                      <div class="edit-travel-row-actions">
+                        <button
+                          class="btn btn-sm btn-action editar-movimento p-0"
+                          title="Editar"
+                        >
+                          <span class="material-symbols-rounded">edit</span>
+                        </button>
+                        <button
+                          class="btn btn-sm btn-action excluir-movimento p-0"
+                          title="Excluir"
+                        >
+                          <span class="material-symbols-rounded">delete</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %} {% else %}
+                  <tr>
+                    <td colspan="5" class="text-center">
+                      Nenhuma movimenta&ccedil;&atilde;o registrada
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
 
-        <!-- Aba 4: Outros -->
         <div
           class="tab-pane fade"
           id="outros"
@@ -833,10 +868,19 @@ block content %}
           <form id="formOutros">
             <input type="hidden" id="viagemIdOutros" name="viagemIdOutros" />
 
-            <div class="row mb-3">
-              <div class="col-md-6">
+            <div class="edit-travel-section-heading">
+              <div>
+                <h5 class="mb-1">Transporte e quilometragem</h5>
+                <p class="text-sm text-muted mb-0">
+                  Dados complementares usados no fechamento operacional.
+                </p>
+              </div>
+            </div>
+
+            <div class="edit-travel-form-grid">
+              <div class="edit-travel-field">
                 <label for="veiculo" class="form-label"
-                  >Veículo Utilizado</label
+                  >Ve&iacute;culo utilizado</label
                 >
                 <input
                   type="text"
@@ -845,7 +889,7 @@ block content %}
                   name="veiculo"
                 />
               </div>
-              <div class="col-md-6">
+              <div class="edit-travel-field">
                 <label for="placa" class="form-label">Placa</label>
                 <input
                   type="text"
@@ -854,11 +898,8 @@ block content %}
                   name="placa"
                 />
               </div>
-            </div>
-
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="kmInicial" class="form-label">KM Inicial</label>
+              <div class="edit-travel-field">
+                <label for="kmInicial" class="form-label">KM inicial</label>
                 <input
                   type="number"
                   class="form-control border"
@@ -867,8 +908,8 @@ block content %}
                   min="0"
                 />
               </div>
-              <div class="col-md-6">
-                <label for="kmFinal" class="form-label">KM Final</label>
+              <div class="edit-travel-field">
+                <label for="kmFinal" class="form-label">KM final</label>
                 <input
                   type="number"
                   class="form-control border"
@@ -878,147 +919,135 @@ block content %}
                 />
               </div>
             </div>
-
-            <div class="d-flex justify-content-end">
-              <!--<button type="button" id="btn-send-data" class="btn btn-primary">
-                Salvar Dados
-              </button>-->
-            </div>
-          <!--</form>-->
+          </form>
         </div>
       </div>
     </div>
-
-    {% if current_user.admin %}
-    <!-- Modal Editar Viagem -->
-    <div class="modal fade" id="editTravelModal" tabindex="-1" aria-labelledby="editTravelModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content shadow-lg rounded-3">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" id="editTravelModalLabel">
-              <i class="bi bi-pencil-square me-2"></i>Editar Viagem
-            </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-          </div>
-          
-          <div class="modal-body">
-            <div class="row gy-3">
-              <!-- Entidade -->
-              <div class="col-md-6">
-                <label for="entidade" class="form-label fw-bold">Entidade *</label>
-                <input 
-                  type="text" 
-                  class="form-control border ps-2" 
-                  id="entidade" 
-                  name="entidade" 
-                  value="{{ travel.entidade_nome }}"
-                  required
-                />
-                <input type="hidden" id="entidade-id" name="entidade_id" required />
-              </div>
-
-              <!-- Data de início -->
-              <div class="col-md-3">
-                <label for="dataSaida-modal" class="form-label"
-                  >Data de Saída *</label
-                >
-                <input
-                  type="datetime-local"
-                  class="form-control border ps-1"
-                  id="dataSaida-modal"
-                  name="dataSaida"
-                  value="{{ travel.data_inicio_convert_iso }}" 
-                  
-                />
-              </div>
-
-              <!-- Data de Fim -->
-              <div class="col-md-3">
-                <label for="dataRetorno-modal" class="form-label"
-                  >Data de Retorno*</label
-                >
-                <input
-                  type="datetime-local"
-                  class="form-control border ps-1"
-                  id="dataRetorno-modal"
-                  name="dataRetorno"
-                  value="{{ travel.data_fim_convert_iso }}" 
-                  
-                />
-              </div>
-
-
-
-
-              <!-- Tipo de Viagem -->
-              <div class="col-md-3">
-                <label for="tipo-travel" class="form-label fw-bold">Tipo de Viagem:</label>
-                <select class="form-select border" id="tipo-travel" name="tipo-travel">
-                  <option value="Técnica" {% if travel.tipo_viagem == 'Técnica' %}selected{% endif %}>Técnica</option>
-                  <option value="Administrativa" {% if travel.tipo_viagem == 'Administrativa' %}selected{% endif %}>Administrativa</option>
-                  <option value="Capacitação" {% if travel.tipo_viagem == 'Capacitação' %}selected{% endif %}>Capacitação</option>
-                  <option value="Outra" {% if travel.tipo_viagem == 'Outra' %}selected{% endif %}>Outra</option>
-                </select>
-              </div>
-
-              <!-- Status e Descrição -->
-              <div class="col-md-4">
-                <label for="status" class="form-label fw-bold">Status:</label>
-                <select class="form-select border" id="status-modal" name="status">
-                  <option value="Agendada" {% if travel.status == 'Agendada' %}selected{% endif %}>Agendada</option>
-                  <option value="Em Andamento" {% if travel.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
-                  <option value="Concluída" {% if travel.status == 'Concluída' %}selected{% endif %}>Concluída</option>
-                  <option value="Cancelada" {% if travel.status == 'Cancelada' %}selected{% endif %}>Cancelada</option>
-                </select>
-              </div>
-            </div>
-
-            
-            <!--<div class="row gy-3 mt-3">-->
-              
-
-            <!--</div>-->
-            <div class="row gy-3 mt-3">
-              <div class="col-md-8">
-                <label for="descricao" class="form-label fw-bold">Descrição:</label>
-                <textarea 
-                  class="form-control border" 
-                  id="descricao-modal" 
-                  name="descricao" 
-                  rows="3"
-                >{{ travel.descricao }}</textarea>
-              </div>
-          </div>
-
-            </div>
-            
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              <i class="bi bi-x-circle"></i> Fechar
-            </button>
-            <button class="btn btn-primary" id="btnEditarViagemModal">
-              <i class="bi bi-save"></i> Salvar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %}
-
-    {% include  "includes/viewer-file.html"%}
-
-
-    {% include "includes/footer.html" %} 
-    {% if current_user.admin %} {% include
-  "travel/modal/assign-technical.html" %} {% endif %}
-  </div>
-  {% block javascripts %}
-
-  <script
-    type="module"
-    src="{{ url_for('static', filename='/assets/js/application/useEditTravel.js') }}"
-  ></script>
-
+  </section>
 </div>
+
+{% if current_user.admin %}
+<div
+  class="modal fade"
+  id="editTravelModal"
+  tabindex="-1"
+  aria-labelledby="editTravelModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-3">
+      <div class="modal-header">
+        <div>
+          <p class="text-sm text-muted mb-1">Viagem #{{ travel.id }}</p>
+          <h5 class="modal-title" id="editTravelModalLabel">Editar viagem</h5>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="edit-travel-form-grid">
+          <div class="edit-travel-field edit-travel-field--wide">
+            <label for="entidade" class="form-label">Entidade *</label>
+            <input
+              type="text"
+              class="form-control border ps-2"
+              id="entidade"
+              name="entidade"
+              value="{{ travel.entidade_nome }}"
+              required
+            />
+            <input type="hidden" id="entidade-id" name="entidade_id" required />
+          </div>
+
+          <div class="edit-travel-field">
+            <label for="dataSaida-modal" class="form-label"
+              >Data de sa&iacute;da *</label
+            >
+            <input
+              type="datetime-local"
+              class="form-control border ps-1"
+              id="dataSaida-modal"
+              name="dataSaida"
+              value="{{ travel.data_inicio_convert_iso }}"
+            />
+          </div>
+
+          <div class="edit-travel-field">
+            <label for="dataRetorno-modal" class="form-label"
+              >Data de retorno *</label
+            >
+            <input
+              type="datetime-local"
+              class="form-control border ps-1"
+              id="dataRetorno-modal"
+              name="dataRetorno"
+              value="{{ travel.data_fim_convert_iso }}"
+            />
+          </div>
+
+          <div class="edit-travel-field">
+            <label for="tipo-travel" class="form-label">Tipo de viagem</label>
+            <select class="form-select border" id="tipo-travel" name="tipo-travel">
+              <option value="Técnica" {% if travel.tipo_viagem == 'Técnica' %}selected{% endif %}>T&eacute;cnica</option>
+              <option value="Administrativa" {% if travel.tipo_viagem == 'Administrativa' %}selected{% endif %}>Administrativa</option>
+              <option value="Capacitação" {% if travel.tipo_viagem == 'Capacitação' %}selected{% endif %}>Capacita&ccedil;&atilde;o</option>
+              <option value="Outra" {% if travel.tipo_viagem == 'Outra' %}selected{% endif %}>Outra</option>
+            </select>
+          </div>
+
+          <div class="edit-travel-field">
+            <label for="status-modal" class="form-label">Status</label>
+            <select class="form-select border" id="status-modal" name="status">
+              <option value="Agendada" {% if travel.status == 'Agendada' %}selected{% endif %}>Agendada</option>
+              <option value="Em Andamento" {% if travel.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+              <option value="Concluída" {% if travel.status == 'Concluída' %}selected{% endif %}>Conclu&iacute;da</option>
+              <option value="Cancelada" {% if travel.status == 'Cancelada' %}selected{% endif %}>Cancelada</option>
+            </select>
+          </div>
+
+          <div class="edit-travel-field edit-travel-field--wide">
+            <label for="descricao-modal" class="form-label"
+              >Descri&ccedil;&atilde;o</label
+            >
+            <textarea
+              class="form-control border"
+              id="descricao-modal"
+              name="descricao"
+              rows="3"
+            >
+{{ travel.descricao }}</textarea
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary mb-0"
+          data-bs-dismiss="modal"
+        >
+          <i class="material-symbols-rounded">close</i>
+          Fechar
+        </button>
+        <button class="btn btn-primary mb-0" id="btnEditarViagemModal">
+          <i class="material-symbols-rounded">save</i>
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {% include "includes/viewer-file.html" %} {% include
+"includes/footer.html" %} {% if current_user.admin %} {% include
+"travel/modal/assign-technical.html" %} {% endif %} {% block javascripts %}
+<script
+  type="module"
+  src="{{ url_for('static', filename='/assets/js/application/useEditTravel.js') }}"
+></script>
 {% endblock javascripts %} {% endblock content %}

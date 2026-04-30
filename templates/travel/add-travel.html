@@ -1,121 +1,181 @@
-{% extends "layouts/base.html" %} {% block title %} Profile {% endblock %}
+{% extends "layouts/base.html" %} {% block title %} Cadastro de Viagem {%
+endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %} {% block content %}
 
-<div class="container mt-4">
-  <h2 class="mb-4" name="titulo">Cadastro de Viagem</h2>
-
-  <!-- Tabs Navigation -->
-  <ul class="nav nav-tabs bg-20" id="viagemTabs" role="tablist">
-    <li class="nav-item bg" role="presentation">
-      <button
-        class="nav-link active"
-        id="dados-tab"
-        data-bs-toggle="tab"
-        data-bs-target="#dados"
-        type="button"
-        role="tab"
-        aria-controls="dados"
-        aria-selected="true"
+<div class="container-fluid py-4 travel-stepper-page">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-11">
+      <div
+        class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4"
       >
-        <i class="bi bi-card-checklist"></i> Dados Principais
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button
-        class="nav-link"
-        id="tecnicoUser-tab"
-        data-bs-toggle="tab"
-        data-bs-target="#tecnicos"
-        type="button"
-        role="tab"
-        aria-controls="tecnicoUser"
-        aria-selected="false"
+        <div>
+          <p class="text-sm text-muted mb-1">Gest&atilde;o de viagens</p>
+          <h2 class="mb-0" name="titulo">Cadastro de Viagem</h2>
+        </div>
+      </div>
+
+      <section
+        class="card app-themed-panel travel-stepper-shell"
+        aria-labelledby="travel-stepper-title"
       >
-        <i class="bi bi-cash-stack"></i> Técnicos
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button
-        class="nav-link"
-        id="outros-tab"
-        data-bs-toggle="tab"
-        data-bs-target="#outros"
-        type="button"
-        role="tab"
-        aria-controls="outros"
-        aria-selected="false"
-      >
-        <i class="bi bi-gear"></i> Outros
-      </button>
-    </li>
-  </ul>
+        <div class="card-header pb-0">
+          <div class="d-flex flex-column gap-3">
+            <div>
+              <h5 class="mb-1" id="travel-stepper-title">Novo agendamento</h5>
+              <p class="text-sm text-muted mb-0">
+                Preencha os dados principais, associe os t&eacute;cnicos e
+                revise antes de finalizar.
+              </p>
+            </div>
 
-  <!-- Tabs Content -->
-  <div
-    class="tab-content app-themed-panel p-3 border border-top-0 rounded-bottom"
-    id="viagemTabsContent"
-  >
-    <!-- Aba 1: Dados Principais -->
-    <div
-      class="tab-pane fade show active"
-      id="dados"
-      role="tabpanel"
-      aria-labelledby="dados-tab"
-    >
-      <form id="formDadosPrincipais" action>
-        <input type="hidden" id="viagemId" name="viagemId" value="" />
-        <input
-          type="hidden"
-          id="usuario"
-          name="usuario"
-          value="{{ session['usuarioConnect'] }}"
-        />
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="entidade" class="form-label">Entidade *</label>
-            <input
-              type="text"
-              class="form-control border ps-1"
-              id="entidade"
-              name="entidade"
-              required
-            />
-            <input type="hidden" id="entidade-id" name="entidade_id" required />
-          </div>
-
-          <div class="col-md-2">
-            <label for="dataSaida" class="form-label">Data de Saída *</label>
-            <input
-              type="datetime-local"
-              class="form-control border ps-1"
-              id="dataSaida"
-              name="dataSaida"
-              value="{% if date_start %}{{ date_start }}{% endif %}"
-              required
-            />
-          </div>
-
-          <div class="col-md-2">
-            <label for="dataRetorno" class="form-label"
-              >Data de Retorno *</label
+            <nav
+              class="travel-stepper"
+              aria-label="Etapas do cadastro de viagem"
             >
-            <input
-              type="datetime-local"
-              class="form-control border ps-1"
-              id="dataRetorno"
-              name="dataRetorno"
-              value="{% if date_end %}{{ date_end }}{% endif %}"
-              required
-            />
-          </div>
+              <button
+                type="button"
+                class="travel-stepper__item is-active"
+                id="dados-tab"
+                data-step-target="dados"
+                aria-controls="dados"
+                aria-selected="true"
+              >
+                <span class="travel-stepper__marker" aria-hidden="true">1</span>
+                <span class="travel-stepper__content">
+                  <span class="travel-stepper__label">Dados</span>
+                  <span class="travel-stepper__hint"
+                    >Informa&ccedil;&otilde;es gerais</span
+                  >
+                </span>
+              </button>
 
-          <div class="col-md-2 d-flex align-items-end">
-            <div class="d-flex flex-column mt-3">
-              <div class="row justify-content-top">
-                <div class="col">
+              <button
+                type="button"
+                class="travel-stepper__item"
+                id="tecnicoUser-tab"
+                data-step-target="tecnicos"
+                aria-controls="tecnicos"
+                aria-selected="false"
+              >
+                <span class="travel-stepper__marker" aria-hidden="true">2</span>
+                <span class="travel-stepper__content">
+                  <span class="travel-stepper__label">T&eacute;cnicos</span>
+                  <span class="travel-stepper__hint">Equipe vinculada</span>
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="travel-stepper__item"
+                id="outros-tab"
+                data-step-target="outros"
+                aria-controls="outros"
+                aria-selected="false"
+              >
+                <span class="travel-stepper__marker" aria-hidden="true">3</span>
+                <span class="travel-stepper__content">
+                  <span class="travel-stepper__label">Transporte</span>
+                  <span class="travel-stepper__hint">Ve&iacute;culo e KM</span>
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="travel-stepper__item"
+                id="revisao-tab"
+                data-step-target="revisao"
+                aria-controls="revisao"
+                aria-selected="false"
+              >
+                <span class="travel-stepper__marker" aria-hidden="true">4</span>
+                <span class="travel-stepper__content">
+                  <span class="travel-stepper__label">Revis&atilde;o</span>
+                  <span class="travel-stepper__hint"
+                    >Confer&ecirc;ncia final</span
+                  >
+                </span>
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <div class="card-body pt-4">
+          <div class="travel-stepper__panels" id="viagemTabsContent">
+            <section
+              class="travel-stepper__panel is-active"
+              id="dados"
+              role="tabpanel"
+              aria-labelledby="dados-tab"
+            >
+              <div class="travel-stepper__section-heading">
+                <div>
+                  <h6 class="mb-1">Dados principais</h6>
+                  <p class="text-sm text-muted mb-0">
+                    Defina destino, per&iacute;odo e descri&ccedil;&atilde;o da
+                    viagem.
+                  </p>
+                </div>
+              </div>
+
+              <form id="formDadosPrincipais" action>
+                <input type="hidden" id="viagemId" name="viagemId" value="" />
+                <input
+                  type="hidden"
+                  id="usuario"
+                  name="usuario"
+                  value="{{ session['usuarioConnect'] }}"
+                />
+
+                <div class="row g-3 mb-3">
+                  <div class="col-12 col-lg-6">
+                    <label for="entidade" class="form-label">Entidade *</label>
+                    <input
+                      type="text"
+                      class="form-control border ps-1"
+                      id="entidade"
+                      name="entidade"
+                      required
+                    />
+                    <input
+                      type="hidden"
+                      id="entidade-id"
+                      name="entidade_id"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="dataSaida" class="form-label"
+                      >Data de Sa&iacute;da *</label
+                    >
+                    <input
+                      type="datetime-local"
+                      class="form-control border ps-1"
+                      id="dataSaida"
+                      name="dataSaida"
+                      value="{% if date_start %}{{ date_start }}{% endif %}"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="dataRetorno" class="form-label"
+                      >Data de Retorno *</label
+                    >
+                    <input
+                      type="datetime-local"
+                      class="form-control border ps-1"
+                      id="dataRetorno"
+                      name="dataRetorno"
+                      value="{% if date_end %}{{ date_end }}{% endif %}"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="travel-stepper__options mb-3">
                   <div class="form-check">
                     <input
                       class="form-check-input justify-content-top"
@@ -128,11 +188,7 @@
                       Enviar e-Mail
                     </label>
                   </div>
-                </div>
-              </div>
-              <!--check Dia todo-->
-              <div class="row justify-content-bottom">
-                <div class="col">
+
                   <div class="form-check">
                     <input
                       class="form-check-input justify-content-top"
@@ -146,188 +202,360 @@
                     </label>
                   </div>
                 </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-12 col-md-6">
+                    <label for="tipoViagem" class="form-label"
+                      >Tipo da Viagem</label
+                    >
+                    <select
+                      class="form-select"
+                      id="tipoViagem"
+                      name="tipoViagem"
+                    >
+                      <option value="T&eacute;cnica">T&eacute;cnica</option>
+                      <option value="Administrativa">Administrativa</option>
+                      <option value="Capacita&ccedil;&atilde;o">
+                        Capacita&ccedil;&atilde;o
+                      </option>
+                      <option value="Outra">Outra</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label for="localViagem" class="form-label">Local</label>
+                    <select
+                      class="form-select"
+                      id="localViagem"
+                      name="localViagem"
+                    >
+                      <option value="Cliente">Cliente</option>
+                      <option value="Quality">Quality</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mb-0">
+                  <label for="descricao" class="form-label"
+                    >Descri&ccedil;&atilde;o / Assunto **</label
+                  >
+                  <textarea
+                    class="form-control border ps-1"
+                    id="descricao"
+                    name="descricao"
+                    rows="4"
+                    required
+                  ></textarea>
+                </div>
+              </form>
+            </section>
+
+            <section
+              class="travel-stepper__panel"
+              id="tecnicos"
+              role="tabpanel"
+              aria-labelledby="tecnicoUser-tab"
+              hidden
+            >
+              <div class="travel-stepper__section-heading">
+                <div>
+                  <h6 class="mb-1">T&eacute;cnicos da viagem</h6>
+                  <p class="text-sm text-muted mb-0">
+                    Inclua pelo menos um t&eacute;cnico para permitir o
+                    cadastro.
+                  </p>
+                </div>
               </div>
-            </div>
+
+              <div class="travel-technicians-layout">
+                <div class="travel-technicians-picker">
+                  <div class="travel-stepper__subpanel">
+                    <div class="travel-technicians-panel-header">
+                      <div
+                        class="travel-technicians-panel-icon"
+                        aria-hidden="true"
+                      >
+                        <i class="material-symbols-rounded">person_add</i>
+                      </div>
+                      <div>
+                        <h6 class="mb-1">Selecionar equipe</h6>
+                        <p class="text-sm text-muted mb-0">
+                          Escolha um t&eacute;cnico por vez ou inclua todos os
+                          dispon&iacute;veis.
+                        </p>
+                      </div>
+                    </div>
+                    <form id="tecnicoUserForm">
+                      <div class="travel-technicians-select">
+                        <label for="tecnicoUser" class="form-label"
+                          >T&eacute;cnico *</label
+                        >
+                        <select
+                          class="form-select"
+                          id="tecnicoUser"
+                          name="tecnicoUser"
+                          required
+                        >
+                          <option value="" selected disabled>
+                            Selecione um T&eacute;cnico
+                          </option>
+                          {% for tecnico in tecnicos %}
+                          <option value="{{ tecnico.id }}">
+                            {{ tecnico.username }}
+                          </option>
+                          {% endfor %}
+                        </select>
+                      </div>
+
+                      <div
+                        class="travel-technicians-actions"
+                        aria-label="A&ccedil;&otilde;es de sele&ccedil;&atilde;o de t&eacute;cnicos"
+                      >
+                        <button
+                          type="button"
+                          id="addTecnicoBtn"
+                          class="btn btn-success travel-technicians-primary-action"
+                        >
+                          <i class="material-symbols-rounded">add_circle</i>
+                          Adicionar
+                        </button>
+                        <button
+                          type="button"
+                          id="addTodosBtn"
+                          class="btn btn-outline-primary"
+                        >
+                          <i class="material-symbols-rounded">group_add</i>
+                          Adicionar Todos
+                        </button>
+                        <button
+                          type="button"
+                          id="removerTodosBtn"
+                          class="btn btn-outline-danger"
+                        >
+                          <i class="material-symbols-rounded">delete_forever</i>
+                          Remover Todos
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="travel-technicians-roster">
+                  <div class="travel-stepper__subpanel h-100">
+                    <div class="travel-technicians-roster-header">
+                      <div>
+                        <h6 class="mb-1">Equipe selecionada</h6>
+                        <p class="text-sm text-muted mb-0">
+                          A lista abaixo ser&aacute; enviada no cadastro da
+                          viagem.
+                        </p>
+                      </div>
+                      <span
+                        class="badge rounded-pill text-bg-light"
+                        id="reviewTecnicosCount"
+                        >0 selecionados</span
+                      >
+                    </div>
+
+                    <div
+                      class="travel-technicians-empty"
+                      id="tecnicosEmptyState"
+                    >
+                      <div
+                        class="travel-technicians-empty-icon"
+                        aria-hidden="true"
+                      >
+                        <i class="material-symbols-rounded">groups</i>
+                      </div>
+                      <div>
+                        <strong>Nenhum t&eacute;cnico adicionado</strong>
+                        <p class="text-sm text-muted mb-0">
+                          Selecione um nome ao lado para montar a equipe.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div
+                      class="travel-technicians-list"
+                      id="listaTecnicosSelecionados"
+                      aria-live="polite"
+                    ></div>
+
+                    <div
+                      class="travel-technicians-table"
+                      aria-label="Tabela de t&eacute;cnicos selecionados"
+                      hidden
+                    >
+                      <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                          <thead>
+                            <tr>
+                              <th
+                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                              >
+                                Nome
+                              </th>
+                              <th
+                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                              >
+                                A&ccedil;&otilde;es
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody id="tabelaTecnicos">
+                            <tr>
+                              <td colspan="2" class="text-center">
+                                Nenhum t&eacute;cnico adicionado
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section
+              class="travel-stepper__panel"
+              id="outros"
+              role="tabpanel"
+              aria-labelledby="outros-tab"
+              hidden
+            >
+              <div class="travel-stepper__section-heading">
+                <div>
+                  <h6 class="mb-1">Transporte</h6>
+                  <p class="text-sm text-muted mb-0">
+                    Dados opcionais para registrar ve&iacute;culo, placa e
+                    quilometragem.
+                  </p>
+                </div>
+              </div>
+
+              <form id="formOutros">
+                <input
+                  type="hidden"
+                  id="viagemIdOutros"
+                  name="viagemIdOutros"
+                />
+
+                <div class="row g-3">
+                  <div class="col-12 col-md-6">
+                    <label for="veiculo" class="form-label"
+                      >Ve&iacute;culo Utilizado</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control border ps-1"
+                      id="veiculo"
+                      name="veiculo"
+                    />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label for="placa" class="form-label">Placa</label>
+                    <input
+                      type="text"
+                      class="form-control border ps-1"
+                      id="placa"
+                      name="placa"
+                    />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label for="kmInicial" class="form-label">KM Inicial</label>
+                    <input
+                      type="float"
+                      class="form-control border ps-1"
+                      id="kmInicial"
+                      name="kmInicial"
+                      min="0"
+                    />
+                  </div>
+                </div>
+              </form>
+            </section>
+
+            <section
+              class="travel-stepper__panel"
+              id="revisao"
+              role="tabpanel"
+              aria-labelledby="revisao-tab"
+              hidden
+            >
+              <div class="travel-stepper__section-heading">
+                <div>
+                  <h6 class="mb-1">Revis&atilde;o</h6>
+                  <p class="text-sm text-muted mb-0">
+                    Confira os principais dados antes de finalizar o cadastro.
+                  </p>
+                </div>
+              </div>
+
+              <div class="travel-review-grid">
+                <article class="travel-review-card">
+                  <span class="travel-review-card__label">Entidade</span>
+                  <strong id="reviewEntidade">N&atilde;o informado</strong>
+                </article>
+                <article class="travel-review-card">
+                  <span class="travel-review-card__label">Per&iacute;odo</span>
+                  <strong id="reviewPeriodo">N&atilde;o informado</strong>
+                </article>
+                <article class="travel-review-card">
+                  <span class="travel-review-card__label">Tipo e local</span>
+                  <strong id="reviewTipoLocal">N&atilde;o informado</strong>
+                </article>
+                <article class="travel-review-card">
+                  <span class="travel-review-card__label">T&eacute;cnicos</span>
+                  <strong id="reviewTecnicos"
+                    >Nenhum t&eacute;cnico adicionado</strong
+                  >
+                </article>
+                <article class="travel-review-card">
+                  <span class="travel-review-card__label">Transporte</span>
+                  <strong id="reviewTransporte">N&atilde;o informado</strong>
+                </article>
+                <article class="travel-review-card">
+                  <span class="travel-review-card__label"
+                    >Op&ccedil;&otilde;es</span
+                  >
+                  <strong id="reviewOpcoes">N&atilde;o informado</strong>
+                </article>
+              </div>
+
+              <div class="travel-review-description mt-3">
+                <span class="travel-review-card__label"
+                  >Descri&ccedil;&atilde;o / Assunto</span
+                >
+                <p class="mb-0" id="reviewDescricao">N&atilde;o informado</p>
+              </div>
+            </section>
           </div>
         </div>
 
-        <!--Tipo da Viagem-->
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="tipoViagem" class="form-label">Tipo da Viagem</label>
-            <select class="form-select" id="tipoViagem" name="tipoViagem">
-              <option value="Técnica">Técnica</option>
-              <option value="Administrativa">Administrativa</option>
-              <option value="Capacitação">Capacitação</option>
-              <option value="Outra">Outra</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label for="localViagem" class="form-label">Local</label>
-            <select class="form-select" id="localViagem" name="localViagem">
-              <option value="Cliente">Cliente</option>
-              <option value="Quality">Quality</option>
-            </select>
-          </div>
-        </div>
-
-        <!--Descrição-->
-        <div class="mb-3">
-          <label for="descricao" class="form-label"
-            >Descrição / Assunto **</label
-          >
-          <textarea
-            class="form-control border ps-1"
-            id="descricao"
-            name="descricao"
-            rows="3"
-            required
-          ></textarea>
-        </div>
-
-        <div class="d-flex justify-content-end">
+        <div class="card-footer travel-stepper__footer">
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-outline-secondary mb-0"
+            id="travelStepperPrev"
+          >
+            <i class="material-symbols-rounded">arrow_back</i> Voltar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary mb-0"
+            id="travelStepperNext"
+          >
+            Pr&oacute;ximo <i class="material-symbols-rounded">arrow_forward</i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-success mb-0 d-none"
             id="bnt-salvar-principal"
           >
-            Salvar Dados
+            <i class="material-symbols-rounded">check_circle</i> Finalizar
           </button>
         </div>
-      </form>
-    </div>
-
-    <!-- Aba 2: Técnicos -->
-    <div
-      class="tab-pane fade"
-      id="tecnicos"
-      role="tabpanel"
-      aria-labelledby="tecnicos-tab"
-    >
-      <div class="row">
-        <div class="col-md-6">
-          <h5>Adicionar Técnicos</h5>
-          <form id="tecnicoUserForm">
-            <div class="mb-3">
-              <label for="tecnicoUser" class="form-label">Técnico *</label>
-              <select
-                class="form-select"
-                id="tecnicoUser"
-                name="tecnicoUser"
-                required
-              >
-                <option value="" selected disabled>Selecione um Técnico</option>
-                {% for tecnico in tecnicos %}
-                <option value="{{ tecnico.id }}">{{ tecnico.username }}</option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="d-flex justify-content-between mb-3">
-              <button
-                type="button"
-                id="addTecnicoBtn"
-                class="btn btn-success me-2"
-              >
-                <i class="material-symbols-rounded">add_circle</i> Adicionar
-              </button>
-              <button
-                type="button"
-                id="addTodosBtn"
-                class="btn btn-primary me-2"
-              >
-                <i class="material-symbols-rounded">group_add</i> Adicionar
-                Todos
-              </button>
-              <button
-                type="button"
-                id="removerTodosBtn"
-                class="btn btn-outline-danger"
-              >
-                <i class="material-symbols-rounded">delete_forever</i> Remover
-                Todos
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div class="col-md-6">
-          <h5>Técnicos Adicionados</h5>
-          <div class="card-body px-0 pb-2">
-            <div class="table-responsive p-0">
-              <table class="table align-items-center mb-0">
-                <thead>
-                  <tr>
-                    <th
-                      class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                    >
-                      Nome
-                    </th>
-                    <th
-                      class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                    >
-                      Ações
-                    </th>
-                  </tr>
-                </thead>
-                <tbody id="tabelaTecnicos">
-                  <tr>
-                    <td colspan="2" class="text-center">
-                      Nenhum técnico adicionado
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Aba 3: Outros -->
-    <div
-      class="tab-pane fade"
-      id="outros"
-      role="tabpanel"
-      aria-labelledby="outros-tab"
-    >
-      <form id="formOutros">
-        <input type="hidden" id="viagemIdOutros" name="viagemIdOutros" />
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="veiculo" class="form-label">Veículo Utilizado</label>
-            <input
-              type="text"
-              class="form-control border ps-1"
-              id="veiculo"
-              name="veiculo"
-            />
-          </div>
-          <div class="col-md-6">
-            <label for="placa" class="form-label">Placa</label>
-            <input
-              type="text"
-              class="form-control border ps-1"
-              id="placa"
-              name="placa"
-            />
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="kmInicial" class="form-label">KM Inicial</label>
-            <input
-              type="float"
-              class="form-control border ps-1"
-              id="kmInicial"
-              name="kmInicial"
-              min="0"
-            />
-          </div>
-        </div>
-      </form>
+      </section>
     </div>
   </div>
 </div>

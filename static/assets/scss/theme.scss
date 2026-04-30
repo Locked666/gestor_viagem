@@ -430,3 +430,936 @@ fieldset.collapsed h2 {
 .spm-btn:hover {
   background: var(--app-table-hover) !important;
 }
+
+.travel-stepper-page {
+  color: var(--app-text);
+}
+
+.travel-stepper-shell {
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.travel-stepper {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.travel-stepper__item {
+  align-items: center;
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  color: var(--app-text);
+  display: flex;
+  gap: 0.75rem;
+  min-height: 4.25rem;
+  padding: 0.75rem;
+  position: relative;
+  text-align: left;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.travel-stepper__item:hover,
+.travel-stepper__item:focus {
+  background: var(--app-table-hover);
+  border-color: var(--app-border-strong);
+  color: var(--app-text-strong);
+}
+
+.travel-stepper__item:focus-visible {
+  box-shadow: 0 0 0 0.2rem var(--app-focus-ring);
+  outline: 0;
+}
+
+.travel-stepper__item.is-active {
+  background: var(--app-sidebar-active-bg);
+  border-color: var(--app-sidebar-active-bg);
+  color: var(--app-sidebar-active-text);
+}
+
+.travel-stepper__item.is-complete {
+  background: color-mix(in srgb, var(--app-chart-accent) 14%, var(--app-surface));
+  border-color: color-mix(in srgb, var(--app-chart-accent) 46%, var(--app-border));
+}
+
+.travel-stepper__marker {
+  align-items: center;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 50%;
+  color: var(--app-text-strong);
+  display: inline-flex;
+  flex: 0 0 2rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  height: 2rem;
+  justify-content: center;
+  width: 2rem;
+}
+
+.travel-stepper__item.is-active .travel-stepper__marker {
+  background: var(--app-sidebar-active-text);
+  border-color: var(--app-sidebar-active-text);
+  color: var(--app-sidebar-active-bg);
+}
+
+.travel-stepper__item.is-complete .travel-stepper__marker {
+  background: var(--app-chart-accent);
+  border-color: var(--app-chart-accent);
+  color: var(--app-sidebar-active-text);
+}
+
+.travel-stepper__item.is-complete .travel-stepper__marker::before {
+  content: "check";
+  font-family: "Material Symbols Rounded";
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.travel-stepper__item.is-complete .travel-stepper__marker {
+  font-size: 0;
+}
+
+.travel-stepper__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.travel-stepper__label {
+  color: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.travel-stepper__hint {
+  color: currentColor;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  opacity: 0.72;
+}
+
+.travel-stepper__panels {
+  min-height: 25rem;
+}
+
+.travel-stepper__panel {
+  animation: travel-stepper-panel-in 180ms ease;
+}
+
+.travel-stepper__section-heading {
+  align-items: flex-start;
+  border-bottom: 1px solid var(--app-border);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+}
+
+.travel-stepper__options {
+  align-items: center;
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  padding: 0.85rem 1rem;
+}
+
+.travel-stepper__subpanel,
+.travel-review-description,
+.travel-review-card {
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  color: var(--app-text);
+}
+
+.travel-stepper__subpanel {
+  padding: 1rem;
+}
+
+.travel-stepper__button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.travel-stepper__button-group .btn,
+.travel-stepper__footer .btn {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.travel-stepper__footer {
+  align-items: center;
+  background: var(--app-surface-muted) !important;
+  border-top: 1px solid var(--app-border);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.travel-stepper__footer .btn:first-child {
+  margin-right: auto;
+}
+
+.travel-technicians-layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(18rem, 0.9fr) minmax(0, 1.35fr);
+}
+
+.travel-technicians-picker .travel-stepper__subpanel,
+.travel-technicians-roster .travel-stepper__subpanel {
+  min-height: 100%;
+}
+
+.travel-technicians-panel-header,
+.travel-technicians-roster-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.85rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.travel-technicians-panel-header {
+  justify-content: flex-start;
+}
+
+.travel-technicians-panel-icon,
+.travel-technicians-empty-icon {
+  align-items: center;
+  background: color-mix(in srgb, var(--app-sidebar-active-bg) 10%, var(--app-surface));
+  border: 1px solid color-mix(in srgb, var(--app-sidebar-active-bg) 22%, var(--app-border));
+  border-radius: 0.5rem;
+  color: var(--app-text-strong);
+  display: inline-flex;
+  flex: 0 0 2.5rem;
+  height: 2.5rem;
+  justify-content: center;
+  width: 2.5rem;
+}
+
+.travel-technicians-panel-icon .material-symbols-rounded,
+.travel-technicians-empty-icon .material-symbols-rounded {
+  font-size: 1.35rem;
+}
+
+.travel-technicians-select {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.9rem;
+}
+
+.travel-technicians-actions {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.travel-technicians-actions .btn {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.4rem;
+  justify-content: center;
+  min-height: 2.65rem;
+  width: 100%;
+}
+
+.travel-technicians-primary-action {
+  font-weight: 700;
+}
+
+.travel-technicians-roster-header {
+  border-bottom: 1px solid var(--app-border);
+  padding-bottom: 1rem;
+}
+
+.travel-technicians-empty {
+  align-items: center;
+  background: var(--app-surface);
+  border: 1px dashed var(--app-border-strong);
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+  min-height: 6rem;
+  padding: 1rem;
+}
+
+.travel-technicians-empty[hidden] {
+  display: none;
+}
+
+.travel-technicians-empty strong {
+  color: var(--app-text-strong);
+  display: block;
+  font-size: 0.95rem;
+}
+
+.travel-technicians-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.travel-technicians-member {
+  align-items: center;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-height: 4.25rem;
+  padding: 0.75rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.travel-technicians-member:hover {
+  border-color: var(--app-border-strong);
+  box-shadow: 0 0.75rem 1.5rem color-mix(in srgb, var(--app-text-strong) 8%, transparent);
+  transform: translateY(-1px);
+}
+
+.travel-technicians-member-avatar {
+  align-items: center;
+  background: var(--app-sidebar-active-bg);
+  border-radius: 50%;
+  color: var(--app-sidebar-active-text);
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 800;
+  height: 2.4rem;
+  justify-content: center;
+  line-height: 1;
+  width: 2.4rem;
+}
+
+.travel-technicians-member-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.travel-technicians-member-body strong {
+  color: var(--app-text-strong);
+  font-size: 0.95rem;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.travel-technicians-member-body span {
+  color: var(--app-text-muted);
+  font-size: 0.78rem;
+}
+
+.travel-technicians-member-remove {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--app-border);
+  border-radius: 50%;
+  color: var(--app-text-muted);
+  display: inline-flex;
+  height: 2rem;
+  justify-content: center;
+  padding: 0;
+  width: 2rem;
+}
+
+.travel-technicians-member-remove:hover,
+.travel-technicians-member-remove:focus {
+  background: var(--app-table-hover);
+  border-color: var(--app-border-strong);
+  color: var(--app-text-strong);
+}
+
+.travel-technicians-member-remove:focus-visible {
+  box-shadow: 0 0 0 0.2rem var(--app-focus-ring);
+  outline: 0;
+}
+
+.travel-technicians-member-remove .material-symbols-rounded {
+  font-size: 1.1rem;
+}
+
+.travel-technicians-table {
+  border-top: 1px solid var(--app-border);
+  padding-top: 0.75rem;
+}
+
+.travel-technicians-table .table {
+  margin-bottom: 0;
+}
+
+.travel-review-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.travel-review-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 6rem;
+  padding: 1rem;
+}
+
+.travel-review-card__label {
+  color: var(--app-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.travel-review-card strong {
+  color: var(--app-text-strong);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.travel-review-description {
+  padding: 1rem;
+}
+
+.travel-review-description p {
+  color: var(--app-text-strong) !important;
+  overflow-wrap: anywhere;
+}
+
+.travel-stepper-shell .badge.text-bg-light {
+  background: var(--app-surface) !important;
+  border: 1px solid var(--app-border);
+  color: var(--app-text) !important;
+}
+
+.edit-travel-page {
+  color: var(--app-text);
+}
+
+.edit-travel-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.edit-travel-header h2 {
+  color: var(--app-text-strong) !important;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  letter-spacing: 0;
+}
+
+.edit-travel-header__actions,
+.edit-travel-actions,
+.edit-travel-row-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.edit-travel-header__actions .btn,
+.edit-travel-actions .btn,
+.edit-travel-admin-picker .btn,
+.edit-travel-tabs .nav-link,
+.modal-footer .btn {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.edit-travel-header__actions .material-symbols-rounded,
+.edit-travel-actions .material-symbols-rounded,
+.edit-travel-admin-picker .material-symbols-rounded,
+.edit-travel-tabs .material-symbols-rounded,
+.modal-footer .material-symbols-rounded {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.edit-travel-kpi-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.edit-travel-kpi-card {
+  align-items: flex-start;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  box-shadow: var(--app-shadow);
+  color: var(--app-text);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  min-height: 8.25rem;
+  padding: 1rem;
+}
+
+.edit-travel-kpi-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.edit-travel-kpi-card__label,
+.edit-travel-status-chip {
+  color: var(--app-text-muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.edit-travel-kpi-card strong {
+  color: var(--app-text-strong);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.edit-travel-kpi-card small {
+  color: var(--app-text-muted);
+  line-height: 1.35;
+}
+
+.edit-travel-kpi-card__icon {
+  align-items: center;
+  background: color-mix(in srgb, var(--app-sidebar-active-bg) 10%, var(--app-surface));
+  border: 1px solid color-mix(in srgb, var(--app-sidebar-active-bg) 22%, var(--app-border));
+  border-radius: 0.65rem;
+  color: var(--app-text-strong);
+  display: inline-flex;
+  flex: 0 0 2.75rem;
+  height: 2.75rem;
+  justify-content: center;
+  width: 2.75rem;
+}
+
+.edit-travel-kpi-card__icon .material-symbols-rounded {
+  font-size: 1.35rem;
+}
+
+.edit-travel-shell {
+  align-items: start;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(17rem, 0.8fr) minmax(0, 1.7fr);
+}
+
+.edit-travel-summary-card,
+.edit-travel-workspace,
+.edit-travel-subpanel {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  box-shadow: var(--app-shadow);
+  color: var(--app-text);
+}
+
+.edit-travel-summary-card {
+  padding: 1rem;
+  position: sticky;
+  top: 5rem;
+}
+
+.edit-travel-workspace {
+  overflow: hidden;
+}
+
+.edit-travel-section-heading {
+  align-items: flex-start;
+  border-bottom: 1px solid var(--app-border);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+
+.edit-travel-section-heading h5 {
+  color: var(--app-text-strong) !important;
+}
+
+.edit-travel-status-chip {
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  color: var(--app-text) !important;
+  display: inline-flex;
+  max-width: 100%;
+  min-height: 2rem;
+  padding: 0.45rem 0.75rem;
+  text-transform: none;
+}
+
+.edit-travel-readonly-grid,
+.edit-travel-form-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.edit-travel-form-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.edit-travel-form-grid--single,
+.edit-travel-readonly-grid {
+  grid-template-columns: 1fr;
+}
+
+.edit-travel-field {
+  min-width: 0;
+}
+
+.edit-travel-field--wide {
+  grid-column: 1 / -1;
+}
+
+.edit-travel-page .form-label {
+  color: var(--app-text-strong) !important;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: 0.35rem;
+}
+
+.edit-travel-page .form-control,
+.edit-travel-page .form-select,
+.edit-travel-page .input-group-text {
+  border-color: var(--app-border) !important;
+  border-radius: 0.5rem;
+  min-height: 2.65rem;
+}
+
+.edit-travel-page .input-group .form-control {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.edit-travel-page .input-group-text {
+  background: var(--app-surface-muted) !important;
+  color: var(--app-text) !important;
+}
+
+.edit-travel-admin-picker {
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 0.65rem;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-top: 1rem;
+  padding: 0.85rem;
+}
+
+.edit-travel-tabs {
+  background: var(--app-surface-muted);
+  border-bottom: 1px solid var(--app-border);
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding: 0.75rem 0.75rem 0;
+}
+
+.edit-travel-tabs .nav-link {
+  border: 1px solid transparent !important;
+  border-radius: 0.6rem 0.6rem 0 0;
+  color: var(--app-text-muted) !important;
+  min-height: 2.85rem;
+  white-space: nowrap;
+}
+
+.edit-travel-tabs .nav-link:hover,
+.edit-travel-tabs .nav-link:focus {
+  background: var(--app-table-hover);
+  border-color: var(--app-border) !important;
+  color: var(--app-text-strong) !important;
+}
+
+.edit-travel-tabs .nav-link.active {
+  background: var(--app-surface) !important;
+  border-color: var(--app-border) var(--app-border) var(--app-surface) !important;
+  color: var(--app-text-strong) !important;
+}
+
+.edit-travel-tab-content {
+  padding: 1rem;
+}
+
+.edit-travel-assignment-state {
+  align-items: center;
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 0.35rem;
+  min-height: 2.2rem;
+  padding: 0.4rem 0.75rem;
+  white-space: nowrap;
+}
+
+.edit-travel-assignment-state .material-symbols-rounded {
+  font-size: 1.1rem;
+}
+
+.edit-travel-dados-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.edit-travel-save-main {
+  min-height: 2.5rem;
+  white-space: nowrap;
+}
+
+.edit-travel-save-panel {
+  align-items: center;
+  background: var(--app-surface);
+  border-top: 1px solid var(--app-border);
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  position: sticky;
+  z-index: 3;
+}
+
+.edit-travel-actions {
+  border-top: 1px solid var(--app-border);
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+}
+
+.edit-travel-split {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(18rem, 0.9fr) minmax(0, 1.1fr);
+}
+
+.edit-travel-subpanel {
+  box-shadow: none;
+  padding: 1rem;
+}
+
+.edit-travel-check {
+  align-items: center;
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.85rem;
+}
+
+.edit-travel-table-wrap {
+  border: 1px solid var(--app-border);
+  border-radius: 0.65rem;
+}
+
+.edit-travel-table-wrap table {
+  min-width: 42rem;
+}
+
+.edit-travel-table-wrap thead th {
+  background: var(--app-surface-muted) !important;
+  color: var(--app-text-muted) !important;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.edit-travel-table-wrap tfoot td {
+  background: var(--app-surface-muted) !important;
+  color: var(--app-text-strong) !important;
+}
+
+.edit-travel-row-actions {
+  flex-wrap: nowrap;
+}
+
+.edit-travel-row-actions .btn-action {
+  align-items: center;
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 0.45rem;
+  color: var(--app-text-muted) !important;
+  display: inline-flex;
+  height: 2rem;
+  justify-content: center;
+  width: 2rem;
+}
+
+.edit-travel-row-actions .btn-action:hover,
+.edit-travel-row-actions .btn-action:focus {
+  background: var(--app-table-hover);
+  border-color: var(--app-border-strong);
+  color: var(--app-text-strong) !important;
+}
+
+.edit-travel-row-actions .material-symbols-rounded {
+  font-size: 1.05rem;
+}
+
+@media (max-width: 1199.98px) {
+  .edit-travel-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .edit-travel-shell,
+  .edit-travel-split {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-travel-summary-card {
+    position: static;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .edit-travel-header {
+    flex-direction: column;
+  }
+
+  .edit-travel-header__actions,
+  .edit-travel-header__actions .btn {
+    width: 100%;
+  }
+
+  .edit-travel-kpi-grid,
+  .edit-travel-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-travel-section-heading {
+    flex-direction: column;
+  }
+
+  .edit-travel-dados-actions {
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .edit-travel-admin-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-travel-admin-picker .btn,
+  .edit-travel-dados-actions .btn,
+  .edit-travel-save-panel .btn,
+  .edit-travel-actions .btn {
+    width: 100%;
+  }
+
+  .edit-travel-save-panel {
+    align-items: stretch;
+  }
+
+  .edit-travel-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@keyframes travel-stepper-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .travel-stepper__item,
+  .travel-stepper__panel,
+  .travel-technicians-member {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .travel-stepper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .travel-review-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .travel-technicians-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .travel-stepper-page {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .travel-stepper {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-stepper__item {
+    min-height: 3.75rem;
+  }
+
+  .travel-review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-stepper__footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .travel-stepper__footer .btn,
+  .travel-stepper__footer .btn:first-child {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .travel-technicians-panel-header,
+  .travel-technicians-roster-header,
+  .travel-technicians-empty {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
